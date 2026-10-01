@@ -161,23 +161,25 @@ Not taken:
 - **Its corpus of "10 real emails from SBI, HDFC, ICICI over 6 months":** that corpus does not exist. Only samples Ashutosh actually provides count, and the post states the real count.
 - **Its 30-hour timeline and the "Muvattupuzha case" reference:** neither is sourced. Nothing unsourced goes into the post.
 
-## State (1 Oct 2026, evening IST)
+## State (1 Oct 2026, 19:15 IST)
 
-- Done and pushed: core (verdicts, DKIM alert check, rupee parsing, claim-once
-  transaction with OCC retry, Bedrock screenshot reader, naive race control),
-  Lambda handlers (`/api/shops`, `/api/alerts`, `/api/check`, `/api/race`,
-  migrate), the CDK stack (CloudFront + S3 with OAC, HTTP API, five Node 22
-  arm64 Lambdas, a new DSQL cluster, a 24 h upload bucket), and the web SPA.
-  `pnpm synth` and `pnpm check` pass.
-- Not done: nothing is deployed; the web app has not been opened in a browser;
-  no measurements; no fixture page; no agent proof; no post.
-- AWS: CLI 2.36.14, us-east-1, account 960149837193, signed in as **root**.
-  Create `unforged-agent` before the agent deploys anything. The existing DSQL
-  cluster `nft4bnb2g3fv2sg77vt7mlbcei` is Stub's: never touch it.
-- Bedrock model defaults to `us.amazon.nova-2-lite-v1:0` in `cdk.json`
-  (`-c modelId=...` to change) pending the hour-0 test.
-- Still needed from Ashutosh: a yes on AWS spend, one bank credit-alert `.eml`
-  ("Show original" in Gmail), 5 UPI screenshots.
+- **Live:** https://d1ajauwkb76on3.cloudfront.net, stack `Unforged`, DSQL
+  cluster `ubud3ytzjhhzezzpiu3v5774de` (Stub's `nft4bnb2g3fv2sg77vt7mlbcei`
+  untouched). Deployed by `unforged-agent` (IAM user, CLI profile, AWS MCP
+  Server pinned to it). Migrate has run and now waits for async index builds.
+- **Working live:** race (20/20 rounds exactly one winner vs 1000/1000 naive,
+  `docs/measurements.md`), replay, DKIM rejection of an unsigned alert,
+  `/api/spike/dkim`, the Try-it page and phone layout, Release goods,
+  "first claimed HH:MM:SS", and claiming a signed alert directly
+  (`/api/alerts` with `orderRef`, no Bedrock needed).
+- **Blocked:** Bedrock. Every model's daily token quota is 0 and not
+  adjustable (`docs/spikes.md`); needs an AWS Support limit increase.
+  `/api/check` returns 503 and claims nothing until then.
+- **Proof so far:** `docs/agent-proof/mcp-connected.txt`, `sessions.md` (the
+  async-index catch), `scripts/agent-trail.sh` for the CloudTrail export.
+  Cover at `docs/post/cover.png`; post draft in `planning/submission-post-draft.md`.
+- **Still needed from Ashutosh:** the Bedrock quota case, the real bank
+  `.eml`, 5 screenshots, and the open decision above on which input leads.
 
 ## Next, in order
 
