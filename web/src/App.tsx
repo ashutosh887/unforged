@@ -2,11 +2,21 @@ import { useEffect, useState, type DragEvent, type FormEvent } from "react"
 import { encodeImage, post, type AlertResult, type CheckResult } from "./api"
 import { Demo } from "./Demo"
 import { money, Race, useAction, VerdictCard } from "./parts"
+import { SignatureCheck } from "./Signature"
 
 type View = "try" | "shop"
 type Mode = "screenshot" | "alert"
 
 const tokenKey = "unforged.token"
+
+const demoAlert = {
+  label: "Use the demo bank alert",
+  load: async () => {
+    const res = await fetch("/fixtures/alert.eml", { cache: "no-cache" }).catch(() => null)
+    if (!res?.ok || (res.headers.get("content-type") ?? "").includes("text/html")) return null
+    return res.text()
+  },
+}
 
 function initialToken(): string {
   const fromHash = new URLSearchParams(location.hash.slice(1)).get("t")
@@ -51,7 +61,12 @@ export function App() {
           Your shop
         </button>
       </nav>
-      {view === "try" ? <Demo /> : token ? <Workspace token={token} /> : <ShopSetup onToken={setToken} />}
+      {view === "try" ? (
+        <>
+          <SignatureCheck sample={demoAlert} />
+          <Demo />
+        </>
+      ) : token ? <Workspace token={token} /> : <ShopSetup onToken={setToken} />}
       <Race />
     </main>
   )

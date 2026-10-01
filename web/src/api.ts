@@ -2,6 +2,13 @@ import type { Decision, ScreenshotRead } from "../../src/core/types.js"
 
 export type CheckResult = Decision & { read: ScreenshotRead; retries: number }
 export type AlertResult = { credit: { bank: string; utr: string; amountPaise: number; creditedAt: string; dkimDomain: string }; duplicate: boolean; decision?: Decision }
+export type VerifyResult = {
+  from: string | null
+  signatures: { domain: string; selector: string; result: string; aligned: boolean; detail: string | null }[]
+  signer: string | null
+  bankCredit: { bank: string; utr: string; amountPaise: number; dkimDomain: string } | null
+  notStoredBecause: string | null
+}
 export type RaceResult = {
   n: number
   utr: string
