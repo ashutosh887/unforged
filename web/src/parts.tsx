@@ -1,0 +1,112 @@
+import { useCallback, useState } from "react"
+import type { Credit, Verdict } from "../../src/core/types.js"
+import { formatPaise } from "../../src/core/money.js"
+import { post, type CheckResult, type RaceResult } from "./api"
+
+export type Tone = "good" | "warn" | "bad" | "neutral"
+
+export type BankRow = Pick<Credit, "bank" | "utr" | "amountPaise" | "dkimDomain" | "creditedAt">
+
+export const verdicts: Record<Verdict, { label: string; tone: Tone }> = {
+  VERIFIED: { label: "Verified", tone: "good" },
+  ALREADY_CLAIMED: { label: "Already claimed", tone: "warn" },
+  AMOUNT_MISMATCH: { label: "Amount mismatch", tone: "bad" },
+  PAYEE_MISMATCH: { label: "Payee mismatch", tone: "bad" },
+  NOT_FOUND_YET: { label: "Not found yet", tone: "neutral" },
+  UNREADABLE: { label: "Unreadable", tone: "neutral" },
+}
+
+export function money(paise: number | null | undefined): string {
+  return paise === null || paise === undefined ? "—" : formatPaise(paise)
+}
+
+export function useAction<T>() {
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState("")
+  const [result, setResult] = useState<T | null>(null)
+  const run = useCallback(async (task: () => Promise<T>) => {
+    setBusy(true)
+    setError("")
+    try {
+      setResult(await task())
+    } catch (e) {
+      setResult(null)
+      setError(e instanceof Error ? e.message : String(e))
+    } finally {
+      setBusy(false)
+    }
+  }, [])
+  return { busy, error, result, run }
+}
+
+export function BankFacts({ row, empty }: { row: BankRow | null | undefined; empty?: string }) {
+  if (!row) return <p className="muted small">{empty ?? "No signed alert matches this UTR."}</p>
+  return (
+    <dl className="facts">
+      <dt>Bank UTR</dt>
+      <dd className="mono">{row.utr}</dd>
+      <dt>Bank amount</dt>
+      <dd>{money(row.amountPaise)}</dd>
+      <dt>Signed by</dt>
+      <dd>{row.dkimDomain}</dd>
+    </dl>
+  )
+}
+
+export function VerdictCard({ result, bankFallback, bankEmpty }: { result: CheckResult; bankFallback?: BankRow | null; bankEmpty?: string }) {
+  const v = verdicts[result.verdict]
+  return (
+    <article className={`verdict ${v.tone}`}>
+      <h3>{v.label}</h3>
+      <p>{result.reason}</p>
+      <div className="compare">
+        <div>
+          <h4>Screenshot</h4>
+          <dl className="facts">
+            <dt>UTR</dt>
+            <dd className="mono">{result.read.utr ?? "—"}</dd>
+            <dt>Amount</dt>
+            <dd>{money(result.read.amountPaise)}</dd>
+            <dt>Paid to</dt>
+            <dd>{result.read.payeeVpa ?? "—"}</dd>
+          </dl>
+        </div>
+        <div>
+          <h4>Bank alert</h4>
+          <BankFacts row={result.credit ?? bankFallback} {...(bankEmpty ? { empty: bankEmpty } : {})} />
+        </div>
+      </div>
+    </article>
+  )
+}
+
+export function Race() {
+  const action = useAction<RaceResult>()
+  const n = 50
+  return (
+    <section className="card">
+      <h2>Race</h2>
+      <p className="muted">{n} claims for one bank credit at the same instant, with and without the unique index.</p>
+      <button type="button" disabled={action.busy} onClick={() => void action.run(() => post("race", { n }))}>
+        {action.busy ? "Racing…" : `Race ${n} claims`}
+      </button>
+      {action.error && <p className="error">{action.error}</p>}
+      {action.result && (
+        <div className="compare">
+          <div className={`tally ${action.result.guarded.verified === 1 ? "good" : "bad"}`}>
+            <strong>{action.result.guarded.verified}</strong>
+            <span>accepted with the unique index</span>
+            <small>
+              {action.result.guarded.alreadyClaimed} already claimed · {action.result.guarded.retries} retries · {action.result.guarded.ms} ms
+            </small>
+          </div>
+          <div className={`tally ${action.result.naive.accepted === 1 ? "good" : "bad"}`}>
+            <strong>{action.result.naive.accepted}</strong>
+            <span>accepted by check-then-insert</span>
+            <small>{action.result.naive.errors} errors</small>
+          </div>
+        </div>
+      )}
+    </section>
+  )
+}

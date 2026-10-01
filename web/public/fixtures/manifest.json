@@ -1,0 +1,12 @@
+{
+  "shop": { "name": "Demo shop", "vpa": "demo.seller@okicici" },
+  "alert": { "label": "Signed bank credit alert", "file": "alert.eml" },
+  "checks": [
+    { "label": "Real screenshot, before the bank alert lands", "file": "original.png", "expect": "NOT_FOUND_YET", "order": "A12", "beforeAlert": true },
+    { "label": "Real screenshot, after the bank alert", "file": "original.png", "expect": "VERIFIED", "order": "A12" },
+    { "label": "Amount edited", "file": "amount-edit.png", "expect": "AMOUNT_MISMATCH", "order": "A14" },
+    { "label": "Payee edited", "file": "payee-edit.png", "expect": "PAYEE_MISMATCH", "order": "A15" },
+    { "label": "Cropped, UTR cut off", "file": "crop.png", "expect": "UNREADABLE", "order": "A16" },
+    { "label": "Same real screenshot, second order", "file": "original.png", "expect": "ALREADY_CLAIMED", "order": "A13" }
+  ]
+}

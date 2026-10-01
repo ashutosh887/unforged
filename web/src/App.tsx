@@ -1,18 +1,9 @@
-import { useCallback, useEffect, useState, type DragEvent, type FormEvent } from "react"
-import type { Verdict } from "../../src/core/types.js"
-import { formatPaise } from "../../src/core/money.js"
-import { encodeImage, post, type AlertResult, type CheckResult, type RaceResult } from "./api"
+import { useEffect, useState, type DragEvent, type FormEvent } from "react"
+import { encodeImage, post, type AlertResult, type CheckResult } from "./api"
+import { Demo } from "./Demo"
+import { money, Race, useAction, VerdictCard } from "./parts"
 
-type Tone = "good" | "warn" | "bad" | "neutral"
-
-const verdicts: Record<Verdict, { label: string; tone: Tone }> = {
-  VERIFIED: { label: "Verified", tone: "good" },
-  ALREADY_CLAIMED: { label: "Already claimed", tone: "warn" },
-  AMOUNT_MISMATCH: { label: "Amount mismatch", tone: "bad" },
-  PAYEE_MISMATCH: { label: "Payee mismatch", tone: "bad" },
-  NOT_FOUND_YET: { label: "Not found yet", tone: "neutral" },
-  UNREADABLE: { label: "Unreadable", tone: "neutral" },
-}
+type View = "try" | "shop"
 
 const tokenKey = "unforged.token"
 
@@ -31,39 +22,35 @@ function initialToken(): string {
   }
 }
 
-function money(paise: number | null | undefined): string {
-  return paise === null || paise === undefined ? "—" : formatPaise(paise)
-}
-
-function useAction<T>() {
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState("")
-  const [result, setResult] = useState<T | null>(null)
-  const run = useCallback(async (task: () => Promise<T>) => {
-    setBusy(true)
-    setError("")
-    try {
-      setResult(await task())
-    } catch (e) {
-      setResult(null)
-      setError(e instanceof Error ? e.message : String(e))
-    } finally {
-      setBusy(false)
-    }
-  }, [])
-  return { busy, error, result, run }
+function initialView(token: string): View {
+  const hash = new URLSearchParams(location.hash.slice(1))
+  if (hash.has("try")) return "try"
+  return token ? "shop" : "try"
 }
 
 export function App() {
   const [token, setToken] = useState(initialToken)
+  const [view, setView] = useState<View>(() => initialView(token))
 
   return (
     <main>
-      <header>
+      <header className="hero">
         <h1>Unforged</h1>
-        <p className="lede">Check a UPI payment screenshot against the bank's own signed credit alert.</p>
+        <p className="claim">A signed email is proof nobody can forge, and each proof can be claimed exactly once.</p>
+        <p className="lede">
+          First case: is that UPI payment screenshot real? Unforged checks it against the seller's own bank credit alert, verified by the bank's DKIM signature. Bedrock reads the
+          screenshot, code decides, and each bank credit can back one order only.
+        </p>
       </header>
-      {token ? <Workspace token={token} /> : <ShopSetup onToken={setToken} />}
+      <nav className="tabs" aria-label="Views">
+        <button type="button" className={view === "try" ? "on" : ""} aria-pressed={view === "try"} onClick={() => setView("try")}>
+          Try it
+        </button>
+        <button type="button" className={view === "shop" ? "on" : ""} aria-pressed={view === "shop"} onClick={() => setView("shop")}>
+          Your shop
+        </button>
+      </nav>
+      {view === "try" ? <Demo /> : token ? <Workspace token={token} /> : <ShopSetup onToken={setToken} />}
       <Race />
     </main>
   )
@@ -217,67 +204,6 @@ function ScreenshotBox({ token }: { token: string }) {
       </form>
       {action.error && <p className="error">{action.error}</p>}
       {action.result && <VerdictCard result={action.result} />}
-    </section>
-  )
-}
-
-function VerdictCard({ result }: { result: CheckResult }) {
-  const v = verdicts[result.verdict]
-  return (
-    <article className={`verdict ${v.tone}`}>
-      <h3>{v.label}</h3>
-      <p>{result.reason}</p>
-      <div className="compare">
-        <dl className="facts">
-          <dt>Screenshot UTR</dt>
-          <dd className="mono">{result.read.utr ?? "—"}</dd>
-          <dt>Screenshot amount</dt>
-          <dd>{money(result.read.amountPaise)}</dd>
-          <dt>Paid to</dt>
-          <dd>{result.read.payeeVpa ?? "—"}</dd>
-        </dl>
-        {result.credit && (
-          <dl className="facts">
-            <dt>Bank UTR</dt>
-            <dd className="mono">{result.credit.utr}</dd>
-            <dt>Bank amount</dt>
-            <dd>{money(result.credit.amountPaise)}</dd>
-            <dt>Signed by</dt>
-            <dd>{result.credit.dkimDomain}</dd>
-          </dl>
-        )}
-      </div>
-    </article>
-  )
-}
-
-function Race() {
-  const action = useAction<RaceResult>()
-  const n = 50
-  return (
-    <section className="card">
-      <h2>Race</h2>
-      <p className="muted">{n} claims for one bank credit at the same instant, with and without the unique index.</p>
-      <button type="button" disabled={action.busy} onClick={() => void action.run(() => post("race", { n }))}>
-        {action.busy ? "Racing…" : `Race ${n} claims`}
-      </button>
-      {action.error && <p className="error">{action.error}</p>}
-      {action.result && (
-        <div className="compare">
-          <div className={`tally ${action.result.guarded.verified === 1 ? "good" : "bad"}`}>
-            <strong>{action.result.guarded.verified}</strong>
-            <span>accepted with the unique index</span>
-            <small>
-              {action.result.guarded.alreadyClaimed} already claimed · {action.result.guarded.retries} retries · {action.result.guarded.ms} ms
-            </small>
-          </div>
-          <div className={`tally ${action.result.naive.accepted === 1 ? "good" : "bad"}`}>
-            <strong>{action.result.naive.accepted}</strong>
-            <span>accepted by check-then-insert</span>
-            <small>{action.result.naive.errors} errors</small>
-          </div>
-        </div>
-      )}
     </section>
   )
 }
