@@ -1,0 +1,11 @@
+{
+  "alert": "../test/fixtures/alert.eml",
+  "vpas": ["shop@bank"],
+  "cases": [
+    { "name": "amount-edit", "file": "../test/fixtures/shots/amount-edit.png", "expected": "AMOUNT_MISMATCH", "truth": { "utr": "000000000000", "amountPaise": 0, "payeeVpa": "shop@bank" } },
+    { "name": "payee-edit", "file": "../test/fixtures/shots/payee-edit.png", "expected": "PAYEE_MISMATCH", "truth": { "utr": "000000000000", "amountPaise": 0, "payeeVpa": "someone@bank" } },
+    { "name": "crop", "file": "../test/fixtures/shots/crop.png", "expected": "UNREADABLE", "truth": { "utr": null, "amountPaise": null, "payeeVpa": null } },
+    { "name": "original", "file": "../test/fixtures/shots/original.png", "expected": "VERIFIED", "orderRef": "order-1", "truth": { "utr": "000000000000", "amountPaise": 0, "payeeVpa": "shop@bank" } },
+    { "name": "reuse", "file": "../test/fixtures/shots/original.png", "expected": "ALREADY_CLAIMED", "orderRef": "order-2", "truth": { "utr": "000000000000", "amountPaise": 0, "payeeVpa": "shop@bank" } }
+  ]
+}
