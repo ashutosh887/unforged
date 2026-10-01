@@ -105,6 +105,24 @@ body). Write it in the last block from real measurements and screenshots. A
 Hashnode cross-post linking the Builder Center project is optional, after
 submitting.
 
+## ARENA c4 card: what we take, what we don't (decided 1 Oct, 6:30 PM IST)
+
+The c4 card (a 30-hour, email-only variant) was read against this plan. The plan wins wherever they differ.
+
+Taken:
+- **Replay ablation as the headline measurement:** the same signed alert claimed twice with the unique index on, then against the naive table (no index). Report approved first claims vs approved second claims. This sits alongside the 50-way race.
+- **Spike item:** time the DKIM DNS lookup from inside Lambda for the real bank's domain, and record p50/p95 in `docs/spikes.md`.
+- **Its do-not-build list, where it agrees with ours:** no auth, billing, admin or metrics dashboard, settings, run history, waitlist, second platform, IMAP/SMTP ingestion, or seller registration UI.
+- **Demo rehearsal plus a recorded video backup.**
+
+Not taken:
+- **Email-only input, with no screenshots.** The screenshot is the thing a buyer forges; the alert is what proves it. The hero demo stays screenshot plus alert.
+- **Python `dkim` library:** `mailauth` in Node is already built and tested against tampering.
+- **Message-ID as the claim key:** the bank credit (UTR + amount) is the thing claimed once.
+- **A single REJECTED verdict:** keep the six discrete verdicts.
+- **Its corpus of "10 real emails from SBI, HDFC, ICICI over 6 months":** that corpus does not exist. Only samples Ashutosh actually provides count, and the post states the real count.
+- **Its 30-hour timeline and the "Muvattupuzha case" reference:** neither is sourced. Nothing unsourced goes into the post.
+
 ## State (1 Oct 2026, evening IST)
 
 - Done and pushed: core (verdicts, DKIM alert check, rupee parsing, claim-once
@@ -132,9 +150,9 @@ submitting.
 3. `cdk bootstrap` if needed, `pnpm deploy` as `unforged-agent`, invoke the
    migrate Lambda once. Open the CloudFront URL on a phone over mobile data.
 4. Fixture page and the landing copy (requirements 1–2).
-5. Measurements into `docs/measurements.md`.
+5. Measurements into `docs/measurements.md`: the 50-way race, the replay ablation, the forgery matrix, extraction accuracy and DKIM DNS latency.
 6. Post, cover, diagram; repo public; submit about 6 h before the deadline.
 
 ## First message for a new session here
 
-> Read CLAUDE.md and docs/PLAN.md (the Positioning, Requirements and State sections are new). Then do "Next, in order" from step 1. I say yes to the AWS spend. Here is my bank alert .eml and 5 screenshots: …
+> Read CLAUDE.md, docs/PLAN.md (Positioning, Requirements, ARENA c4 card, State and Next) and git log -12. Then do "Next, in order" from step 1. I say yes to the AWS spend. Here is my bank alert .eml and 5 screenshots: …
