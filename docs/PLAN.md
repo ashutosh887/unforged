@@ -181,6 +181,12 @@ Not taken:
 - **Rechecked 1 Oct 22:40 IST through aws-mcp:** stack `UPDATE_COMPLETE`,
   DSQL `ACTIVE`, Bedrock still 0 on Nova 2 Lite, Haiku 4.5 and Nova Lite.
   The Support API needs a paid plan, so the limit case is console-only.
+- **Added 1 Oct night:** `POST /api/verify` and the "Check any signed email"
+  card at the top of Try it. A judge pastes any email, sees the DKIM signer,
+  then breaks it with one changed character; nothing is stored. Measured on
+  80 public-archive emails (measurements §6): 37/37 broken by one character,
+  37/37 rejected with a bank From. The card's "Use the demo bank alert"
+  button appears once `web/public/fixtures/alert.eml` is published.
 - **Still needed from Ashutosh:** the Bedrock quota case, the real bank
   `.eml`, 5 screenshots, and the open decision above on which input leads.
 
