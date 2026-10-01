@@ -97,6 +97,44 @@ How each criterion is earned:
    from a global sender) through the same claim path, to show it is not
    India-only.
 
+## ARENA review (1 Oct, project chat, three models)
+
+The same question went to Qwen 3 235B, GPT-OSS-120B and Sarvam 105B
+through ARENA's project chat, with this run's evidence, gates, Play and
+build plan as context. Raw answers: `planning/arena-review.md`. Only
+points at least two models agreed on are kept here.
+
+Agreed by all three:
+1. **The demo:** paste, VERIFIED with the bank domain and time. Paste
+   again, **ALREADY CLAIMED · first claimed HH:MM:SS**, and the
+   **Release goods** button is disabled. Show REJECTED with its reason.
+2. **Hour-0 spike:** DKIM verify plus the DNS TXT key lookup inside Lambda,
+   on real alerts from SBI, HDFC or ICICI. Measure success rate and
+   latency.
+3. **Cut:** Step Functions, SMTP/IMAP forwarding, accounts and login,
+   history, admin and analytics views, multi-bank selector config.
+4. **The line to state:** no gallery entry verifies a bank DKIM signature
+   and locks the claim exactly once; the verdict is a storage-layer
+   guarantee, not a model's guess.
+
+Agreed by two:
+- Open the story with: **"The screenshot they showed you was never the
+  source of truth."**
+- Publish the replay ablation (unique index vs the naive control) with the
+  measurement script committed before the numbers.
+- A short narrated demo video that ends on the seller pressing Release
+  goods.
+
+Open decision (Ashutosh): all three pitched the pasted email alone, and
+one said to cut the Bedrock screenshot read. Unforged as built checks the
+buyer's screenshot against the seller's alert. Decide which input leads.
+
+Never use (fabricated or wrong in the answers): "23 cases", "₹4.1M",
+"NCRB 4,046", "RBI December 2026 draft guidelines", the domain
+"sbibank.co.in" (SBI is sbi.co.in), multi-region read replicas,
+ElastiCache, DKIM in a CloudFront Function, "DNSKEY" (DKIM keys are TXT
+records), and Buyable/IncidentLense as nearest entries.
+
 ## Blog (required, written at submission time)
 
 The required "blog" is the Builder Center project post. Skeleton:
