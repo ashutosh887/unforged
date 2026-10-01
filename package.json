@@ -4,10 +4,12 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc --noEmit && tsc --noEmit -p infra",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p infra && tsc --noEmit -p web",
     "check": "pnpm typecheck && vitest run",
-    "synth": "cdk synth",
-    "deploy": "cdk deploy --require-approval never"
+    "web": "vite --config web/vite.config.ts",
+    "build:web": "vite build --config web/vite.config.ts",
+    "synth": "pnpm build:web && cdk synth",
+    "deploy": "pnpm build:web && cdk deploy --require-approval never"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.1144.0",
