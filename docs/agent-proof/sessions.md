@@ -43,3 +43,19 @@ the fix, three rounds:
 {"n":50,"guarded":{"verified":1,"alreadyClaimed":49,"errors":0,"retries":14,"ms":178},"naive":{"accepted":50,"errors":0}}
 {"n":50,"guarded":{"verified":1,"alreadyClaimed":49,"errors":0,"retries":19,"ms":199},"naive":{"accepted":50,"errors":0}}
 ```
+
+## 1 Oct 2026, late evening IST: checks through the AWS MCP Server
+
+Every call below went through the `aws-mcp` tools (`aws___run_script`), not
+the CLI. `sts:GetCallerIdentity` returned
+`arn:aws:iam::960149837193:user/unforged-agent`.
+
+| Call | Result |
+| --- | --- |
+| `cloudformation:DescribeStacks Unforged` | `UPDATE_COMPLETE`, URL output `https://d1ajauwkb76on3.cloudfront.net` |
+| `dsql:GetCluster ubud3ytzjhhzezzpiu3v5774de` | `ACTIVE` |
+| `service-quotas:ListServiceQuotas bedrock` | Nova 2 Lite tokens per day (`L-210172B5`, cross-region `L-AD940EDE`): 0, not adjustable |
+| `bedrock-runtime:Converse` on Nova 2 Lite, Claude Haiku 4.5, Nova Lite | `ThrottlingException: Too many tokens per day` on all three |
+| `support:DescribeSeverityLevels` | `SubscriptionRequiredException`: the limit case cannot be filed by API on Basic support; it goes through the console |
+| `logs:FilterLogEvents` on the Check, Alerts and Race functions (24 h) | Check 1 invocation (max 2718 ms), Alerts 1 (477 ms), Race 39 (1947 ms) |
+| `cloudtrail:LookupEvents Username=unforged-agent` | 825 events, 13:10–15:09 UTC (the newest calls appear after CloudTrail's delivery lag) |
