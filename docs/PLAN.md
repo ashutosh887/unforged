@@ -181,18 +181,56 @@ Not taken:
 - **Still needed from Ashutosh:** the Bedrock quota case, the real bank
   `.eml`, 5 screenshots, and the open decision above on which input leads.
 
-## Next, in order
+## Next, in order (next session, 2 Oct)
 
-1. Create `unforged-agent` (IAM user + profile), connect the AWS MCP Server in
-   Claude Code, screenshot `claude mcp list` into `docs/agent-proof/`.
-2. Spikes: DKIM and UTR on the real `.eml`; Bedrock on the 5 screenshots
-   (Nova 2 Lite vs Claude Haiku 4.5). Write `docs/spikes.md`.
-3. `cdk bootstrap` if needed, `pnpm deploy` as `unforged-agent`, invoke the
-   migrate Lambda once. Open the CloudFront URL on a phone over mobile data.
-4. Fixture page and the landing copy (requirements 1–2).
-5. Measurements into `docs/measurements.md`: the 50-way race, the replay ablation, the forgery matrix, extraction accuracy and DKIM DNS latency.
-6. Post, cover, diagram; repo public; submit about 6 h before the deadline.
+Already done: unforged-agent, MCP, deploy, migrate, Try-it page, landing
+copy, race and replay measurements, cover, README, diagram.
+
+**A. Inputs (first 30 min, needs Ashutosh)**
+1. Bedrock limit case filed (Support → Service limit increase → Bedrock,
+   us-east-1, Nova 2 Lite L-210172B5 + Claude Haiku 4.5 tokens/day).
+2. Real bank `.eml` and 5 screenshots dropped into `planning/samples/`.
+3. Demo lead decided: screenshot + alert, or alert only.
+
+**B. With the `.eml` (about 1 h)**
+4. DKIM + UTR spike on the real alert; fix the parser for that bank's format
+   if needed. Record in `docs/spikes.md`.
+5. `pnpm measure:dkim` against `/api/spike/dkim` with the bank's
+   domain/selector → measurements §4.
+6. Claim the real alert directly twice (VERIFIED, then ALREADY_CLAIMED) on the
+   live site; screenshot both cards.
+
+**C. With Bedrock (about 1.5 h; skip to D if the quota is still 0)**
+7. Extraction spike: Nova 2 Lite vs Claude Haiku 4.5 on the 5 screenshots;
+   pick the model and set `modelId` order in `cdk.json`.
+8. Make fixtures: original, amount edit, payee edit (visible UPI ID), crop
+   (UTR cut). Set `shop.vpa` in `web/public/fixtures/manifest.json` to the
+   real payee. Copy the `.eml` in byte for byte. Redeploy.
+9. `pnpm measure:forgery` → measurements §5. Run Try it end to end on a phone
+   over mobile data and time it.
+
+**D. If Bedrock is still 0 at noon IST**
+10. Lead the demo with "Claim a signed alert directly" (works without
+    Bedrock); the Try-it page runs the alert-only cases; the post says
+    plainly that screenshot reading is built, and shows the 503 fail-closed
+    behaviour. Nothing is faked.
+
+**E. Agent proof (30 min, through the aws-mcp tools)**
+11. In the new session, use aws-mcp tools for: stack status, DSQL `sys.jobs`
+    check, CloudWatch logs of Check, so the transcript holds MCP calls.
+12. `scripts/agent-trail.sh` → `docs/agent-proof/cloudtrail-unforged-agent.json`;
+    screenshots of `claude mcp list`, an MCP call, and the CloudTrail
+    console filtered to `unforged-agent`.
+
+**F. Post and submit (about 2.5 h)**
+13. Fill every `[[MEASURE]]` and `[[TODO]]` in
+    `planning/submission-post-draft.md` from `docs/measurements.md` only.
+14. Demo video (90 s): three cards, Release goods, race. Rehearse once.
+15. Repo public; clean-browser check from another network; Builder Center
+    post with cover, 3 proof images, tags `#daily-life-enhancement`
+    `#startups`, repo + live links.
+16. Submit by 2 Oct 6:00 PM IST (6 h buffer before 3 Oct 12:29 IST).
 
 ## First message for a new session here
 
-> Read CLAUDE.md, docs/PLAN.md (Positioning, Requirements, ARENA c4 card, State and Next) and git log -12. Then do "Next, in order" from step 1. I say yes to the AWS spend. Here is my bank alert .eml and 5 screenshots: …
+> Read CLAUDE.md, docs/PLAN.md (State, ARENA review, Next) and git log -15. The app is live at https://d1ajauwkb76on3.cloudfront.net; deploy with `AWS_PROFILE=unforged-agent pnpm run deploy`. Use the aws-mcp tools for AWS work. Do "Next, in order" from B. Bedrock quota: [raised / pending]. Demo lead: [screenshot + alert / alert only]. Files are in planning/samples/.
