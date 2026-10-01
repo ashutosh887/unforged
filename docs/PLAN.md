@@ -178,6 +178,9 @@ Not taken:
 - **Proof so far:** `docs/agent-proof/mcp-connected.txt`, `sessions.md` (the
   async-index catch), `scripts/agent-trail.sh` for the CloudTrail export.
   Cover at `docs/post/cover.png`; post draft in `planning/submission-post-draft.md`.
+- **Rechecked 1 Oct 22:40 IST through aws-mcp:** stack `UPDATE_COMPLETE`,
+  DSQL `ACTIVE`, Bedrock still 0 on Nova 2 Lite, Haiku 4.5 and Nova Lite.
+  The Support API needs a paid plan, so the limit case is console-only.
 - **Still needed from Ashutosh:** the Bedrock quota case, the real bank
   `.eml`, 5 screenshots, and the open decision above on which input leads.
 
@@ -199,6 +202,10 @@ copy, race and replay measurements, cover, README, diagram.
    domain/selector → measurements §4.
 6. Claim the real alert directly twice (VERIFIED, then ALREADY_CLAIMED) on the
    live site; screenshot both cards.
+6a. `ALERT_EML=planning/samples/<file>.eml SHOP_VPAS=<vpa> API_URL=<url>
+    pnpm measure:tamper`: one body digit changed and a look-alike From
+    domain, both expected rejected, plus the untouched original as control.
+    Fills the post's two alert rows of the forgery table.
 
 **C. With Bedrock (about 1.5 h; skip to D if the quota is still 0)**
 7. Extraction spike: Nova 2 Lite vs Claude Haiku 4.5 on the 5 screenshots;
