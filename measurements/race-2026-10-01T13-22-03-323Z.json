@@ -1,0 +1,452 @@
+{
+  "apiUrl": "https://d1ajauwkb76on3.cloudfront.net",
+  "startedAt": "2026-10-01T13:21:52.110Z",
+  "node": "v24.14.0",
+  "finishedAt": "2026-10-01T13:22:03.323Z",
+  "summary": {
+    "rounds": 20,
+    "n": 50,
+    "successfulRounds": 20,
+    "roundsWithExactlyOneGuardedWinner": 20,
+    "roundsWithMoreThanOneNaiveWinner": 20,
+    "guardedWinnersTotal": 20,
+    "naiveWinnersTotal": 1000,
+    "guardedErrorsTotal": 0,
+    "naiveErrorsTotal": 0,
+    "occRetriesTotal": 377,
+    "guardedBatchMs": {
+      "p50": 134,
+      "p95": 198
+    },
+    "naiveBatchMs": {
+      "p50": 40,
+      "p95": 73
+    },
+    "clientRoundTripMs": {
+      "p50": 491.9366660000005,
+      "p95": 888.145833
+    }
+  },
+  "results": [
+    {
+      "round": 1,
+      "status": 200,
+      "clientMs": 639.11525,
+      "body": {
+        "n": 50,
+        "utr": "381908160330",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 207
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 67
+        }
+      }
+    },
+    {
+      "round": 2,
+      "status": 200,
+      "clientMs": 1007.52375,
+      "body": {
+        "n": 50,
+        "utr": "310055703298",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 16,
+          "ms": 195
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 52
+        }
+      }
+    },
+    {
+      "round": 3,
+      "status": 200,
+      "clientMs": 520.002583,
+      "body": {
+        "n": 50,
+        "utr": "354822544929",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 171
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 73
+        }
+      }
+    },
+    {
+      "round": 4,
+      "status": 200,
+      "clientMs": 483.38324999999986,
+      "body": {
+        "n": 50,
+        "utr": "304065810320",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 164
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 59
+        }
+      }
+    },
+    {
+      "round": 5,
+      "status": 200,
+      "clientMs": 516.9405420000003,
+      "body": {
+        "n": 50,
+        "utr": "705624124774",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 158
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 51
+        }
+      }
+    },
+    {
+      "round": 6,
+      "status": 200,
+      "clientMs": 671.911458,
+      "body": {
+        "n": 50,
+        "utr": "684146888360",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 198
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 76
+        }
+      }
+    },
+    {
+      "round": 7,
+      "status": 200,
+      "clientMs": 888.145833,
+      "body": {
+        "n": 50,
+        "utr": "838229772861",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 194
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 39
+        }
+      }
+    },
+    {
+      "round": 8,
+      "status": 200,
+      "clientMs": 868.5118330000005,
+      "body": {
+        "n": 50,
+        "utr": "396079007729",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 134
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 51
+        }
+      }
+    },
+    {
+      "round": 9,
+      "status": 200,
+      "clientMs": 410.1148750000002,
+      "body": {
+        "n": 50,
+        "utr": "462165033468",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 116
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 40
+        }
+      }
+    },
+    {
+      "round": 10,
+      "status": 200,
+      "clientMs": 491.72508299999936,
+      "body": {
+        "n": 50,
+        "utr": "269544059662",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 140
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 41
+        }
+      }
+    },
+    {
+      "round": 11,
+      "status": 200,
+      "clientMs": 491.9366660000005,
+      "body": {
+        "n": 50,
+        "utr": "111682591758",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 189
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 36
+        }
+      }
+    },
+    {
+      "round": 12,
+      "status": 200,
+      "clientMs": 775.095875,
+      "body": {
+        "n": 50,
+        "utr": "619716974274",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 81
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 38
+        }
+      }
+    },
+    {
+      "round": 13,
+      "status": 200,
+      "clientMs": 397.916541999999,
+      "body": {
+        "n": 50,
+        "utr": "738791452270",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 95
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 36
+        }
+      }
+    },
+    {
+      "round": 14,
+      "status": 200,
+      "clientMs": 402.22970799999894,
+      "body": {
+        "n": 50,
+        "utr": "309325761233",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 83
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 56
+        }
+      }
+    },
+    {
+      "round": 15,
+      "status": 200,
+      "clientMs": 494.6542499999996,
+      "body": {
+        "n": 50,
+        "utr": "293399194413",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 93
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 45
+        }
+      }
+    },
+    {
+      "round": 16,
+      "status": 200,
+      "clientMs": 401.56574999999975,
+      "body": {
+        "n": 50,
+        "utr": "267852622045",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 99
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 35
+        }
+      }
+    },
+    {
+      "round": 17,
+      "status": 200,
+      "clientMs": 396.06304199999977,
+      "body": {
+        "n": 50,
+        "utr": "437468219683",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 100
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 36
+        }
+      }
+    },
+    {
+      "round": 18,
+      "status": 200,
+      "clientMs": 430.56295800000044,
+      "body": {
+        "n": 50,
+        "utr": "906051850878",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 90
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 36
+        }
+      }
+    },
+    {
+      "round": 19,
+      "status": 200,
+      "clientMs": 364.6897919999992,
+      "body": {
+        "n": 50,
+        "utr": "513434128522",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 73
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 39
+        }
+      }
+    },
+    {
+      "round": 20,
+      "status": 200,
+      "clientMs": 556.172125000001,
+      "body": {
+        "n": 50,
+        "utr": "296396534419",
+        "guarded": {
+          "verified": 1,
+          "alreadyClaimed": 49,
+          "errors": 0,
+          "retries": 19,
+          "ms": 137
+        },
+        "naive": {
+          "accepted": 50,
+          "errors": 0,
+          "ms": 35
+        }
+      }
+    }
+  ]
+}

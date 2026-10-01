@@ -1,0 +1,470 @@
+{
+  "apiUrl": "https://d1ajauwkb76on3.cloudfront.net",
+  "startedAt": "2026-10-01T13:22:03.690Z",
+  "node": "v24.14.0",
+  "rounds": 10,
+  "replays": [
+    {
+      "round": 1,
+      "status": 200,
+      "ms": 769.559167,
+      "body": {
+        "mode": "replay",
+        "utr": "306437101666",
+        "guarded": {
+          "first": {
+            "verdict": "VERIFIED",
+            "reason": "RACE credited this amount at 2026-10-01T13:22:04.273Z, signed by race. Claimed for order replay-1.",
+            "credit": {
+              "id": "b8b0c035-ce5f-4193-8da8-57e4d9735f05",
+              "bank": "race",
+              "utr": "306437101666",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:04.273Z",
+              "dkimDomain": "race",
+              "source": "race"
+            }
+          },
+          "second": {
+            "verdict": "ALREADY_CLAIMED",
+            "reason": "This bank credit was already used for order replay-1. The screenshot may be real, but it has been shown before.",
+            "credit": {
+              "id": "b8b0c035-ce5f-4193-8da8-57e4d9735f05",
+              "bank": "race",
+              "utr": "306437101666",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:04.273Z",
+              "dkimDomain": "race",
+              "source": "race"
+            },
+            "priorClaim": {
+              "orderRef": "replay-1",
+              "createdAt": "2026-10-01T13:22:04.295Z"
+            }
+          }
+        },
+        "naive": {
+          "first": true,
+          "second": false
+        }
+      }
+    },
+    {
+      "round": 2,
+      "status": 200,
+      "ms": 759.8771249999999,
+      "body": {
+        "mode": "replay",
+        "utr": "250967326926",
+        "guarded": {
+          "first": {
+            "verdict": "VERIFIED",
+            "reason": "RACE credited this amount at 2026-10-01T13:22:05.060Z, signed by race. Claimed for order replay-1.",
+            "credit": {
+              "id": "dcb1834b-3d66-462e-ab61-c3848239bebc",
+              "bank": "race",
+              "utr": "250967326926",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:05.060Z",
+              "dkimDomain": "race",
+              "source": "race"
+            }
+          },
+          "second": {
+            "verdict": "ALREADY_CLAIMED",
+            "reason": "This bank credit was already used for order replay-1. The screenshot may be real, but it has been shown before.",
+            "credit": {
+              "id": "dcb1834b-3d66-462e-ab61-c3848239bebc",
+              "bank": "race",
+              "utr": "250967326926",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:05.060Z",
+              "dkimDomain": "race",
+              "source": "race"
+            },
+            "priorClaim": {
+              "orderRef": "replay-1",
+              "createdAt": "2026-10-01T13:22:05.075Z"
+            }
+          }
+        },
+        "naive": {
+          "first": true,
+          "second": false
+        }
+      }
+    },
+    {
+      "round": 3,
+      "status": 200,
+      "ms": 307.4897910000002,
+      "body": {
+        "mode": "replay",
+        "utr": "218485235459",
+        "guarded": {
+          "first": {
+            "verdict": "VERIFIED",
+            "reason": "RACE credited this amount at 2026-10-01T13:22:05.368Z, signed by race. Claimed for order replay-1.",
+            "credit": {
+              "id": "7ffd21e7-252b-4256-a656-b920eef8924e",
+              "bank": "race",
+              "utr": "218485235459",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:05.368Z",
+              "dkimDomain": "race",
+              "source": "race"
+            }
+          },
+          "second": {
+            "verdict": "ALREADY_CLAIMED",
+            "reason": "This bank credit was already used for order replay-1. The screenshot may be real, but it has been shown before.",
+            "credit": {
+              "id": "7ffd21e7-252b-4256-a656-b920eef8924e",
+              "bank": "race",
+              "utr": "218485235459",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:05.368Z",
+              "dkimDomain": "race",
+              "source": "race"
+            },
+            "priorClaim": {
+              "orderRef": "replay-1",
+              "createdAt": "2026-10-01T13:22:05.381Z"
+            }
+          }
+        },
+        "naive": {
+          "first": true,
+          "second": false
+        }
+      }
+    },
+    {
+      "round": 4,
+      "status": 200,
+      "ms": 298.1064160000001,
+      "body": {
+        "mode": "replay",
+        "utr": "249601503068",
+        "guarded": {
+          "first": {
+            "verdict": "VERIFIED",
+            "reason": "RACE credited this amount at 2026-10-01T13:22:05.675Z, signed by race. Claimed for order replay-1.",
+            "credit": {
+              "id": "e60d70a9-38fd-4a16-aaf4-4654dd306066",
+              "bank": "race",
+              "utr": "249601503068",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:05.675Z",
+              "dkimDomain": "race",
+              "source": "race"
+            }
+          },
+          "second": {
+            "verdict": "ALREADY_CLAIMED",
+            "reason": "This bank credit was already used for order replay-1. The screenshot may be real, but it has been shown before.",
+            "credit": {
+              "id": "e60d70a9-38fd-4a16-aaf4-4654dd306066",
+              "bank": "race",
+              "utr": "249601503068",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:05.675Z",
+              "dkimDomain": "race",
+              "source": "race"
+            },
+            "priorClaim": {
+              "orderRef": "replay-1",
+              "createdAt": "2026-10-01T13:22:05.688Z"
+            }
+          }
+        },
+        "naive": {
+          "first": true,
+          "second": false
+        }
+      }
+    },
+    {
+      "round": 5,
+      "status": 200,
+      "ms": 349.93670900000006,
+      "body": {
+        "mode": "replay",
+        "utr": "866844925458",
+        "guarded": {
+          "first": {
+            "verdict": "VERIFIED",
+            "reason": "RACE credited this amount at 2026-10-01T13:22:05.969Z, signed by race. Claimed for order replay-1.",
+            "credit": {
+              "id": "afff2ce7-b442-4414-8e50-4d7b921d8b72",
+              "bank": "race",
+              "utr": "866844925458",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:05.969Z",
+              "dkimDomain": "race",
+              "source": "race"
+            }
+          },
+          "second": {
+            "verdict": "ALREADY_CLAIMED",
+            "reason": "This bank credit was already used for order replay-1. The screenshot may be real, but it has been shown before.",
+            "credit": {
+              "id": "afff2ce7-b442-4414-8e50-4d7b921d8b72",
+              "bank": "race",
+              "utr": "866844925458",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:05.969Z",
+              "dkimDomain": "race",
+              "source": "race"
+            },
+            "priorClaim": {
+              "orderRef": "replay-1",
+              "createdAt": "2026-10-01T13:22:05.983Z"
+            }
+          }
+        },
+        "naive": {
+          "first": true,
+          "second": false
+        }
+      }
+    },
+    {
+      "round": 6,
+      "status": 200,
+      "ms": 319.6881250000001,
+      "body": {
+        "mode": "replay",
+        "utr": "718232593378",
+        "guarded": {
+          "first": {
+            "verdict": "VERIFIED",
+            "reason": "RACE credited this amount at 2026-10-01T13:22:06.325Z, signed by race. Claimed for order replay-1.",
+            "credit": {
+              "id": "b6dff70e-d707-4566-a074-dd0fed318973",
+              "bank": "race",
+              "utr": "718232593378",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:06.325Z",
+              "dkimDomain": "race",
+              "source": "race"
+            }
+          },
+          "second": {
+            "verdict": "ALREADY_CLAIMED",
+            "reason": "This bank credit was already used for order replay-1. The screenshot may be real, but it has been shown before.",
+            "credit": {
+              "id": "b6dff70e-d707-4566-a074-dd0fed318973",
+              "bank": "race",
+              "utr": "718232593378",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:06.325Z",
+              "dkimDomain": "race",
+              "source": "race"
+            },
+            "priorClaim": {
+              "orderRef": "replay-1",
+              "createdAt": "2026-10-01T13:22:06.339Z"
+            }
+          }
+        },
+        "naive": {
+          "first": true,
+          "second": false
+        }
+      }
+    },
+    {
+      "round": 7,
+      "status": 200,
+      "ms": 295.83954200000016,
+      "body": {
+        "mode": "replay",
+        "utr": "779053448395",
+        "guarded": {
+          "first": {
+            "verdict": "VERIFIED",
+            "reason": "RACE credited this amount at 2026-10-01T13:22:06.641Z, signed by race. Claimed for order replay-1.",
+            "credit": {
+              "id": "e6719a18-057a-455d-8519-4cd3e793b822",
+              "bank": "race",
+              "utr": "779053448395",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:06.641Z",
+              "dkimDomain": "race",
+              "source": "race"
+            }
+          },
+          "second": {
+            "verdict": "ALREADY_CLAIMED",
+            "reason": "This bank credit was already used for order replay-1. The screenshot may be real, but it has been shown before.",
+            "credit": {
+              "id": "e6719a18-057a-455d-8519-4cd3e793b822",
+              "bank": "race",
+              "utr": "779053448395",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:06.641Z",
+              "dkimDomain": "race",
+              "source": "race"
+            },
+            "priorClaim": {
+              "orderRef": "replay-1",
+              "createdAt": "2026-10-01T13:22:06.655Z"
+            }
+          }
+        },
+        "naive": {
+          "first": true,
+          "second": false
+        }
+      }
+    },
+    {
+      "round": 8,
+      "status": 200,
+      "ms": 319.9670839999999,
+      "body": {
+        "mode": "replay",
+        "utr": "829282849952",
+        "guarded": {
+          "first": {
+            "verdict": "VERIFIED",
+            "reason": "RACE credited this amount at 2026-10-01T13:22:06.939Z, signed by race. Claimed for order replay-1.",
+            "credit": {
+              "id": "40bfff02-b7cd-4757-b9ff-e711e8e9753b",
+              "bank": "race",
+              "utr": "829282849952",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:06.939Z",
+              "dkimDomain": "race",
+              "source": "race"
+            }
+          },
+          "second": {
+            "verdict": "ALREADY_CLAIMED",
+            "reason": "This bank credit was already used for order replay-1. The screenshot may be real, but it has been shown before.",
+            "credit": {
+              "id": "40bfff02-b7cd-4757-b9ff-e711e8e9753b",
+              "bank": "race",
+              "utr": "829282849952",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:06.939Z",
+              "dkimDomain": "race",
+              "source": "race"
+            },
+            "priorClaim": {
+              "orderRef": "replay-1",
+              "createdAt": "2026-10-01T13:22:06.954Z"
+            }
+          }
+        },
+        "naive": {
+          "first": true,
+          "second": false
+        }
+      }
+    },
+    {
+      "round": 9,
+      "status": 200,
+      "ms": 745.2039999999997,
+      "body": {
+        "mode": "replay",
+        "utr": "818372523117",
+        "guarded": {
+          "first": {
+            "verdict": "VERIFIED",
+            "reason": "RACE credited this amount at 2026-10-01T13:22:07.686Z, signed by race. Claimed for order replay-1.",
+            "credit": {
+              "id": "eeadb837-0180-4380-aef5-f7bc1220411b",
+              "bank": "race",
+              "utr": "818372523117",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:07.686Z",
+              "dkimDomain": "race",
+              "source": "race"
+            }
+          },
+          "second": {
+            "verdict": "ALREADY_CLAIMED",
+            "reason": "This bank credit was already used for order replay-1. The screenshot may be real, but it has been shown before.",
+            "credit": {
+              "id": "eeadb837-0180-4380-aef5-f7bc1220411b",
+              "bank": "race",
+              "utr": "818372523117",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:07.686Z",
+              "dkimDomain": "race",
+              "source": "race"
+            },
+            "priorClaim": {
+              "orderRef": "replay-1",
+              "createdAt": "2026-10-01T13:22:07.700Z"
+            }
+          }
+        },
+        "naive": {
+          "first": true,
+          "second": false
+        }
+      }
+    },
+    {
+      "round": 10,
+      "status": 200,
+      "ms": 382.4006669999999,
+      "body": {
+        "mode": "replay",
+        "utr": "427272655975",
+        "guarded": {
+          "first": {
+            "verdict": "VERIFIED",
+            "reason": "RACE credited this amount at 2026-10-01T13:22:08.008Z, signed by race. Claimed for order replay-1.",
+            "credit": {
+              "id": "84fb4d80-0118-4d49-93ed-dc6c6a3b9ee7",
+              "bank": "race",
+              "utr": "427272655975",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:08.008Z",
+              "dkimDomain": "race",
+              "source": "race"
+            }
+          },
+          "second": {
+            "verdict": "ALREADY_CLAIMED",
+            "reason": "This bank credit was already used for order replay-1. The screenshot may be real, but it has been shown before.",
+            "credit": {
+              "id": "84fb4d80-0118-4d49-93ed-dc6c6a3b9ee7",
+              "bank": "race",
+              "utr": "427272655975",
+              "amountPaise": 50000,
+              "creditedAt": "2026-10-01T13:22:08.008Z",
+              "dkimDomain": "race",
+              "source": "race"
+            },
+            "priorClaim": {
+              "orderRef": "replay-1",
+              "createdAt": "2026-10-01T13:22:08.021Z"
+            }
+          }
+        },
+        "naive": {
+          "first": true,
+          "second": false
+        }
+      }
+    }
+  ],
+  "summary": {
+    "completedRounds": 10,
+    "uniqueIndex": {
+      "approvedFirst": 10,
+      "approvedSecond": 0
+    },
+    "naive": {
+      "approvedFirst": 10,
+      "approvedSecond": 0
+    }
+  },
+  "finishedAt": "2026-10-01T13:22:08.240Z"
+}
