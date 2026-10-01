@@ -7,7 +7,7 @@ send: credit alerts, payslips, refunds, bookings. Unforged checks a claim
 against that signed email in code, and lets each signed record be claimed one
 time only.
 
-Live app: `LIVE_URL_PENDING`
+Live app: https://d1ajauwkb76on3.cloudfront.net
 
 ## The first case: is that UPI payment real?
 
