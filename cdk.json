@@ -1,7 +1,7 @@
 {
-  "app": "tsx infra/app.ts",
-  "output": "infra/cdk.out",
-  "context": {
-    "modelId": "us.amazon.nova-2-lite-v1:0"
-  }
+    "app": "tsx infra/app.ts",
+    "output": "infra/cdk.out",
+    "context": {
+        "modelId": "us.amazon.nova-2-lite-v1:0,us.anthropic.claude-haiku-4-5-20251001-v1:0"
+    }
 }

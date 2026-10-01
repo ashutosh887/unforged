@@ -60,6 +60,7 @@ class UnforgedStack extends Stack {
     const check = fn("Check", 29, 1024)
     const race = fn("Race", 29, 1024)
     const migrate = fn("Migrate", 120)
+    const spike = fn("Spike", 29, 256)
 
     uploads.grantPut(check)
     check.addToRolePolicy(
@@ -75,6 +76,7 @@ class UnforgedStack extends Stack {
     route("/api/alerts", alerts)
     route("/api/check", check)
     route("/api/race", race)
+    route("/api/spike/dkim", spike)
 
     const distribution = new Distribution(this, "Cdn", {
       defaultRootObject: "index.html",
