@@ -40,19 +40,43 @@ export function extractCredit(text: string): { amountPaise: number; utr: string 
   return { amountPaise, utr: normaliseUtr(utr[1]) }
 }
 
-export async function verifyAlert(raw: string | Buffer, resolver?: DNSResolver): Promise<AlertResult> {
+export type Signature = { domain: string; selector: string; result: string; aligned: boolean; detail: string | null }
+
+export type SignatureReport = {
+  from: string | null
+  signatures: Signature[]
+  signer: string | null
+  alert: AlertResult
+}
+
+export async function inspectSignature(raw: string | Buffer, resolver?: DNSResolver): Promise<SignatureReport> {
   const dkim = await dkimVerify(raw, resolver ? { resolver } : {})
-  if (dkim.fromFields !== 1 || dkim.headerFrom.length !== 1) {
-    return { ok: false, reason: "The email must have exactly one From address." }
-  }
-  const fromDomain = dkim.headerFrom[0]!.split("@").pop()!.toLowerCase()
+  const signatures = dkim.results
+    .filter((r) => r.signingDomain)
+    .map((r) => ({
+      domain: r.signingDomain!.toLowerCase(),
+      selector: r.selector ?? "",
+      result: r.status.result,
+      aligned: Boolean(r.status.aligned),
+      detail: r.status.comment ?? null,
+    }))
+  const from = dkim.fromFields === 1 && dkim.headerFrom.length === 1 ? dkim.headerFrom[0]! : null
+  const signer = signatures.find((s) => s.result === "pass" && s.aligned)?.domain ?? null
+  return { from, signatures, signer, alert: await decide(raw, from, signatures) }
+}
+
+export async function verifyAlert(raw: string | Buffer, resolver?: DNSResolver): Promise<AlertResult> {
+  return (await inspectSignature(raw, resolver)).alert
+}
+
+async function decide(raw: string | Buffer, from: string | null, signatures: Signature[]): Promise<AlertResult> {
+  if (!from) return { ok: false, reason: "The email must have exactly one From address." }
+  const fromDomain = from.split("@").pop()!.toLowerCase()
   const fromBank = bankFor(fromDomain)
   if (!fromBank) return { ok: false, reason: `${fromDomain} is not on the bank allowlist.` }
 
-  const passing = dkim.results.find(
-    (r) => r.status.result === "pass" && r.signingDomain && bankFor(r.signingDomain) === fromBank && r.status.aligned,
-  )
-  if (!passing?.signingDomain) {
+  const passing = signatures.find((s) => s.result === "pass" && s.aligned && bankFor(s.domain) === fromBank)
+  if (!passing) {
     return { ok: false, reason: `No passing DKIM signature from ${fromDomain}. The email may be edited or forged.` }
   }
 
@@ -68,7 +92,7 @@ export async function verifyAlert(raw: string | Buffer, resolver?: DNSResolver):
       utr: credit.utr,
       amountPaise: credit.amountPaise,
       creditedAt: (mail.date ?? new Date()).toISOString(),
-      dkimDomain: passing.signingDomain.toLowerCase(),
+      dkimDomain: passing.domain,
       source: "dkim-email",
     },
   }
