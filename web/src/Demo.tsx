@@ -170,6 +170,23 @@ export function Demo() {
 
   const storedAlert: BankRow | null = alertStep.state === "done" ? alertStep.result.credit : null
   const alertMissing = files !== null && !files[ready.alert.file]
+  const nothingPublished = files !== null && alertMissing && ready.checks.every((c) => !files[c.file])
+
+  if (nothingPublished) {
+    return (
+      <section className="card">
+        <h2>Try it</h2>
+        <p className="muted">The signed bank alert and its screenshots are being published. The race below runs live now. Once they land, one tap runs each case:</p>
+        <ul className="small">
+          {ready.checks.map((c, i) => (
+            <li key={`${c.order}-${i}`}>
+              {c.label} <span className="muted">· order {c.order} · expects {verdicts[c.expect]?.label ?? c.expect}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
 
   return (
     <>
