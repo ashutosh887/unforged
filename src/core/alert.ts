@@ -49,7 +49,18 @@ export type SignatureReport = {
   alert: AlertResult
 }
 
+const maxSignatures = 8
+
+function signatureCount(raw: string | Buffer): number {
+  const text = typeof raw === "string" ? raw : raw.toString("latin1")
+  const end = text.search(/\r?\n\r?\n/)
+  return (text.slice(0, end < 0 ? text.length : end).match(/^dkim-signature:/gim) ?? []).length
+}
+
 export async function inspectSignature(raw: string | Buffer, resolver?: DNSResolver): Promise<SignatureReport> {
+  if (signatureCount(raw) > maxSignatures) {
+    return { from: null, signatures: [], signer: null, alert: { ok: false, reason: `More than ${maxSignatures} DKIM signatures. Paste the original email.` } }
+  }
   const dkim = await dkimVerify(raw, resolver ? { resolver } : {})
   const signatures = dkim.results
     .filter((r) => r.signingDomain)
