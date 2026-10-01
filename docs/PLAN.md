@@ -44,15 +44,97 @@ reach and goes in the stretch list.
 5. CloudWatch metric `ClaimConflictRetries` graph in the post.
 6. Audit hash chain view.
 
-## State at handoff (1 Oct 2026)
+## Positioning (locked 1 Oct, after the ARENA run)
 
-- Done: repo scaffold, `CLAUDE.md`, verdict rules and rupee parsing with tests (`src/core/`).
-- Next file: `src/core/alert.ts`, DKIM verify via `mailauth/lib/dkim/verify.js` (`dkimVerify(raw, { resolver })`, so tests can sign a fixture with `dkimSign` and a fake DNS resolver, plus a spoofed fixture that must be rejected), then parse the body with `mailparser`.
-- AWS: CLI 2.36.14, region us-east-1, account 960149837193. The CLI is signed in as **root**, so create `unforged-agent` before the agent touches anything. The existing DSQL cluster `nft4bnb2g3fv2sg77vt7mlbcei` (`dsql-cluster-1`) belongs to Stub. Do not reuse or modify it; create a new one.
-- Bedrock (us-east-1) lists these image-input models: `amazon.nova-2-lite-v1:0`, `amazon.nova-pro-v1:0`, `anthropic.claude-haiku-4-5-20251001-v1:0` and others. Model access for Claude has not been confirmed in this account, so test at hour 0.
-- No AWS MCP server is configured in Claude Code yet.
-- Still needed from Ashutosh: one bank credit-alert email, raw from Gmail "Show original" (bank name at least), and 5 of his own UPI payment screenshots.
+The idea is bigger than UPI and the post must say so in its first line:
+**a signed email is proof nobody can forge, and each proof can be claimed
+exactly once.** Banks, employers, marketplaces and airlines already DKIM-sign
+every credit alert, payslip, refund and booking email. Unforged verifies a
+claim against that signed email in code and lets each signed record be claimed
+once. UPI payment screenshots are the first market and the hero demo, not the
+whole product.
+
+What the ARENA run (aws-zero-to-shipped, revision 5, full discovery on the
+162-entry gallery and the official T&C) established:
+
+- **The rubric is the T&C's, not the overview page's:** Technical Innovation &
+  Originality, Implementation Quality, Community/Market Impact, Creativity &
+  Storytelling, 25% each. Top 100 go to Gate 2; the AWS panel picks 5.
+  "Communication quality" is the old wording. Write for the four criteria.
+- **Nobody in the field does this.** Field lane: entries crowd into Bedrock
+  agent harnesses and SRE automation. No entry checks DKIM, receives email,
+  claims a record once, or uses DSQL.
+- **The winning mechanism is ours already.** Precedent lane: past winners
+  ground every decision in deterministic code before any model call. Unforged:
+  Bedrock reads, code decides, UNREADABLE is a valid answer.
+- **Every generated variant collapsed to this one machine** (verify DKIM, then
+  claim exactly once). The other uses it found: refunds, salary slips, rent,
+  expense reimbursement, booking deposits, contract acceptance. Name them in
+  the post's "where it goes" section; build at most one of them (stretch 1).
+- **Do not call gallery entries winners.** Misconception Map, TontinePilot
+  and the rest are submitted with no result yet.
+
+How each criterion is earned:
+
+| Criterion | What earns it | Where it shows |
+|---|---|---|
+| Innovation & originality | The signed-record-claimed-once mechanism, stated as general | Title, first paragraph, architecture section |
+| Implementation quality | Live race: 50 claims, exactly 1 winner vs the naive control; DKIM spoof rejected; tests | Race button, `docs/measurements.md` |
+| Community/market impact | 24.5 bn UPI transactions in Aug 2026; monthly sourced screenshot thefts; personal-UPI sellers with no soundbox | Opening scene, "who it is for" |
+| Creativity & storytelling | The 10-second three-card demo: green, red ₹500≠₹5,000, amber "already claimed by A12" | Cover image, first screenshot, video |
+
+## Requirements added in this round
+
+1. The landing page leads with the general line, then the UPI case.
+2. A judge path that needs no Indian bank account: a fixture page with a real
+   signed alert and screenshots (amount edit, payee edit, reuse, crop), plus the
+   race button. Judges and the AI scorer must reach every verdict in under a
+   minute.
+3. Every number in the post comes from `docs/measurements.md`, from real runs.
+4. The post's architecture section states the honest DynamoDB
+   TransactWriteItems alternative and why DSQL was chosen.
+5. Stretch 1 is now a second signed-record type (a refund or payslip email
+   from a global sender) through the same claim path, to show it is not
+   India-only.
+
+## Blog (required, written at submission time)
+
+The required "blog" is the Builder Center project post. Skeleton:
+`planning/submission-post.md` (title, description, tags, cover, 12-section
+body). Write it in the last block from real measurements and screenshots. A
+Hashnode cross-post linking the Builder Center project is optional, after
+submitting.
+
+## State (1 Oct 2026, evening IST)
+
+- Done and pushed: core (verdicts, DKIM alert check, rupee parsing, claim-once
+  transaction with OCC retry, Bedrock screenshot reader, naive race control),
+  Lambda handlers (`/api/shops`, `/api/alerts`, `/api/check`, `/api/race`,
+  migrate), the CDK stack (CloudFront + S3 with OAC, HTTP API, five Node 22
+  arm64 Lambdas, a new DSQL cluster, a 24 h upload bucket), and the web SPA.
+  `pnpm synth` and `pnpm check` pass.
+- Not done: nothing is deployed; the web app has not been opened in a browser;
+  no measurements; no fixture page; no agent proof; no post.
+- AWS: CLI 2.36.14, us-east-1, account 960149837193, signed in as **root**.
+  Create `unforged-agent` before the agent deploys anything. The existing DSQL
+  cluster `nft4bnb2g3fv2sg77vt7mlbcei` is Stub's: never touch it.
+- Bedrock model defaults to `us.amazon.nova-2-lite-v1:0` in `cdk.json`
+  (`-c modelId=...` to change) pending the hour-0 test.
+- Still needed from Ashutosh: a yes on AWS spend, one bank credit-alert `.eml`
+  ("Show original" in Gmail), 5 UPI screenshots.
+
+## Next, in order
+
+1. Create `unforged-agent` (IAM user + profile), connect the AWS MCP Server in
+   Claude Code, screenshot `claude mcp list` into `docs/agent-proof/`.
+2. Spikes: DKIM and UTR on the real `.eml`; Bedrock on the 5 screenshots
+   (Nova 2 Lite vs Claude Haiku 4.5). Write `docs/spikes.md`.
+3. `cdk bootstrap` if needed, `pnpm deploy` as `unforged-agent`, invoke the
+   migrate Lambda once. Open the CloudFront URL on a phone over mobile data.
+4. Fixture page and the landing copy (requirements 1–2).
+5. Measurements into `docs/measurements.md`.
+6. Post, cover, diagram; repo public; submit about 6 h before the deadline.
 
 ## First message for a new session here
 
-> Read CLAUDE.md and docs/PLAN.md, then start hour 0: set up the AWS MCP Server, create the `unforged-agent` IAM user, and run the two spikes. Here is my bank alert .eml and 5 screenshots: …
+> Read CLAUDE.md and docs/PLAN.md (the Positioning, Requirements and State sections are new). Then do "Next, in order" from step 1. I say yes to the AWS spend. Here is my bank alert .eml and 5 screenshots: …
