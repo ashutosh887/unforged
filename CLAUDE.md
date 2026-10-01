@@ -1,11 +1,13 @@
 # Unforged
 
-Is that UPI payment real? Unforged checks a payment screenshot against the
-one record a buyer cannot edit: the seller's bank credit alert, verified by
-its DKIM signature. Bedrock reads the screenshot; code decides. Each bank
-credit can be claimed exactly once, enforced by an Aurora DSQL unique index
-inside one transaction, so an old real screenshot shown for a second order
-is caught.
+A signed email is proof nobody can forge, and each proof can be claimed
+exactly once. Unforged's first case: is that UPI payment real? It checks a
+payment screenshot against the one record a buyer cannot edit: the seller's
+bank credit alert, verified by its DKIM signature. Bedrock reads the
+screenshot; code decides. Each bank credit can be claimed exactly once,
+enforced by an Aurora DSQL unique index inside one transaction, so an old
+real screenshot shown for a second order is caught. Positioning, rubric and
+requirements: `docs/PLAN.md`.
 
 Built for the AWS Builder Center "Zero to Shipped" hackathon. Category
 `#daily-life-enhancement`, lane `#startups`. Deadline 2 Oct 2026 11:59 PM
