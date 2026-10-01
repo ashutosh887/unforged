@@ -72,6 +72,8 @@ class UnforgedStack extends Stack {
       }),
     )
 
+    check.addToRolePolicy(new PolicyStatement({ actions: ["textract:DetectDocumentText"], resources: ["*"] }))
+
     const api = new HttpApi(this, "Api", { createDefaultStage: true })
     const stage = api.defaultStage!.node.defaultChild as CfnStage
     stage.defaultRouteSettings = { throttlingRateLimit: 25, throttlingBurstLimit: 50 }
