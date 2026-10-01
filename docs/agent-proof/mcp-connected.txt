@@ -1,0 +1,22 @@
+$ claude mcp list   # 2026-10-01T13:11:35Z
+Checking MCP server health…
+aws-mcp: uvx mcp-proxy-for-aws@latest https://aws-mcp.us-east-1.api.aws/mcp --metadata INSTALL_SOURCE=aws-cli - ✔ Connected
+
+$ claude mcp get aws-mcp
+aws-mcp:
+  Scope: User config (available in all your projects)
+  Status: ✔ Connected
+  Type: stdio
+  Command: uvx
+  Args: mcp-proxy-for-aws@latest https://aws-mcp.us-east-1.api.aws/mcp --metadata INSTALL_SOURCE=aws-cli
+  Environment:
+    AWS_PROFILE=unforged-agent
+    AWS_REGION=us-east-1
+
+
+$ aws sts get-caller-identity --profile unforged-agent
+{
+    "UserId": "AIDA57DLD2WEWSP57VAU7",
+    "Account": "960149837193",
+    "Arn": "arn:aws:iam::960149837193:user/unforged-agent"
+}
