@@ -131,8 +131,8 @@ function Report({ run }: { run: Run }) {
       <dl className="facts">
         <dt>From</dt>
         <dd className="mono">{result.from ?? "—"}</dd>
-        {result.signatures.map((s, i) => (
-          <SignatureRow key={`${s.domain}-${s.selector}-${i}`} s={s} />
+        {distinct(result.signatures).map((s) => (
+          <SignatureRow key={`${s.domain}-${s.selector}-${s.result}`} s={s} />
         ))}
         {!signed && failing?.detail && (
           <>
@@ -147,6 +147,10 @@ function Report({ run }: { run: Run }) {
   )
 }
 
+function distinct(signatures: VerifyResult["signatures"]): VerifyResult["signatures"] {
+  return signatures.filter((s, i) => signatures.findIndex((o) => o.domain === s.domain && o.selector === s.selector && o.result === s.result) === i)
+}
+
 function SignatureRow({ s }: { s: VerifyResult["signatures"][number] }) {
   return (
     <>
@@ -155,8 +159,7 @@ function SignatureRow({ s }: { s: VerifyResult["signatures"][number] }) {
         <span className="mono">
           d={s.domain} s={s.selector}
         </span>{" "}
-        · {s.result}
-        {s.result === "pass" && (s.aligned ? ", aligned with From" : ", not aligned with From")}
+        · {s.result === "pass" ? (s.aligned ? "passes, aligned with From" : "passes, not aligned with From") : "fails"}
       </dd>
     </>
   )
