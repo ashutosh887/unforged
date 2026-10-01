@@ -13,7 +13,8 @@
     "measure:race": "tsx scripts/race.ts",
     "measure:replay": "tsx scripts/replay.ts",
     "measure:dkim": "tsx scripts/dkim-latency.ts",
-    "measure:forgery": "tsx scripts/forgery.ts"
+    "measure:forgery": "tsx scripts/forgery.ts",
+    "measure:tamper": "tsx scripts/tamper.ts"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.1144.0",
