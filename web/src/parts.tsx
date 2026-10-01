@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react"
-import type { Credit, Verdict } from "../../src/core/types.js"
+import type { Credit, Decision, ScreenshotRead, Verdict } from "../../src/core/types.js"
 import { formatPaise } from "../../src/core/money.js"
-import { post, type CheckResult, type RaceResult } from "./api"
+import { post, type RaceResult } from "./api"
 
 export type Tone = "good" | "warn" | "bad" | "neutral"
 
@@ -53,28 +53,69 @@ export function BankFacts({ row, empty }: { row: BankRow | null | undefined; emp
   )
 }
 
-export function VerdictCard({ result, bankFallback, bankEmpty }: { result: CheckResult; bankFallback?: BankRow | null; bankEmpty?: string }) {
+export type CardResult = Decision & { read?: ScreenshotRead }
+
+export function clockTime(iso: string): string {
+  const at = new Date(iso)
+  return Number.isNaN(at.getTime()) ? iso : at.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })
+}
+
+export function VerdictCard({
+  result,
+  orderRef,
+  bankFallback,
+  bankEmpty,
+}: {
+  result: CardResult
+  orderRef?: string
+  bankFallback?: BankRow | null
+  bankEmpty?: string
+}) {
   const v = verdicts[result.verdict]
+  const [releasedFor, setReleasedFor] = useState<CardResult | null>(null)
+  const canRelease = result.verdict === "VERIFIED"
+  const released = canRelease && releasedFor === result
   return (
     <article className={`verdict ${v.tone}`}>
       <h3>{v.label}</h3>
+      {result.verdict === "ALREADY_CLAIMED" && result.priorClaim && (
+        <p className="claimed">
+          Already claimed · first claimed {clockTime(result.priorClaim.createdAt)} · order <span className="mono">{result.priorClaim.orderRef}</span>
+        </p>
+      )}
       <p>{result.reason}</p>
       <div className="compare">
         <div>
           <h4>Screenshot</h4>
-          <dl className="facts">
-            <dt>UTR</dt>
-            <dd className="mono">{result.read.utr ?? "—"}</dd>
-            <dt>Amount</dt>
-            <dd>{money(result.read.amountPaise)}</dd>
-            <dt>Paid to</dt>
-            <dd>{result.read.payeeVpa ?? "—"}</dd>
-          </dl>
+          {result.read ? (
+            <dl className="facts">
+              <dt>UTR</dt>
+              <dd className="mono">{result.read.utr ?? "—"}</dd>
+              <dt>Amount</dt>
+              <dd>{money(result.read.amountPaise)}</dd>
+              <dt>Paid to</dt>
+              <dd>{result.read.payeeVpa ?? "—"}</dd>
+            </dl>
+          ) : (
+            <p className="muted small">No screenshot, alert claimed directly.</p>
+          )}
         </div>
         <div>
           <h4>Bank alert</h4>
           <BankFacts row={result.credit ?? bankFallback} {...(bankEmpty ? { empty: bankEmpty } : {})} />
         </div>
+      </div>
+      <div className="release">
+        {released ? (
+          <p className="released">Released for order {orderRef ? <span className="mono">{orderRef}</span> : "this payment"}</p>
+        ) : (
+          <>
+            <button type="button" disabled={!canRelease} title={canRelease ? "Mark this order released" : result.reason} onClick={() => setReleasedFor(result)}>
+              Release goods
+            </button>
+            {!canRelease && <p className="muted small">Not releasable: {result.reason}</p>}
+          </>
+        )}
       </div>
     </article>
   )

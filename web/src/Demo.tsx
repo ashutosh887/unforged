@@ -242,6 +242,7 @@ function Case({ fixture, step, preview, storedAlert }: { fixture: FixtureCheck; 
       {step.state === "done" && (
         <VerdictCard
           result={step.result}
+          orderRef={fixture.order}
           bankFallback={fixture.beforeAlert ? null : storedAlert}
           bankEmpty={fixture.beforeAlert ? "No alert has reached the shop yet." : "No signed alert matches this UTR."}
         />

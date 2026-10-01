@@ -4,6 +4,7 @@ import { Demo } from "./Demo"
 import { money, Race, useAction, VerdictCard } from "./parts"
 
 type View = "try" | "shop"
+type Mode = "screenshot" | "alert"
 
 const tokenKey = "unforged.token"
 
@@ -95,6 +96,7 @@ function ShopSetup({ onToken }: { onToken: (t: string) => void }) {
 }
 
 function Workspace({ token }: { token: string }) {
+  const [mode, setMode] = useState<Mode>("screenshot")
   const link = `${location.origin}${location.pathname}#t=${token}`
   const [copied, setCopied] = useState(false)
   const copy = async () => {
@@ -107,8 +109,22 @@ function Workspace({ token }: { token: string }) {
         <span>Your private shop link</span>
         <button type="button" className="ghost" onClick={copy}>{copied ? "Copied" : "Copy link"}</button>
       </section>
-      <AlertBox token={token} />
-      <ScreenshotBox token={token} />
+      <nav className="tabs modes" aria-label="Check mode">
+        <button type="button" className={mode === "screenshot" ? "on" : ""} aria-pressed={mode === "screenshot"} onClick={() => setMode("screenshot")}>
+          Check a screenshot
+        </button>
+        <button type="button" className={mode === "alert" ? "on" : ""} aria-pressed={mode === "alert"} onClick={() => setMode("alert")}>
+          Alert only
+        </button>
+      </nav>
+      {mode === "screenshot" ? (
+        <>
+          <AlertBox token={token} />
+          <ScreenshotBox token={token} />
+        </>
+      ) : (
+        <ClaimAlertBox token={token} />
+      )}
     </>
   )
 }
@@ -153,10 +169,47 @@ function AlertBox({ token }: { token: string }) {
   )
 }
 
+function ClaimAlertBox({ token }: { token: string }) {
+  const [raw, setRaw] = useState("")
+  const [orderRef, setOrderRef] = useState("")
+  const [submitted, setSubmitted] = useState("")
+  const action = useAction<AlertResult>()
+  const submit = (e: FormEvent) => {
+    e.preventDefault()
+    setSubmitted(orderRef)
+    void action.run(() => post("alerts", { raw, orderRef }, token))
+  }
+  return (
+    <section className="card">
+      <h2>Claim a signed alert directly</h2>
+      <p className="muted small">No screenshot. Paste the bank's signed credit alert and the order it pays for. Each alert can back one order only.</p>
+      <form onSubmit={submit} className="stack">
+        <label>
+          Raw credit alert email (Gmail: Show original, copy all)
+          <textarea value={raw} onChange={(e) => setRaw(e.target.value)} rows={6} spellCheck={false} required />
+        </label>
+        <label>
+          Order reference
+          <input value={orderRef} onChange={(e) => setOrderRef(e.target.value)} placeholder="Order 1042" required />
+        </label>
+        <button disabled={action.busy || !raw.trim() || !orderRef.trim()}>{action.busy ? "Checking signature…" : "Claim alert"}</button>
+      </form>
+      {action.error && <p className="error">{action.error}</p>}
+      {action.result &&
+        (action.result.decision ? (
+          <VerdictCard result={action.result.decision} orderRef={submitted} bankFallback={action.result.credit} />
+        ) : (
+          <p className="muted small">Alert stored, but the server returned no claim decision.</p>
+        ))}
+    </section>
+  )
+}
+
 function ScreenshotBox({ token }: { token: string }) {
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState("")
   const [orderRef, setOrderRef] = useState("")
+  const [submitted, setSubmitted] = useState("")
   const [over, setOver] = useState(false)
   const action = useAction<CheckResult>()
 
@@ -177,6 +230,7 @@ function ScreenshotBox({ token }: { token: string }) {
   const submit = (e: FormEvent) => {
     e.preventDefault()
     if (!file) return
+    setSubmitted(orderRef)
     void action.run(async () => post("check", { ...(await encodeImage(file)), orderRef }, token))
   }
 
@@ -203,7 +257,7 @@ function ScreenshotBox({ token }: { token: string }) {
         <button disabled={action.busy || !file}>{action.busy ? "Reading…" : "Check payment"}</button>
       </form>
       {action.error && <p className="error">{action.error}</p>}
-      {action.result && <VerdictCard result={action.result} />}
+      {action.result && <VerdictCard result={action.result} orderRef={submitted} />}
     </section>
   )
 }

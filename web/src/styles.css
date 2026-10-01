@@ -382,6 +382,32 @@ h4 {
   margin-top: 0.35rem;
 }
 
+.modes {
+  position: static;
+}
+
+.claimed {
+  font-weight: 650;
+  color: var(--warn);
+  margin: 0 0 0.35rem;
+}
+
+.release {
+  margin-top: 0.9rem;
+  display: grid;
+  gap: 0.35rem;
+  justify-items: start;
+}
+
+.release .muted {
+  margin: 0;
+}
+
+.released {
+  font-weight: 650;
+  color: var(--good);
+}
+
 @media (min-width: 40rem) {
   main {
     padding-top: 2.5rem;

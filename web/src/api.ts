@@ -1,7 +1,7 @@
 import type { Decision, ScreenshotRead } from "../../src/core/types.js"
 
 export type CheckResult = Decision & { read: ScreenshotRead; retries: number }
-export type AlertResult = { credit: { bank: string; utr: string; amountPaise: number; creditedAt: string; dkimDomain: string }; duplicate: boolean }
+export type AlertResult = { credit: { bank: string; utr: string; amountPaise: number; creditedAt: string; dkimDomain: string }; duplicate: boolean; decision?: Decision }
 export type RaceResult = {
   n: number
   utr: string
