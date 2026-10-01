@@ -31,11 +31,13 @@
   <rect x="670" y="150" width="170" height="180" rx="12" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
   <text x="755" y="180" font-size="15" font-weight="600" fill="#0f172a" text-anchor="middle">Lambda</text>
   <text x="755" y="199" font-size="12" fill="#475569" text-anchor="middle">Node 22, arm64</text>
-  <text x="755" y="228" font-size="12" fill="#334155" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Shops</text>
-  <text x="755" y="247" font-size="12" fill="#334155" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Alerts (DKIM)</text>
-  <text x="755" y="266" font-size="12" fill="#334155" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Check</text>
-  <text x="755" y="285" font-size="12" fill="#334155" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Race</text>
-  <text x="755" y="304" font-size="12" fill="#334155" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Migrate</text>
+  <text x="755" y="222" font-size="12" fill="#334155" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Shops</text>
+  <text x="755" y="238" font-size="12" fill="#334155" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Alerts (DKIM)</text>
+  <text x="755" y="254" font-size="12" fill="#334155" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Verify (DKIM)</text>
+  <text x="755" y="270" font-size="12" fill="#334155" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Check</text>
+  <text x="755" y="286" font-size="12" fill="#334155" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Books (ledger)</text>
+  <text x="755" y="302" font-size="12" fill="#334155" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Race</text>
+  <text x="755" y="318" font-size="12" fill="#334155" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">Migrate</text>
 
   <rect x="450" y="420" width="190" height="96" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
   <text x="545" y="452" font-size="15" font-weight="600" fill="#0f172a" text-anchor="middle">Aurora DSQL</text>

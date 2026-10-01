@@ -48,6 +48,15 @@ shown for a second order is caught.
    backoff, up to 8 attempts. A retry that then hits the unique key
    (`23505`) becomes `ALREADY_CLAIMED`, never a second approval.
 
+4. **Any signed email, checked in the open.** `POST /api/verify` runs the same
+   DKIM check on any email and reports the signer, selector and alignment,
+   and whether it would be accepted as a bank credit. It stores nothing. The
+   Try it page uses it to let anyone paste an email they received, then
+   change one character and watch the signature break.
+5. **The ledger.** `POST /api/ledger` (shop token) lists the shop's signed
+   credits, which order claimed each one and when, and the latest checks with
+   their verdicts.
+
 ### Verdicts
 
 Every verdict is decided by code, never by a prompt. There is no fraud score.
@@ -86,8 +95,8 @@ All in one region, `us-east-1`. Defined in [`infra/app.ts`](infra/app.ts).
 | Amazon CloudFront | Serves the SPA from S3 and forwards `/api/*` to the HTTP API, HTTPS only, no caching on the API path |
 | Amazon S3 (site bucket) | Holds the built SPA. Private, reached only through CloudFront Origin Access Control |
 | Amazon S3 (upload bucket) | Stores each checked screenshot under its SHA-256. Private, SSL enforced, lifecycle rule deletes objects after 1 day (24 h) |
-| Amazon API Gateway HTTP API | `POST /api/shops`, `/api/alerts`, `/api/check`, `/api/race` |
-| AWS Lambda | Five functions, Node.js 22 on arm64, bundled with esbuild: `Shops`, `Alerts`, `Check`, `Race`, and `Migrate` (schema setup, invoked directly, not routed) |
+| Amazon API Gateway HTTP API | `POST /api/shops`, `/api/alerts`, `/api/check`, `/api/verify`, `/api/ledger`, `/api/race`, `/api/spike/dkim`; throttled to 25 req/s, burst 50 |
+| AWS Lambda | Eight functions, Node.js 22 on arm64, bundled with esbuild: `Shops`, `Alerts`, `Verify` (DKIM report for any email, stores nothing), `Check`, `Books` (the shop's ledger), `Race`, `Spike` (DKIM DNS timing), and `Migrate` (schema setup, invoked directly, not routed) |
 | Amazon Aurora DSQL | Shops, credits, claims, attempts and the naive control table. IAM token auth from Lambda (`dsql:DbConnectAdmin`), no VPC, no passwords. Unique indexes built with `CREATE UNIQUE INDEX ASYNC` |
 | Amazon Bedrock | Converse API with vision and a tool-use JSON schema. The model ID is a CDK context value; the default in `cdk.json` is `us.amazon.nova-2-lite-v1:0` |
 | AWS IAM | Per-function least-privilege grants: DSQL connect on the one cluster, `s3:PutObject` on the upload bucket and Bedrock invoke for `Check` only |
