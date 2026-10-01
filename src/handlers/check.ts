@@ -8,6 +8,17 @@ const bedrock = new BedrockRuntimeClient({})
 const s3 = new S3Client({})
 const formats = new Set<ImageFormat>(["png", "jpeg", "gif", "webp"])
 
+async function readWithFallback(models: string[], image: Uint8Array, format: ImageFormat) {
+  for (const model of models) {
+    try {
+      return await readScreenshot(bedrock, model, image, format)
+    } catch (e) {
+      console.error(JSON.stringify({ event: "reader_failed", model, error: e instanceof Error ? `${e.name}: ${e.message}` : String(e) }))
+    }
+  }
+  return null
+}
+
 type Input = { image?: string; format?: string; orderRef?: string }
 
 export async function handler(event: Event): Promise<Result> {
@@ -22,7 +33,9 @@ export async function handler(event: Event): Promise<Result> {
   const screenshotSha256 = sha256(image)
   await s3.send(new PutObjectCommand({ Bucket: env("UPLOAD_BUCKET"), Key: `${shop.id}/${screenshotSha256}.${format}`, Body: image, ContentType: `image/${format}` }))
 
-  const read = await readScreenshot(bedrock, env("MODEL_ID"), image, format)
+  const models = env("MODEL_ID").split(",").map((m) => m.trim()).filter(Boolean)
+  const read = await readWithFallback(models, image, format)
+  if (!read) return json(503, { error: "The screenshot reader is unavailable right now. Nothing was claimed; try again shortly." })
   let retries = 0
   const decision = await claim(pool(), { shopId: shop.id, shopVpas: shop.vpas, read, orderRef, screenshotSha256 }, () => retries++)
   await pool().query("INSERT INTO attempts (shop_id, screenshot_sha256, extracted, verdict, reason) VALUES ($1, $2, $3, $4, $5)", [shop.id, screenshotSha256, JSON.stringify(read), decision.verdict, decision.reason])
