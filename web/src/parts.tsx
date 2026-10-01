@@ -81,7 +81,14 @@ export function BankFacts({ row, empty }: { row: BankRow | null | undefined; emp
   )
 }
 
-export type CardResult = Decision & { read?: ScreenshotRead }
+export type CardResult = Decision & { read?: ScreenshotRead; reader?: string }
+
+function readerName(reader: string): string {
+  if (reader === "textract") return "Amazon Textract"
+  if (reader.includes("nova")) return "Amazon Nova (Bedrock)"
+  if (reader.includes("claude")) return "Claude (Bedrock)"
+  return reader
+}
 
 export function clockTime(iso: string): string {
   const at = new Date(iso)
@@ -123,6 +130,12 @@ export function VerdictCard({
               <dd>{money(result.read.amountPaise)}</dd>
               <dt>Paid to</dt>
               <dd>{result.read.payeeVpa ?? "—"}</dd>
+              {result.reader && (
+                <>
+                  <dt>Read by</dt>
+                  <dd>{readerName(result.reader)}</dd>
+                </>
+              )}
             </dl>
           ) : (
             <p className="muted small">No screenshot, alert claimed directly.</p>
