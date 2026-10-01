@@ -52,3 +52,7 @@ reach and goes in the stretch list.
 - Bedrock (us-east-1) lists these image-input models: `amazon.nova-2-lite-v1:0`, `amazon.nova-pro-v1:0`, `anthropic.claude-haiku-4-5-20251001-v1:0` and others. Model access for Claude has not been confirmed in this account, so test at hour 0.
 - No AWS MCP server is configured in Claude Code yet.
 - Still needed from Ashutosh: one bank credit-alert email, raw from Gmail "Show original" (bank name at least), and 5 of his own UPI payment screenshots.
+
+## First message for a new session here
+
+> Read CLAUDE.md and docs/PLAN.md, then start hour 0: set up the AWS MCP Server, create the `unforged-agent` IAM user, and run the two spikes. Here is my bank alert .eml and 5 screenshots: …
