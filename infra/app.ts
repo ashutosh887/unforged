@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url"
 import { App, CfnOutput, Duration, RemovalPolicy, Stack, type StackProps } from "aws-cdk-lib"
-import { HttpApi, HttpMethod } from "aws-cdk-lib/aws-apigatewayv2"
+import { CfnStage, HttpApi, HttpMethod } from "aws-cdk-lib/aws-apigatewayv2"
 import { HttpLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations"
 import { AllowedMethods, CachePolicy, Distribution, OriginRequestPolicy, ViewerProtocolPolicy } from "aws-cdk-lib/aws-cloudfront"
 import { HttpOrigin, S3BucketOrigin } from "aws-cdk-lib/aws-cloudfront-origins"
@@ -71,6 +71,8 @@ class UnforgedStack extends Stack {
     )
 
     const api = new HttpApi(this, "Api", { createDefaultStage: true })
+    const stage = api.defaultStage!.node.defaultChild as CfnStage
+    stage.defaultRouteSettings = { throttlingRateLimit: 25, throttlingBurstLimit: 50 }
     const route = (path: string, f: NodejsFunction) => api.addRoutes({ path, methods: [HttpMethod.POST], integration: new HttpLambdaIntegration(`${f.node.id}Route`, f) })
     route("/api/shops", shops)
     route("/api/alerts", alerts)
