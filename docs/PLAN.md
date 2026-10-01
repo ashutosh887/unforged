@@ -161,6 +161,28 @@ Not taken:
 - **Its corpus of "10 real emails from SBI, HDFC, ICICI over 6 months":** that corpus does not exist. Only samples Ashutosh actually provides count, and the post states the real count.
 - **Its 30-hour timeline and the "Muvattupuzha case" reference:** neither is sourced. Nothing unsourced goes into the post.
 
+## Arena run, second read (2 Oct, from the full `aws-zero-to-shipped` dump)
+
+Taken:
+- **The AI scorer skims** and the overview lists "communication quality":
+  the post now opens with a four-line "In one minute" block and a "Judges
+  start here" link to `#try`.
+- **Claim-once alone is not new** (another entry uses a DynamoDB conditional
+  write). The post says the new part is what gets claimed: a record whose
+  origin is proven by its signature.
+- **Self-authored test set was a gate kill** for a sibling candidate. The
+  public-archive measurement (§6) answers it; lead Implementation with it.
+- **Limits stated plainly:** forwarding breaks the signature, unsigned banks
+  cannot be checked, DNS failure fails closed, key rotation.
+- **Key rotation during judging:** re-check the demo alert on 5 and 12 Oct.
+
+Never use (fabricated in the run): "RFC 6376 test vectors, Section 8.2
+Examples 1–8", "Priya, Mumbai jewellery seller", "Vikram Patel", "4-second
+receipt", "180 s manual check", "100 concurrent / zero duplicates", "Step
+Functions with DSQL integration", any prize pool other than "$5,000 AWS
+credits per winner". The UPI figure is sourced to Business Standard (NPCI
+data, 24.51 bn in Aug 2026); no scam-count figure has a source.
+
 ## State (1 Oct 2026, 19:15 IST)
 
 - **Live:** https://d1ajauwkb76on3.cloudfront.net, stack `Unforged`, DSQL
@@ -187,6 +209,9 @@ Not taken:
   80 public-archive emails (measurements §6): 37/37 broken by one character,
   37/37 rejected with a bank From. The card's "Use the demo bank alert"
   button appears once `web/public/fixtures/alert.eml` is published.
+- **Added 2 Oct, early:** the shop ledger (`/api/ledger`, `Books` Lambda,
+  `attempts_by_shop` index, migrated) and `.eml` upload/drop on every
+  email field.
 - **Still needed from Ashutosh:** the Bedrock quota case, the real bank
   `.eml`, 5 screenshots, and the open decision above on which input leads.
 
