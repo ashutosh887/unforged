@@ -1,0 +1,7 @@
+node_modules
+dist
+cdk.out
+.env*
+*.eml
+!test/fixtures/*.eml
+planning/raw
