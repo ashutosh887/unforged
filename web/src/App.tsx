@@ -1,7 +1,8 @@
 import { useEffect, useState, type DragEvent, type FormEvent } from "react"
 import { encodeImage, post, type AlertResult, type CheckResult } from "./api"
 import { Demo } from "./Demo"
-import { money, Race, useAction, VerdictCard } from "./parts"
+import { Ledger } from "./Ledger"
+import { money, Race, RawEmailField, useAction, VerdictCard } from "./parts"
 import { SignatureCheck } from "./Signature"
 
 type View = "try" | "shop"
@@ -112,6 +113,8 @@ function ShopSetup({ onToken }: { onToken: (t: string) => void }) {
 
 function Workspace({ token }: { token: string }) {
   const [mode, setMode] = useState<Mode>("screenshot")
+  const [version, setVersion] = useState(0)
+  const changed = () => setVersion((v) => v + 1)
   const link = `${location.origin}${location.pathname}#t=${token}`
   const [copied, setCopied] = useState(false)
   const copy = async () => {
@@ -134,31 +137,29 @@ function Workspace({ token }: { token: string }) {
       </nav>
       {mode === "screenshot" ? (
         <>
-          <AlertBox token={token} />
-          <ScreenshotBox token={token} />
+          <AlertBox token={token} onDone={changed} />
+          <ScreenshotBox token={token} onDone={changed} />
         </>
       ) : (
-        <ClaimAlertBox token={token} />
+        <ClaimAlertBox token={token} onDone={changed} />
       )}
+      <Ledger token={token} version={version} />
     </>
   )
 }
 
-function AlertBox({ token }: { token: string }) {
+function AlertBox({ token, onDone }: { token: string; onDone: () => void }) {
   const [raw, setRaw] = useState("")
   const action = useAction<AlertResult>()
   const submit = (e: FormEvent) => {
     e.preventDefault()
-    void action.run(() => post("alerts", { raw }, token))
+    void action.run(() => post<AlertResult>("alerts", { raw }, token).finally(onDone))
   }
   return (
     <section className="card">
       <h2>Bank alert</h2>
       <form onSubmit={submit} className="stack">
-        <label>
-          Raw credit alert email (Gmail: Show original, copy all)
-          <textarea value={raw} onChange={(e) => setRaw(e.target.value)} rows={6} spellCheck={false} required />
-        </label>
+        <RawEmailField value={raw} onChange={setRaw} label="Raw credit alert email (Gmail: ⋮ → Show original → Copy to clipboard)" />
         <button disabled={action.busy || !raw.trim()}>{action.busy ? "Checking signature…" : "Add alert"}</button>
       </form>
       {action.error && <p className="error">{action.error}</p>}
@@ -184,7 +185,7 @@ function AlertBox({ token }: { token: string }) {
   )
 }
 
-function ClaimAlertBox({ token }: { token: string }) {
+function ClaimAlertBox({ token, onDone }: { token: string; onDone: () => void }) {
   const [raw, setRaw] = useState("")
   const [orderRef, setOrderRef] = useState("")
   const [submitted, setSubmitted] = useState("")
@@ -192,17 +193,14 @@ function ClaimAlertBox({ token }: { token: string }) {
   const submit = (e: FormEvent) => {
     e.preventDefault()
     setSubmitted(orderRef)
-    void action.run(() => post("alerts", { raw, orderRef }, token))
+    void action.run(() => post<AlertResult>("alerts", { raw, orderRef }, token).finally(onDone))
   }
   return (
     <section className="card">
       <h2>Claim a signed alert directly</h2>
       <p className="muted small">No screenshot. Paste the bank's signed credit alert and the order it pays for. Each alert can back one order only.</p>
       <form onSubmit={submit} className="stack">
-        <label>
-          Raw credit alert email (Gmail: Show original, copy all)
-          <textarea value={raw} onChange={(e) => setRaw(e.target.value)} rows={6} spellCheck={false} required />
-        </label>
+        <RawEmailField value={raw} onChange={setRaw} label="Raw credit alert email (Gmail: ⋮ → Show original → Copy to clipboard)" />
         <label>
           Order reference
           <input value={orderRef} onChange={(e) => setOrderRef(e.target.value)} placeholder="Order 1042" required />
@@ -220,7 +218,7 @@ function ClaimAlertBox({ token }: { token: string }) {
   )
 }
 
-function ScreenshotBox({ token }: { token: string }) {
+function ScreenshotBox({ token, onDone }: { token: string; onDone: () => void }) {
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState("")
   const [orderRef, setOrderRef] = useState("")
@@ -246,7 +244,7 @@ function ScreenshotBox({ token }: { token: string }) {
     e.preventDefault()
     if (!file) return
     setSubmitted(orderRef)
-    void action.run(async () => post("check", { ...(await encodeImage(file)), orderRef }, token))
+    void action.run(async () => post<CheckResult>("check", { ...(await encodeImage(file)), orderRef }, token).finally(onDone))
   }
 
   return (

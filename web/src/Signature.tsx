@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react"
 import { post, type VerifyResult } from "./api"
-import { money } from "./parts"
+import { money, RawEmailField } from "./parts"
 
 type Edit = { raw: string; at: number; was: string; now: string }
 type Run = { label: string; result: VerifyResult; edit?: Edit }
@@ -86,10 +86,7 @@ export function SignatureCheck({ sample }: { sample?: { label: string; load: () 
         character and watch the signature break. Nothing you paste is stored.
       </p>
       <form onSubmit={submit} className="stack">
-        <label>
-          Raw email, headers included
-          <textarea value={raw} onChange={(e) => setRaw(e.target.value)} rows={6} spellCheck={false} required />
-        </label>
+        <RawEmailField value={raw} onChange={setRaw} label="Raw email, headers included" />
         <div className="row">
           <button disabled={busy || !raw.trim()}>{busy ? "Checking…" : "Check signature"}</button>
           <button type="button" className="ghost" disabled={busy || !original?.result.signer} onClick={tamper}>

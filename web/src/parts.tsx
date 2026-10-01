@@ -39,6 +39,34 @@ export function useAction<T>() {
   return { busy, error, result, run }
 }
 
+export function RawEmailField({ value, onChange, label }: { value: string; onChange: (raw: string) => void; label: string }) {
+  const [over, setOver] = useState(false)
+  const load = async (file: File | undefined) => {
+    if (file) onChange(await file.text())
+  }
+  return (
+    <label
+      className={over ? "over" : ""}
+      onDragOver={(e) => {
+        e.preventDefault()
+        setOver(true)
+      }}
+      onDragLeave={() => setOver(false)}
+      onDrop={(e) => {
+        e.preventDefault()
+        setOver(false)
+        void load(e.dataTransfer.files[0])
+      }}
+    >
+      {label}
+      <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={6} spellCheck={false} placeholder="Paste here, or drop an .eml file" />
+      <span className="file small">
+        or open an .eml file <input type="file" accept=".eml,message/rfc822,text/plain" onChange={(e) => void load(e.target.files?.[0])} />
+      </span>
+    </label>
+  )
+}
+
 export function BankFacts({ row, empty }: { row: BankRow | null | undefined; empty?: string }) {
   if (!row) return <p className="muted small">{empty ?? "No signed alert matches this UTR."}</p>
   return (

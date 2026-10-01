@@ -9,6 +9,11 @@ export type VerifyResult = {
   bankCredit: { bank: string; utr: string; amountPaise: number; dkimDomain: string } | null
   notStoredBecause: string | null
 }
+export type LedgerResult = {
+  shop: { name: string; vpas: string[] }
+  credits: { id: string; bank: string; utr: string; amountPaise: number; creditedAt: string; dkimDomain: string; claim: { orderRef: string; createdAt: string } | null }[]
+  attempts: { verdict: string; reason: string; alertOnly: boolean; createdAt: string }[]
+}
 export type RaceResult = {
   n: number
   utr: string

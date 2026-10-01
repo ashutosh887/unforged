@@ -427,3 +427,49 @@ h4 {
   flex-wrap: wrap;
   gap: 0.5rem;
 }
+
+.ledger {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.ledger li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.ledger li.open {
+  border-left: 4px solid var(--good);
+}
+
+.ledger li.spent {
+  border-left: 4px solid var(--warn);
+}
+
+.pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid;
+}
+
+.file {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+}
+
+label.over textarea {
+  outline: 2px dashed var(--accent);
+}
