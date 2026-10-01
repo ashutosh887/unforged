@@ -49,3 +49,4 @@ CREATE UNIQUE INDEX ASYNC IF NOT EXISTS credits_once ON credits (shop_id, bank, 
 CREATE INDEX ASYNC IF NOT EXISTS credits_by_utr ON credits (shop_id, utr);
 CREATE UNIQUE INDEX ASYNC IF NOT EXISTS claims_once ON claims (credit_id);
 CREATE INDEX ASYNC IF NOT EXISTS claims_naive_by_credit ON claims_naive (credit_id);
+CREATE UNIQUE INDEX ASYNC IF NOT EXISTS shops_by_token ON shops (token_hash);
