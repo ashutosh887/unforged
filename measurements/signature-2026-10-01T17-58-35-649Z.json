@@ -1,0 +1,1988 @@
+{
+  "apiUrl": "https://d1ajauwkb76on3.cloudfront.net",
+  "startedAt": "2026-10-01T17:57:00.413Z",
+  "node": "v24.14.0",
+  "summary": {
+    "source": "https://lists.gnu.org/archive/mbox/help-gnu-emacs/2026-09",
+    "messagesWithDkimHeader": 80,
+    "checked": 80,
+    "passingAligned": 37,
+    "signerDomains": 6,
+    "oneCharacterEdit": {
+      "broken": 37,
+      "of": 37
+    },
+    "fromRewrittenToBank": {
+      "rejected": 37,
+      "of": 37
+    },
+    "storedAsBankCredit": 0,
+    "requestMs": {
+      "p50": 657.2018749999988,
+      "p95": 1305.2348340000026
+    }
+  },
+  "results": [
+    {
+      "i": 0,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "original": [
+        {
+          "domain": "posteo.at",
+          "selector": "1984.8680eb",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "posteo.at",
+      "edited": [
+        {
+          "domain": "posteo.at",
+          "selector": "1984.8680eb",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "posteo.at",
+          "selector": "1984.8680eb",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "original": [
+        {
+          "domain": "tuxteam.de",
+          "selector": "mail",
+          "result": "fail",
+          "aligned": true,
+          "detail": "bad signature"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 4,
+      "original": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "gnu.org",
+      "edited": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 5,
+      "original": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "gnu.org",
+      "edited": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 6,
+      "original": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "gnu.org",
+      "edited": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 7,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 8,
+      "original": [
+        {
+          "domain": "bio.ifi.lmu.de",
+          "selector": "dkim",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "bio.ifi.lmu.de",
+      "edited": [
+        {
+          "domain": "bio.ifi.lmu.de",
+          "selector": "dkim",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "bio.ifi.lmu.de",
+          "selector": "dkim",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 9,
+      "original": [
+        {
+          "domain": "bio.ifi.lmu.de",
+          "selector": "dkim",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "bio.ifi.lmu.de",
+      "edited": [
+        {
+          "domain": "bio.ifi.lmu.de",
+          "selector": "dkim",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "bio.ifi.lmu.de",
+          "selector": "dkim",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 10,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 11,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 12,
+      "original": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "gnu.org",
+      "edited": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 13,
+      "original": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "mailbox.org",
+      "edited": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 14,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 15,
+      "original": [
+        {
+          "domain": "protonmail.com",
+          "selector": "protonmail3",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 16,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 17,
+      "original": [
+        {
+          "domain": "protonmail.com",
+          "selector": "protonmail3",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 18,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 19,
+      "original": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "mailbox.org",
+      "edited": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 20,
+      "original": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "mailbox.org",
+      "edited": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 21,
+      "original": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "mailbox.org",
+      "edited": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 22,
+      "original": [
+        {
+          "domain": "protonmail.com",
+          "selector": "protonmail3",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 23,
+      "original": [
+        {
+          "domain": "posteo.at",
+          "selector": "1984.8680eb",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "posteo.at",
+      "edited": [
+        {
+          "domain": "posteo.at",
+          "selector": "1984.8680eb",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "posteo.at",
+          "selector": "1984.8680eb",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 24,
+      "original": [
+        {
+          "domain": "tuxteam.de",
+          "selector": "mail",
+          "result": "fail",
+          "aligned": true,
+          "detail": "bad signature"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 25,
+      "original": [
+        {
+          "domain": "posteo.at",
+          "selector": "1984.8680eb",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "posteo.at",
+      "edited": [
+        {
+          "domain": "posteo.at",
+          "selector": "1984.8680eb",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "posteo.at",
+          "selector": "1984.8680eb",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 26,
+      "original": [
+        {
+          "domain": "tuxteam.de",
+          "selector": "mail",
+          "result": "fail",
+          "aligned": true,
+          "detail": "bad signature"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 27,
+      "original": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "gnu.org",
+      "edited": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 28,
+      "original": [
+        {
+          "domain": "tuxteam.de",
+          "selector": "mail",
+          "result": "fail",
+          "aligned": true,
+          "detail": "bad signature"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 29,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 30,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 31,
+      "original": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "gnu.org",
+      "edited": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 32,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 33,
+      "original": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "gnu.org",
+      "edited": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 34,
+      "original": [
+        {
+          "domain": "protonmail.com",
+          "selector": "protonmail3",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 35,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 36,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 37,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 38,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 39,
+      "original": [
+        {
+          "domain": "mbork.pl",
+          "selector": "fm1",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "invalid public key"
+        },
+        {
+          "domain": "messagingengine.com",
+          "selector": "fm1",
+          "result": "neutral",
+          "aligned": false,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 40,
+      "original": [
+        {
+          "domain": "gmx.net",
+          "selector": "s31663417",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 41,
+      "original": [
+        {
+          "domain": "mbork.pl",
+          "selector": "fm1",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "invalid public key"
+        },
+        {
+          "domain": "messagingengine.com",
+          "selector": "fm1",
+          "result": "neutral",
+          "aligned": false,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 42,
+      "original": [
+        {
+          "domain": "gmx.net",
+          "selector": "s31663417",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 43,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 44,
+      "original": [
+        {
+          "domain": "mbork.pl",
+          "selector": "fm1",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "invalid public key"
+        },
+        {
+          "domain": "messagingengine.com",
+          "selector": "fm1",
+          "result": "neutral",
+          "aligned": false,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 45,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 46,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 47,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 48,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 49,
+      "original": [
+        {
+          "domain": "mbork.pl",
+          "selector": "fm1",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "invalid public key"
+        },
+        {
+          "domain": "messagingengine.com",
+          "selector": "fm1",
+          "result": "neutral",
+          "aligned": false,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 50,
+      "original": [
+        {
+          "domain": "mbork.pl",
+          "selector": "fm1",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "invalid public key"
+        },
+        {
+          "domain": "messagingengine.com",
+          "selector": "fm1",
+          "result": "neutral",
+          "aligned": false,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 51,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 52,
+      "original": [
+        {
+          "domain": "protonmail.com",
+          "selector": "protonmail3",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 53,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 54,
+      "original": [
+        {
+          "domain": "packrat386.com",
+          "selector": "protonmail",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 55,
+      "original": [
+        {
+          "domain": "protonmail.com",
+          "selector": "protonmail3",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 56,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 57,
+      "original": [
+        {
+          "domain": "proton.me",
+          "selector": "protonmail",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 58,
+      "original": [
+        {
+          "domain": "starynkevitch.net",
+          "selector": "gm1",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "starynkevitch.net",
+      "edited": [
+        {
+          "domain": "starynkevitch.net",
+          "selector": "gm1",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "starynkevitch.net",
+          "selector": "gm1",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 59,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 60,
+      "original": [
+        {
+          "domain": "gmx.de",
+          "selector": "s31663417",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 61,
+      "original": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "gnu.org",
+      "edited": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 62,
+      "original": [
+        {
+          "domain": "protonmail.com",
+          "selector": "protonmail3",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 63,
+      "original": [
+        {
+          "domain": "protonmail.com",
+          "selector": "protonmail3",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 64,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 65,
+      "original": [
+        {
+          "domain": "qq.com",
+          "selector": "s201512",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 66,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 67,
+      "original": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "gnu.org",
+      "edited": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 68,
+      "original": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "gnu.org",
+      "edited": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 69,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 70,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 71,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 72,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 73,
+      "original": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "rd10.de",
+      "edited": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "rd10.de",
+          "selector": "key2",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 74,
+      "original": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "mailbox.org",
+      "edited": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 75,
+      "original": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "mailbox.org",
+      "edited": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        },
+        {
+          "domain": "mailbox.org",
+          "selector": "mail20150812",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 76,
+      "original": [
+        {
+          "domain": "mbork.pl",
+          "selector": "fm1",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "invalid public key"
+        },
+        {
+          "domain": "messagingengine.com",
+          "selector": "fm1",
+          "result": "neutral",
+          "aligned": false,
+          "detail": "expired"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 77,
+      "original": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "gnu.org",
+      "edited": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    },
+    {
+      "i": 78,
+      "original": [
+        {
+          "domain": "gmail.com",
+          "selector": "20251104",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "signer": null,
+      "edited": null,
+      "spoofed": null
+    },
+    {
+      "i": 79,
+      "original": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "pass",
+          "aligned": true,
+          "detail": null
+        }
+      ],
+      "signer": "gnu.org",
+      "edited": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "neutral",
+          "aligned": true,
+          "detail": "body hash did not verify"
+        }
+      ],
+      "spoofed": [
+        {
+          "domain": "gnu.org",
+          "selector": "fencepost-gnu-org",
+          "result": "fail",
+          "aligned": false,
+          "detail": "bad signature"
+        }
+      ]
+    }
+  ],
+  "finishedAt": "2026-10-01T17:58:35.647Z"
+}

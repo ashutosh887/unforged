@@ -65,3 +65,32 @@ Pending the real bank's domain and selector.
 ## 5. Forgery matrix and extraction accuracy
 
 Pending the Bedrock quota increase (`docs/spikes.md`) and the real fixtures.
+
+## 6. Real signed emails: one character changed, or a bank From swapped in
+
+Run 1 Oct 2026, 17:58 UTC. `pnpm measure:signature` against `POST
+/api/verify` on the live stack. Raw:
+`measurements/signature-2026-10-01T17-58-35-649Z.json`.
+
+The emails are not bank alerts. They are the first 80 messages with a
+`DKIM-Signature` header in a public mailing-list archive with full headers
+(`https://lists.gnu.org/archive/mbox/help-gnu-emacs/2026-09`), so anyone can
+rerun this. Each one that verified as archived was sent twice more: once with
+the first letter or digit of its body changed, once with its From header
+rewritten to `alerts@hdfcbank.net`.
+
+| Metric | Result |
+| --- | --- |
+| Messages with a DKIM-Signature header | 80 |
+| Passing, aligned signature as archived | 37/80 (6 signing domains) |
+| One body character changed → signature broken | 37/37 |
+| From rewritten to hdfcbank.net → rejected | 37/37 |
+| Stored as a bank credit | 0/80 |
+| Request time p50 / p95 (laptop in India → CloudFront → Lambda, DNS key lookup included) | 657 ms / 1305 ms |
+
+Caveats:
+- The 43 that fail as archived were mostly modified in transit by the list
+  (subject tag, footer), which is what DKIM is meant to catch. They are not
+  counted as tampering results.
+- These are real signatures from real senders, but not from a bank. The bank
+  case is section 4 and the forgery matrix, pending the real alert.
