@@ -118,11 +118,38 @@ the guarded path, and accepted claims for the naive one.
 
 ## Measurements
 
-Every number about Unforged comes from a real run and is recorded in
-[`docs/measurements.md`](docs/measurements.md): the race against the naive
-control, a replay of the same alert, the forgery matrix, screenshot extraction
-accuracy and DKIM DNS lookup latency. None are quoted here until they exist
-there.
+Every number about Unforged comes from a real run against the live stack and
+is recorded in [`docs/measurements.md`](docs/measurements.md), with raw JSON in
+`measurements/`. Forgery matrix, screenshot extraction accuracy and DKIM DNS
+latency are pending real samples and are not quoted until they exist there.
+
+**Race, 1 Oct 2026** (`pnpm measure:race`, 20 rounds × 50 claims of one fresh
+credit at the same instant):
+
+| Metric | Unique index | Naive control |
+| --- | --- | --- |
+| Rounds with exactly one winner | 20/20 | 0/20 |
+| Rounds with more than one winner | 0/20 | 20/20 |
+| Total approvals (1 is correct per round) | 20 | 1000 |
+| Errors | 0 | 0 |
+| Batch time p50 | 134 ms | 40 ms |
+| Batch time p95 | 198 ms | 73 ms |
+
+Client round trip for a whole round (both arms): p50 492 ms, p95 888 ms. The
+Lambda's pg pool holds 20 connections, so at most 20 of the 50 claims are in
+flight at the database at once. Batch time is for all 50 claims, not per claim.
+
+**Replay, 1 Oct 2026** (`pnpm measure:replay`, 10 rounds, the same credit
+claimed twice one after the other):
+
+| Path | Approved first claims | Approved second claims |
+| --- | --- | --- |
+| Unique index | 10/10 | 0/10 |
+| Naive check-then-insert | 10/10 | 0/10 |
+
+A sequential replay is caught even by a naive check. The naive path fails only
+when claims arrive together (the race above). The unique index holds under
+both.
 
 ## Run it
 
