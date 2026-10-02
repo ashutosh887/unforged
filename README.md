@@ -36,6 +36,30 @@ Center "Zero to Shipped" hackathon, `#daily-life-enhancement` and `#startups`.
 - **Every number:** [`docs/measurements.md`](docs/measurements.md), with raw
   JSON in [`measurements/`](measurements/).
 
+## What it looks like
+
+All five are screenshots of the live site.
+
+**Home.** The proof runs on load. Order A12 is verified and released; the same email for A13 comes back Already claimed and Release goods stays off.
+
+![Home page after its live run](docs/images/first-screen.png)
+
+**Proof.** Your browser hashes the email body and gets the signed `bh=` value. One changed letter breaks it. Fifty claims race for one row and one gets through.
+
+![Proof page](docs/images/proof.png)
+
+**Screenshots.** Run the real check on a throwaway demo shop. The cropped sample comes back Unreadable, the others Not found yet.
+
+![Screenshots page after Run the real check](docs/images/screenshots-check.png)
+
+**Ledger.** Every receipt is signed by AWS KMS and hashes the one before it. Your browser rechecks the chain.
+
+![Ledger page](docs/images/ledger.png)
+
+**Architecture.** The stack, the verdict source code and the measured numbers.
+
+![Architecture page](docs/images/architecture-page.png)
+
 ## Try it in 30 seconds
 
 Open the live link. The page runs the whole proof on the live AWS stack as it
