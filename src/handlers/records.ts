@@ -5,7 +5,9 @@ import { body, json, pool, refFrom, type Event, type Result } from "./http.js"
 const maxBytes = 2_000_000
 
 export async function handler(event: Event): Promise<Result> {
-  const input = body<{ raw?: string; claimRef?: string }>(event)
+  const input = body<{ raw?: string; claimRef?: string; ledger?: string }>(event)
+  const ledger = input?.ledger ?? "public"
+  if (!/^(public|[a-z0-9-]{8,40})$/.test(ledger)) return json(400, { error: "A ledger id is 8 to 40 lowercase letters, digits or hyphens." })
   const raw = input?.raw
   const claimRef = refFrom(input?.claimRef)
   if (!raw?.trim() || !claimRef) return json(400, { error: "Send the raw email and what it is being claimed for, under 80 characters." })
@@ -25,6 +27,6 @@ export async function handler(event: Event): Promise<Result> {
     return json(422, { verdict: "REJECTED", reason, signatures: report.signatures })
   }
   let retries = 0
-  const decision = await claimRecord(pool(), { fingerprint: report.fingerprint, signer: report.signer, claimRef }, () => retries++)
+  const decision = await claimRecord(pool(), { ledger, fingerprint: report.fingerprint, signer: report.signer, claimRef }, () => retries++)
   return json(200, { ...decision, retries })
 }
