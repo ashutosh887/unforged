@@ -183,8 +183,10 @@ The same eight checks were rerun inside a fresh ledger after the ledger change
 
 ## 8. Amazon Textract on two sample screenshots made for this demo
 
-Run 2 Oct 2026, 08:41 UTC. `API_URL=https://d1ajauwkb76on3.cloudfront.net pnpm exec tsx scripts/read-samples.ts`
+Run 2 Oct 2026, 08:50 UTC. `API_URL=https://d1ajauwkb76on3.cloudfront.net pnpm exec tsx scripts/read-samples.ts`
 (10 rounds per image) against `POST /api/read`. Raw:
+`measurements/read-samples-2026-10-02T08-50-20-145Z.json`. An earlier run on
+the first version of the images is kept at
 `measurements/read-samples-2026-10-02T08-41-51-620Z.json`.
 
 The two images are synthetic. I rendered them from one HTML page in a
@@ -195,8 +197,16 @@ section.
 
 | Image | UTR right | Amount right | Payee right | 3 field boxes drawn | Textract p50 / p95 | Round trip p50 / p95 |
 | --- | --- | --- | --- | --- | --- | --- |
-| upi-paid.png | 10/10 | 10/10 | 10/10 | 10/10 | 1064 / 1384 ms | 1519 / 2698 ms |
-| upi-edited.png | 10/10 | 10/10 | 10/10 | 10/10 | 742 / 1212 ms | 1174 / 2358 ms |
+| upi-paid.png | 10/10 | 10/10 | 10/10 | 10/10 | 719 / 1882 ms | 1185 / 2581 ms |
+| upi-edited.png | 10/10 | 10/10 | 10/10 | 10/10 | 855 / 3163 ms | 1245 / 3531 ms |
+
+One misread on the way. After I cropped the images shorter, Textract read the
+second copy of the payee on the edited image as `demo.seller@okicicl`. That
+gave the parser two different UPI IDs, so it left the payee empty instead of
+picking one, which is the rule in `src/core/ocr.ts`. I set the detail text one
+pixel larger and the misread stopped in every run since. On a real screenshot
+the same misread leaves the payee empty, and the payee check is skipped
+rather than guessed.
 
 What this does not show: accuracy on real phone screenshots, which are
 compressed, cropped and vary by app. Clean rendered text is the easy case.
