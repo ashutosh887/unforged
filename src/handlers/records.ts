@@ -6,7 +6,7 @@ import { receiptSigner } from "./signing.js"
 export async function handler(event: Event): Promise<Result> {
   const input = body<{ raw?: unknown; claimRef?: unknown; ledger?: unknown }>(event)
   const ledger = input?.ledger === undefined ? "public" : text(input.ledger) ?? ""
-  if (!/^(public|[a-z0-9-]{8,40})$/.test(ledger)) return json(400, { error: "A ledger id is 8 to 40 lowercase letters, digits or hyphens." })
+  if (!/^(public|[a-z0-9-]{8,40})$/.test(ledger) || ledger.startsWith("shop-")) return json(400, { error: "A ledger id is 8 to 40 lowercase letters, digits or hyphens." })
   const raw = text(input?.raw)
   const claimRef = refFrom(input?.claimRef)
   if (!raw?.trim() || !claimRef) return json(400, { error: "Send the raw email and what it is being claimed for, under 80 characters." })

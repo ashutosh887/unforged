@@ -96,7 +96,8 @@ export async function inspectSignature(raw: string | Buffer, resolver?: DNSResol
     detail: r.status.comment ?? null,
   }))
   const from = dkim.fromFields === 1 && dkim.headerFrom.length === 1 ? dkim.headerFrom[0]! : null
-  const passing = dkim.results.find((r) => r.signingDomain && r.status.result === "pass" && r.status.aligned)
+  const aligned = dkim.results.filter((r) => r.signingDomain && r.status.result === "pass" && r.status.aligned)
+  const passing = aligned.find((r) => !r.canonBodyLengthLimited) ?? aligned[0]
   const signer = passing?.signingDomain?.toLowerCase() ?? null
   const claim = passing && signer && from ? claimKey(typeof raw === "string" ? raw : raw.toString("latin1"), from, passing.signingHeaders?.keys ?? "", Boolean(passing.canonBodyLengthLimited)) : { key: null, blocked: null }
   const fullBody = signatures.filter((_, i) => !signed[i]!.canonBodyLengthLimited)
