@@ -12,6 +12,28 @@ export API_URL=https://d1ajauwkb76on3.cloudfront.net
 Each measurement script prints a Markdown table and writes its raw JSON to
 `measurements/`. Compare the output with [`measurements.md`](measurements.md).
 
+## Is the stack healthy right now
+
+```sh
+curl -s $API_URL/api/status
+```
+
+`ok` is true when the sample email still verifies against the key gnu.org
+publishes in DNS and Aurora DSQL answers. `keySha256` changes if gnu.org
+rotates that key.
+
+## Run the screenshot check on a throwaway shop
+
+```sh
+TOKEN=$(curl -s -X POST $API_URL/api/demo/shop | node -pe 'JSON.parse(require("fs").readFileSync(0)).token')
+IMG=$(base64 < web/public/samples/upi-cropped.png | tr -d '\n')
+curl -s -X POST $API_URL/api/check -H "x-shop-token: $TOKEN" -H 'content-type: application/json' \
+  -d "{\"image\":\"$IMG\",\"orderRef\":\"A12\"}"
+```
+
+The cropped screenshot has no UTR, so the verdict is `UNREADABLE`. With
+`upi-paid.png` it is `NOT_FOUND_YET`: the demo shop holds no bank alert.
+
 ## Check a signature with the public API
 
 The API stores nothing on this route.

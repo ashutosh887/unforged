@@ -9,8 +9,19 @@ each bank credit pay for one order.
 
 Live: https://d1ajauwkb76on3.cloudfront.net
 
-Built for the AWS Builder Center "Zero to Shipped" hackathon,
-`#daily-life-enhancement` and `#startups`.
+Built by [@ashutosh887](https://github.com/ashutosh887) for the AWS Builder
+Center "Zero to Shipped" hackathon, `#daily-life-enhancement` and `#startups`.
+
+| Page | What a judge sees |
+|---|---|
+| [Home](https://d1ajauwkb76on3.cloudfront.net/#/) | The six-step proof running live, and every verdict with where to see it |
+| [Proof](https://d1ajauwkb76on3.cloudfront.net/#/proof) | The body hash computed in your browser, one letter changed, 50 claims racing for one row |
+| [Screenshots](https://d1ajauwkb76on3.cloudfront.net/#/screenshots) | Textract reads four sample screenshots, then the real check runs on a throwaway demo shop |
+| [Check an email](https://d1ajauwkb76on3.cloudfront.net/#/check) | Paste any email you received and claim it once |
+| [Architecture](https://d1ajauwkb76on3.cloudfront.net/#/architecture) | The stack, the verdict source code and the measured numbers |
+| [Ledger](https://d1ajauwkb76on3.cloudfront.net/#/ledger) | The receipt hash chain, rechecked in your browser with WebCrypto |
+| [Status](https://d1ajauwkb76on3.cloudfront.net/#/status) | Live check of the DKIM key, Aurora DSQL and the KMS receipt key |
+| [Your shop](https://d1ajauwkb76on3.cloudfront.net/#/shop) | The seller app: counter, check, ledger, Hindi or English announcements |
 
 - **See it work:** open the live link. The proof runs as the page loads, see
   [Try it in 30 seconds](#try-it-in-30-seconds).
@@ -40,9 +51,11 @@ loads, with no input from you:
    back Already claimed and Release goods stays shut.
 5. The buyer's receipt, signed by an AWS KMS key, opens from a link.
 
-Then paste an email you received, or press Open the app. The app has four
-tabs: Counter, Check, Proof and Shop. The page also reads two sample UPI
-screenshots with Amazon Textract.
+Then open Screenshots and press Run the real check. A throwaway demo shop is
+created and four sample screenshots go through the same `/api/check` a seller
+uses: the cropped one comes back Unreadable, the others Not found yet, because
+the demo shop has no bank alert. Or paste an email you received on Check an
+email. The buyer's receipt carries a QR code and verifies in the browser.
 
 ## How it works
 
@@ -93,8 +106,8 @@ All in `us-east-1`, defined in one CDK stack, [`infra/app.ts`](infra/app.ts).
 |---|---|
 | Amazon CloudFront | Serves the app from S3 and forwards `/api/*` to the HTTP API. HTTPS only, no caching on the API path, security headers on every response |
 | Amazon S3 | One private bucket holds the built app, reached through Origin Access Control. One holds checked screenshots and deletes them after 24 hours |
-| Amazon API Gateway HTTP API | Routes `/api/*` to Lambda, throttled to 25 requests a second with a burst of 50 |
-| AWS Lambda | Node.js 22 on arm64: `Shops`, `Alerts`, `Verify`, `Records`, `Check`, `Read`, `Receipts`, `Books` and `Race` behind the API. `Migrate` sets up the schema and is invoked directly |
+| Amazon API Gateway HTTP API | Routes `/api/*` to Lambda, throttled to 25 requests a second with a burst of 50. `race` is held to 5 a second and `demo/shop` to 2 |
+| AWS Lambda | Node.js 22 on arm64: `Shops`, `Alerts`, `Verify`, `Records`, `Check`, `Read`, `Receipts`, `Books`, `Status` and `Race` behind the API. `Migrate` sets up the schema and is invoked directly |
 | Amazon Aurora DSQL | Shops, credits, claims, receipts and chain heads. IAM token auth from Lambda, no VPC, no stored password |
 | Amazon Textract | `DetectDocumentText` reads every screenshot today, in `Check` and `Read` |
 | Amazon Bedrock | Converse with a tool-use schema, tried first by `Check`. This account's quota is 0 tokens a day, so reads fall through to Textract. `Read` uses Textract only |
@@ -128,7 +141,7 @@ cover both behaviours.
 
 ## API
 
-All routes are `POST`, JSON in and out, under `/api/`.
+All routes are `POST` except `status`, JSON in and out, under `/api/`.
 
 | Route | Body | Returns |
 |---|---|---|
@@ -137,12 +150,14 @@ All routes are `POST`, JSON in and out, under `/api/`.
 | `read` | `{ image }`, base64 PNG or JPEG up to 4 MB | `{ read, reader, boxes[], ms }`. Stores nothing |
 | `receipts` | `{ id }` | `{ receipt, verified, check: { signature, hash } }` |
 | `receipts/key` | `{ keyId? }` | `{ keyId, algorithm, curve, publicKeyPem }` |
-| `receipts/chain` | `{ ledger, limit ≤ 50 }` | `{ ledger, receipts[], checks[] }` |
+| `receipts/chain` | `{ ledger, limit ≤ 50 }`, plus `x-shop-token` for a `shop-` ledger | `{ ledger, receipts[], checks[] }` |
 | `race` | `{ n ≤ 50 }` or `{ mode: "replay" }` | `{ n, utr, guarded, naive }`, or for replay `{ mode, utr, guarded: { first, second }, naive: { first, second } }` |
 | `shops` | `{ name ≤ 80, vpas ≤ 5 }` | `201 { shopId, token }` |
 | `alerts` | `{ raw, orderRef? }` with `x-shop-token` | `{ credit, duplicate, decision? }` or `422 { error }` |
 | `check` | `{ image, orderRef }` with `x-shop-token`, PNG, JPEG, GIF or WebP up to 4 MB | `{ verdict, reason, credit?, priorClaim?, read, reader, retries }`. `400` for a non-image, `503` when no reader works |
 | `ledger` | `{}` with `x-shop-token` | `{ shop, credits[], attempts[] }` |
+| `demo/shop` | none | `201 { shopId, token, name, vpas, demo: true, demoBanks }`. A throwaway shop for judges; its `demo.` token works on `check`, `alerts` and `ledger` |
+| `status` (GET) | none | `{ ok, checkedAt, dkim: { domain, selector, keySha256, lookupMs, verifiesSample }, dsql: { reachable, ms }, receiptKeyId, readers }`, cached 60 s, `503` when degraded |
 
 A shop has no login. It gets a private link holding a token, sent as
 `x-shop-token` and stored only as a SHA-256 hash.
