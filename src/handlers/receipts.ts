@@ -1,5 +1,5 @@
 import { chainOf, checkReceipt, findReceipt } from "../core/receipts.js"
-import { body, bounded, env, json, pool, text, type Event, type Result } from "./http.js"
+import { body, bounded, env, json, pool, shopFor, text, unauthorised, type Event, type Result } from "./http.js"
 import { publicKeyPem } from "./signing.js"
 
 const idPattern = /^[0-9A-Za-z]{22}$/
@@ -20,6 +20,11 @@ export async function handler(event: Event): Promise<Result> {
   if (path.endsWith("/chain")) {
     const ledger = text(input?.ledger) ?? ""
     if (!ledgerPattern.test(ledger)) return json(400, { error: "Send a ledger id." })
+    if (ledger.startsWith("shop-")) {
+      const shop = await shopFor(event)
+      if (!shop) return unauthorised
+      if (ledger !== `shop-${shop.id}`) return json(404, { error: "No ledger with that id for this shop." })
+    }
     const limit = bounded(input?.limit, 50, 1, 50)
     const receipts = await chainOf(pool(), ledger, limit)
     const checks = await Promise.all(receipts.map(async (r) => ({ id: r.id, ...checkReceipt(r, await publicKeyPem(r.keyId)) })))
