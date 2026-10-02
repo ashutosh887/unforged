@@ -98,7 +98,7 @@ Every claim writes a row whose key identifies the signed record. For a bank
 credit the key is the credit's id. For any signed email it is:
 
 ```
-sha256( signer domain, From address, Date header, relaxed body hash )
+sha256( From domain, From address, Date header, relaxed body hash )
 ```
 
 These are parts every passing signature must cover. Removing one of two
