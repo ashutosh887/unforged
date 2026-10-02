@@ -1,0 +1,312 @@
+{
+  "apiUrl": "https://d1ajauwkb76on3.cloudfront.net",
+  "startedAt": "2026-10-02T08:44:13.363Z",
+  "node": "v24.14.0",
+  "summary": {
+    "ledger": "chain-1790930647118",
+    "concurrency": 8,
+    "sent": 32,
+    "verified": 32,
+    "receipts": 32,
+    "distinctSeqs": 32,
+    "gapless": true,
+    "retries": 29,
+    "statuses": {
+      "200": 32
+    },
+    "ms": {
+      "p50": 821,
+      "p95": 2658
+    }
+  },
+  "results": [
+    {
+      "file": "pass-10.eml",
+      "status": 200,
+      "ms": 2483,
+      "verdict": "VERIFIED",
+      "seq": 4,
+      "retries": 1,
+      "reason": "Signed by gnu.org. Claimed once, for \"chain test pass-10.eml\"."
+    },
+    {
+      "file": "pass-11.eml",
+      "status": 200,
+      "ms": 2658,
+      "verdict": "VERIFIED",
+      "seq": 7,
+      "retries": 3,
+      "reason": "Signed by rd10.de. Claimed once, for \"chain test pass-11.eml\"."
+    },
+    {
+      "file": "pass-12.eml",
+      "status": 200,
+      "ms": 2203,
+      "verdict": "VERIFIED",
+      "seq": 2,
+      "retries": 1,
+      "reason": "Signed by bio.ifi.lmu.de. Claimed once, for \"chain test pass-12.eml\"."
+    },
+    {
+      "file": "pass-13.eml",
+      "status": 200,
+      "ms": 3200,
+      "verdict": "VERIFIED",
+      "seq": 8,
+      "retries": 0,
+      "reason": "Signed by bio.ifi.lmu.de. Claimed once, for \"chain test pass-13.eml\"."
+    },
+    {
+      "file": "pass-14.eml",
+      "status": 200,
+      "ms": 2553,
+      "verdict": "VERIFIED",
+      "seq": 5,
+      "retries": 1,
+      "reason": "Signed by rd10.de. Claimed once, for \"chain test pass-14.eml\"."
+    },
+    {
+      "file": "pass-15.eml",
+      "status": 200,
+      "ms": 2618,
+      "verdict": "VERIFIED",
+      "seq": 6,
+      "retries": 1,
+      "reason": "Signed by rd10.de. Claimed once, for \"chain test pass-15.eml\"."
+    },
+    {
+      "file": "pass-16.eml",
+      "status": 200,
+      "ms": 2116,
+      "verdict": "VERIFIED",
+      "seq": 1,
+      "retries": 0,
+      "reason": "Signed by gnu.org. Claimed once, for \"chain test pass-16.eml\"."
+    },
+    {
+      "file": "pass-17.eml",
+      "status": 200,
+      "ms": 2345,
+      "verdict": "VERIFIED",
+      "seq": 3,
+      "retries": 1,
+      "reason": "Signed by mailbox.org. Claimed once, for \"chain test pass-17.eml\"."
+    },
+    {
+      "file": "pass-23.eml",
+      "status": 200,
+      "ms": 425,
+      "verdict": "VERIFIED",
+      "seq": 10,
+      "retries": 1,
+      "reason": "Signed by mailbox.org. Claimed once, for \"chain test pass-23.eml\"."
+    },
+    {
+      "file": "pass-24.eml",
+      "status": 200,
+      "ms": 537,
+      "verdict": "VERIFIED",
+      "seq": 12,
+      "retries": 1,
+      "reason": "Signed by mailbox.org. Claimed once, for \"chain test pass-24.eml\"."
+    },
+    {
+      "file": "pass-25.eml",
+      "status": 200,
+      "ms": 505,
+      "verdict": "VERIFIED",
+      "seq": 11,
+      "retries": 2,
+      "reason": "Signed by mailbox.org. Claimed once, for \"chain test pass-25.eml\"."
+    },
+    {
+      "file": "pass-28.eml",
+      "status": 200,
+      "ms": 612,
+      "verdict": "VERIFIED",
+      "seq": 14,
+      "retries": 2,
+      "reason": "Signed by posteo.at. Claimed once, for \"chain test pass-28.eml\"."
+    },
+    {
+      "file": "pass-30.eml",
+      "status": 200,
+      "ms": 569,
+      "verdict": "VERIFIED",
+      "seq": 13,
+      "retries": 0,
+      "reason": "Signed by posteo.at. Claimed once, for \"chain test pass-30.eml\"."
+    },
+    {
+      "file": "pass-32.eml",
+      "status": 200,
+      "ms": 380,
+      "verdict": "VERIFIED",
+      "seq": 9,
+      "retries": 0,
+      "reason": "Signed by gnu.org. Claimed once, for \"chain test pass-32.eml\"."
+    },
+    {
+      "file": "pass-34.eml",
+      "status": 200,
+      "ms": 977,
+      "verdict": "VERIFIED",
+      "seq": 16,
+      "retries": 0,
+      "reason": "Signed by rd10.de. Claimed once, for \"chain test pass-34.eml\"."
+    },
+    {
+      "file": "pass-35.eml",
+      "status": 200,
+      "ms": 913,
+      "verdict": "VERIFIED",
+      "seq": 15,
+      "retries": 0,
+      "reason": "Signed by rd10.de. Claimed once, for \"chain test pass-35.eml\"."
+    },
+    {
+      "file": "pass-36.eml",
+      "status": 200,
+      "ms": 391,
+      "verdict": "VERIFIED",
+      "seq": 18,
+      "retries": 0,
+      "reason": "Signed by gnu.org. Claimed once, for \"chain test pass-36.eml\"."
+    },
+    {
+      "file": "pass-38.eml",
+      "status": 200,
+      "ms": 394,
+      "verdict": "VERIFIED",
+      "seq": 19,
+      "retries": 0,
+      "reason": "Signed by gnu.org. Claimed once, for \"chain test pass-38.eml\"."
+    },
+    {
+      "file": "pass-4.eml",
+      "status": 200,
+      "ms": 919,
+      "verdict": "VERIFIED",
+      "seq": 24,
+      "retries": 0,
+      "reason": "Signed by rd10.de. Claimed once, for \"chain test pass-4.eml\"."
+    },
+    {
+      "file": "pass-40.eml",
+      "status": 200,
+      "ms": 501,
+      "verdict": "VERIFIED",
+      "seq": 20,
+      "retries": 0,
+      "reason": "Signed by rd10.de. Claimed once, for \"chain test pass-40.eml\"."
+    },
+    {
+      "file": "pass-44.eml",
+      "status": 200,
+      "ms": 805,
+      "verdict": "VERIFIED",
+      "seq": 22,
+      "retries": 0,
+      "reason": "Signed by rd10.de. Claimed once, for \"chain test pass-44.eml\"."
+    },
+    {
+      "file": "pass-5.eml",
+      "status": 200,
+      "ms": 386,
+      "verdict": "VERIFIED",
+      "seq": 17,
+      "retries": 0,
+      "reason": "Signed by rd10.de. Claimed once, for \"chain test pass-5.eml\"."
+    },
+    {
+      "file": "pass-53.eml",
+      "status": 200,
+      "ms": 821,
+      "verdict": "VERIFIED",
+      "seq": 23,
+      "retries": 0,
+      "reason": "Signed by rd10.de. Claimed once, for \"chain test pass-53.eml\"."
+    },
+    {
+      "file": "pass-54.eml",
+      "status": 200,
+      "ms": 802,
+      "verdict": "VERIFIED",
+      "seq": 21,
+      "retries": 0,
+      "reason": "Signed by rd10.de. Claimed once, for \"chain test pass-54.eml\"."
+    },
+    {
+      "file": "pass-6.eml",
+      "status": 200,
+      "ms": 840,
+      "verdict": "VERIFIED",
+      "seq": 28,
+      "retries": 1,
+      "reason": "Signed by posteo.at. Claimed once, for \"chain test pass-6.eml\"."
+    },
+    {
+      "file": "pass-66.eml",
+      "status": 200,
+      "ms": 1048,
+      "verdict": "VERIFIED",
+      "seq": 31,
+      "retries": 2,
+      "reason": "Signed by starynkevitch.net. Claimed once, for \"chain test pass-66.eml\"."
+    },
+    {
+      "file": "pass-67.eml",
+      "status": 200,
+      "ms": 873,
+      "verdict": "VERIFIED",
+      "seq": 29,
+      "retries": 1,
+      "reason": "Signed by rd10.de. Claimed once, for \"chain test pass-67.eml\"."
+    },
+    {
+      "file": "pass-69.eml",
+      "status": 200,
+      "ms": 796,
+      "verdict": "VERIFIED",
+      "seq": 27,
+      "retries": 2,
+      "reason": "Signed by gnu.org. Claimed once, for \"chain test pass-69.eml\"."
+    },
+    {
+      "file": "pass-75.eml",
+      "status": 200,
+      "ms": 694,
+      "verdict": "VERIFIED",
+      "seq": 25,
+      "retries": 0,
+      "reason": "Signed by gnu.org. Claimed once, for \"chain test pass-75.eml\"."
+    },
+    {
+      "file": "pass-77.eml",
+      "status": 200,
+      "ms": 1135,
+      "verdict": "VERIFIED",
+      "seq": 32,
+      "retries": 5,
+      "reason": "Signed by gnu.org. Claimed once, for \"chain test pass-77.eml\"."
+    },
+    {
+      "file": "pass-8.eml",
+      "status": 200,
+      "ms": 723,
+      "verdict": "VERIFIED",
+      "seq": 26,
+      "retries": 0,
+      "reason": "Signed by gnu.org. Claimed once, for \"chain test pass-8.eml\"."
+    },
+    {
+      "file": "pass-9.eml",
+      "status": 200,
+      "ms": 926,
+      "verdict": "VERIFIED",
+      "seq": 30,
+      "retries": 4,
+      "reason": "Signed by gnu.org. Claimed once, for \"chain test pass-9.eml\"."
+    }
+  ]
+}

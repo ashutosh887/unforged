@@ -1,0 +1,30 @@
+{
+  "apiUrl": "https://d1ajauwkb76on3.cloudfront.net",
+  "startedAt": "2026-10-02T08:43:50.741Z",
+  "node": "v24.14.0",
+  "id": "3z3ZzorcscO9xp87AaEWvU",
+  "server": true,
+  "local": {
+    "signature": true,
+    "hash": true
+  },
+  "tamperedCopy": {
+    "signature": false,
+    "hash": false
+  },
+  "receipt": {
+    "id": "3z3ZzorcscO9xp87AaEWvU",
+    "ledger": "rcpt-1790930606",
+    "seq": 1,
+    "kind": "signed-email",
+    "signer": "mailbox.org",
+    "what": "order A12",
+    "claimedAt": "2026-10-02T08:43:28.369Z",
+    "fingerprint": "abe37bfe1ac2d0526e56f526d44b05c9a5366a53b564aa3a9b8fc90edcc88619",
+    "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "keyId": "bfea3421-b760-4d91-8f95-d03d8c391cbb",
+    "hash": "c7dcc2badb4fc8d995638e84fe0cb5175e83aec351026a421163efb16575c378",
+    "signature": "MEQCICmtzzKZ4uFzf46+tILYrqTe5LwU8N2d1PQshdDYxMPhAiAPEyaPa9hXQD8yrf3SjDMQQwaxlZNgshk4a84B/kh9Sw=="
+  },
+  "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDHKJZV3abkLmtkw/btyblPgdY/0T\nuGdAPg4VTp4I7PMVIxvDkC+RbO1OMbZAl2DxJ2kgL1pNac8u+TZMyHoFQw==\n-----END PUBLIC KEY-----\n"
+}

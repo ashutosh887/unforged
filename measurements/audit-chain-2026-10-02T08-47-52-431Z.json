@@ -1,0 +1,43 @@
+{
+  "apiUrl": "https://d1ajauwkb76on3.cloudfront.net",
+  "startedAt": "2026-10-02T08:47:52.431Z",
+  "node": "v24.14.0",
+  "ledger": "rcpt-1790930606",
+  "entries": 2,
+  "breaks": [
+    {
+      "seq": 1,
+      "id": "3z3ZzorcscO9xp87AaEWvU",
+      "signature": false,
+      "hash": true,
+      "linked": true,
+      "inOrder": true
+    },
+    {
+      "seq": 2,
+      "id": "UTloVTofApSMhIKpDrPLq9",
+      "signature": false,
+      "hash": true,
+      "linked": true,
+      "inOrder": true
+    }
+  ],
+  "rows": [
+    {
+      "seq": 1,
+      "id": "3z3ZzorcscO9xp87AaEWvU",
+      "signature": false,
+      "hash": true,
+      "linked": true,
+      "inOrder": true
+    },
+    {
+      "seq": 2,
+      "id": "UTloVTofApSMhIKpDrPLq9",
+      "signature": false,
+      "hash": true,
+      "linked": true,
+      "inOrder": true
+    }
+  ]
+}

@@ -213,3 +213,50 @@ compressed, cropped and vary by app. Clean rendered text is the easy case.
 Real screenshots are still pending (section 5). "Textract" is the Lambda's
 `DetectDocumentText` call; the round trip adds the laptop in India to
 CloudFront to Lambda.
+
+## 9. Receipts countersigned by AWS KMS, chained per ledger
+
+Run 2 Oct 2026, 08:43–08:52 UTC against the live stack. Every VERIFIED claim
+writes a receipt. The receipt is canonical JSON (keys sorted), hashed as
+`sha256(prev_hash || json)`, and signed with `ECDSA_SHA_256` by an asymmetric
+KMS key (`ECC_NIST_P256`, `SIGN_VERIFY`) inside the same DSQL transaction as
+the claim. Each ledger keeps one chain head row. The transaction reads it with
+`SELECT ... FOR UPDATE` and updates it, so two claims that race for the same
+head conflict and one retries.
+
+**32 claims into one ledger, 8 at a time.** `EML_DIR=<dir of archive emails>
+CONCURRENCY=8 pnpm measure:receipt-race`. Raw:
+`measurements/receipt-race-2026-10-02T08-44-13-364Z.json`.
+
+| Metric | Result |
+| --- | --- |
+| Distinct signed emails sent | 32 |
+| VERIFIED, each with a receipt | 32/32 |
+| Receipt sequence numbers | 1 to 32, no gaps, no duplicates |
+| OCC retries across all claims | 29 |
+| Request time p50 / p95 | 821 / 2658 ms |
+
+**Offline audit of that chain.** `LEDGER=chain-1790930647118 pnpm measure:chain`
+fetches every receipt and the public key named on it, recomputes each hash,
+checks each link to the previous hash and verifies each signature with
+`node:crypto`. Raw: `measurements/audit-chain-2026-10-02T08-52-04-616Z.json`:
+32 receipts, 0 breaks. A two-receipt ledger audited the same way:
+`measurements/audit-chain-2026-10-02T08-52-06-326Z.json`, 0 breaks.
+
+**One receipt, checked by a third party.** `RECEIPT_ID=3z3ZzorcscO9xp87AaEWvU
+pnpm measure:receipt`. Raw:
+`measurements/verify-receipt-2026-10-02T08-52-07-272Z.json`. Signature valid,
+hash valid. The same receipt with its `what` field edited fails both checks.
+
+What went wrong first, kept in the raw files:
+- The first two audits (`audit-chain-…08-44-22…`, `…08-44-24…`) reported every
+  receipt broken. The chain endpoint had added a `check` field to each receipt,
+  which changed the canonical JSON. It now returns checks in a separate list.
+- The next audits (`…08-47-50…`, `…08-47-52…`) and one receipt check
+  (`verify-receipt-…08-48-38…`) failed the signature only. Two deploys from a
+  checkout without the receipt code removed the key from the stack. The key is
+  retained, never deleted, so the next deploy made a new one. Receipts signed by
+  the first key no longer matched the current public key. Verification now uses
+  the key id written into each receipt, and `/api/receipts/key` takes a `keyId`.
+  Four receipt keys exist in the account. The current one is in the stack; the
+  three retired ones stay so their receipts keep verifying.
