@@ -212,6 +212,10 @@ data, 24.51 bn in Aug 2026); no scam-count figure has a source.
 - **Added 2 Oct, early:** the shop ledger (`/api/ledger`, `Books` Lambda,
   `attempts_by_shop` index, migrated) and `.eml` upload/drop on every
   email field.
+- **Added 2 Oct:** Textract as the last screenshot reader (`src/core/ocr.ts`),
+  live; a synthetic GPay-style image read correctly end to end
+  (`reader: textract`, 4.5 s with the two Bedrock attempts failing first).
+  Not a measurement; the 5 real screenshots are.
 - **Still needed from Ashutosh:** the Bedrock quota case, the real bank
   `.eml`, 5 screenshots, and the open decision above on which input leads.
 
@@ -238,20 +242,20 @@ copy, race and replay measurements, cover, README, diagram.
     domain, both expected rejected, plus the untouched original as control.
     Fills the post's two alert rows of the forgery table.
 
-**C. With Bedrock (about 1.5 h; skip to D if the quota is still 0)**
-7. Extraction spike: Nova 2 Lite vs Claude Haiku 4.5 on the 5 screenshots;
-   pick the model and set `modelId` order in `cdk.json`.
+**C. Screenshots (about 1.5 h; no longer blocked on Bedrock)**
+7. Extraction spike on the 5 screenshots: Textract (live now, last in the
+   reader chain) and, if the quota rises, Nova 2 Lite vs Claude Haiku 4.5.
+   Set the `modelId` order in `cdk.json` from the result. If Bedrock is still
+   0, Textract alone serves the demo and the post says so.
 8. Make fixtures: original, amount edit, payee edit (visible UPI ID), crop
    (UTR cut). Set `shop.vpa` in `web/public/fixtures/manifest.json` to the
    real payee. Copy the `.eml` in byte for byte. Redeploy.
 9. `pnpm measure:forgery` → measurements §5. Run Try it end to end on a phone
    over mobile data and time it.
 
-**D. If Bedrock is still 0 at noon IST**
-10. Lead the demo with "Claim a signed alert directly" (works without
-    Bedrock); the Try-it page runs the alert-only cases; the post says
-    plainly that screenshot reading is built, and shows the 503 fail-closed
-    behaviour. Nothing is faked.
+**D. Demo lead**
+10. Screenshot + alert is possible without Bedrock now (Textract). "Claim a
+    signed alert directly" stays as the second path.
 
 **E. Agent proof (30 min, through the aws-mcp tools)**
 11. In the new session, use aws-mcp tools for: stack status, DSQL `sys.jobs`
