@@ -30,9 +30,12 @@ function bankFor(domain: string): string | null {
 
 const amountPattern = /(?:Rs\.?|INR|₹)\s*([\d,]+(?:\.\d{1,2})?)/i
 const utrPattern = /(?:UPI|UTR|RRN|Ref(?:erence)?)[^\d]{0,30}(\d{12})\b/i
+const creditedToYou = /credited\s+(?:to|in(?:to)?)\s+(?:your\s+)?(?:a\/c|acct|account)/i
+const debitPattern = /\bdebit(?:ed)?\b/i
 
 export function extractCredit(text: string): { amountPaise: number; utr: string } | null {
   if (!/credit/i.test(text)) return null
+  if (debitPattern.test(text) && !creditedToYou.test(text)) return null
   const amount = text.match(amountPattern)
   const utr = text.match(utrPattern)
   if (!amount?.[1] || !utr?.[1]) return null
