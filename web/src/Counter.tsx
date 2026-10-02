@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import type { Verdict } from "../../src/core/types.js"
 import { post, type LedgerResult } from "./api"
+import { Aloud, spellOrder, type Spoken } from "./Aloud"
 import { Icon } from "./Icon"
 import { orders, type Done, type LiveRun, type Step } from "./live"
 import { clockTime, money, Panel, ReleaseAction, toneIcon, utrGroups, verdicts } from "./parts"
@@ -61,11 +62,15 @@ export function DemoCounter({ live, onCheck, onProof }: { live: LiveRun; onCheck
   const claims = [4, 3].map((i) => ({ order: orders[i - 3]!, step: steps[i]! }))
   const anyClaim = claims.some((c) => c.step.state !== "waiting")
   const checks = [0, 1, 2, 5].map((i) => ({ i, step: steps[i]! })).filter((c) => c.step.state !== "waiting")
+  const spoken: Spoken[] = claims.flatMap(({ step }) =>
+    step.state === "done" && step.claim?.verdict === "VERIFIED" ? [{ id: `${step.claim.claimRef}-${step.claim.claimedAt}`, text: `Payment verified for order ${spellOrder(step.claim.claimRef)}. Signed by ${step.claim.signer}.` }] : [],
+  )
   return (
     <div className="counter">
       <p className="counter-note">
         A public signed email stands in for your bank's alert. Every check here calls the live AWS stack.
       </p>
+      <Aloud items={spoken} />
       <div className="orders" aria-live="polite">
         {anyClaim ? (
           claims.map((c) => <OrderPanel key={c.order} order={c.order} step={c.step} />)
@@ -142,8 +147,10 @@ export function ShopCounter({ token, version, onCheck }: { token: string; versio
 
   const claimed = ledger.credits.filter((c) => c.claim).length
   const total = ledger.credits.reduce((sum, c) => sum + c.amountPaise, 0)
+  const spoken: Spoken[] = ledger.credits.map((c) => ({ id: c.id, text: `${money(c.amountPaise)} received. Signed by ${c.dkimDomain}.` }))
   return (
     <div className="counter">
+      <Aloud items={spoken} />
       <section className="summary" aria-label="Signed credits">
         <p className="summary-amount">{money(total)}</p>
         <p className="summary-sub">
