@@ -84,9 +84,33 @@ All routes are `POST`, JSON in and out, under `/api/`.
 | `alerts` | `{ raw, orderRef? }` + `x-shop-token` | `201/200 { credit, duplicate, decision? }`, `422 { error }` |
 | `check` | `{ image (base64 PNG/JPEG/GIF/WebP ≤ 4 MB), orderRef }` + token | `200 { verdict, reason, credit?, priorClaim?, read, reader, retries }`, `400` non-image, `503` no reader |
 | `verify` | `{ raw }` | `200 { from, signatures[], signer, bankCredit, notStoredBecause }` |
-| `records/claim` | `{ raw, claimRef (≤ 80), ledger? }` | `200 { verdict: VERIFIED, ledger, signer, claimRef, claimedAt }` or `{ verdict: ALREADY_CLAIMED, priorClaim }`, `422 { verdict: REJECTED, reason }` |
+| `records/claim` | `{ raw, claimRef (≤ 80), ledger? }` | `200 { verdict: VERIFIED, ledger, signer, claimRef, claimedAt, receipt }` or `{ verdict: ALREADY_CLAIMED, priorClaim }`, `422 { verdict: REJECTED, reason }` |
 | `ledger` | `{}` + token | `200 { shop, credits[], attempts[] }` |
 | `race` | `{ n ≤ 50 }` or `{ mode: "replay" }` | `200 { n, guarded, naive }` |
+| `receipts` | `{ id }` | `200 { receipt, verified, check: { signature, hash } }`, `404` |
+| `receipts/key` | `{ keyId? }` | `200 { keyId, algorithm, curve, publicKeyPem }` |
+| `receipts/chain` | `{ ledger, limit ≤ 50 }` | `200 { ledger, receipts[], checks[] }` |
+
+### Receipts
+
+Every VERIFIED claim gets a receipt the seller can send the buyer: the signer's
+domain, what the record was claimed for, when, and two hashes. The receipt is
+canonical JSON signed by an AWS KMS key (ECDSA P-256), and its hash includes
+the previous receipt's hash in the same ledger, so a ledger is a chain. The
+claim and the receipt are written in one DSQL transaction. Two claims racing
+for the same chain head conflict, and DSQL makes one retry. The page at
+`/#r=<id>` shows a receipt and the server's check of it.
+
+Verify one yourself, with no AWS account:
+
+```bash
+API_URL=https://d1ajauwkb76on3.cloudfront.net RECEIPT_ID=<id> pnpm measure:receipt
+API_URL=https://d1ajauwkb76on3.cloudfront.net LEDGER=<ledger> pnpm measure:chain
+```
+
+The first fetches the receipt and the public key named on it and checks the
+signature and hash with `node:crypto`. The second recomputes every hash and link
+in a ledger. Results from the live stack are in `docs/measurements.md` §9.
 
 ### Verdicts
 
@@ -126,10 +150,11 @@ All in one region, `us-east-1`. Defined in [`infra/app.ts`](infra/app.ts).
 | Amazon CloudFront | Serves the SPA from S3 and forwards `/api/*` to the HTTP API, HTTPS only, no caching on the API path |
 | Amazon S3 (site bucket) | Holds the built SPA. Private, reached only through CloudFront Origin Access Control |
 | Amazon S3 (upload bucket) | Stores each checked screenshot under its SHA-256. Private, SSL enforced, lifecycle rule deletes objects after 1 day (24 h) |
-| Amazon API Gateway HTTP API | `POST /api/shops`, `/api/alerts`, `/api/check`, `/api/verify`, `/api/records/claim`, `/api/ledger`, `/api/race`; throttled to 25 req/s, burst 50 |
-| AWS Lambda | Eight functions, Node.js 22 on arm64, bundled with esbuild: `Shops`, `Alerts`, `Verify` (DKIM report for any email, stores nothing), `Records` (claim any signed email once), `Check`, `Books` (the shop's ledger), `Race`, `Spike` (DKIM DNS timing), and `Migrate` (schema setup, invoked directly, not routed) |
+| Amazon API Gateway HTTP API | `POST /api/shops`, `/api/alerts`, `/api/check`, `/api/verify`, `/api/records/claim`, `/api/receipts`, `/api/receipts/key`, `/api/receipts/chain`, `/api/ledger`, `/api/race`; throttled to 25 req/s, burst 50 |
+| AWS Lambda | Functions, Node.js 22 on arm64, bundled with esbuild: `Shops`, `Alerts`, `Verify` (DKIM report for any email, stores nothing), `Records` (claim any signed email once), `Check`, `Receipts` (receipt, public key and chain lookups), `Books` (the shop's ledger), `Race`, `Spike` (DKIM DNS timing), and `Migrate` (schema setup, invoked directly, not routed) |
 | Amazon Aurora DSQL | Shops, credits, claims, attempts and the naive control table. IAM token auth from Lambda (`dsql:DbConnectAdmin`), no VPC, no passwords. Unique indexes built with `CREATE UNIQUE INDEX ASYNC` |
 | Amazon Bedrock | Converse API with vision and a tool-use JSON schema. The model ID is a CDK context value; the default in `cdk.json` is `us.amazon.nova-2-lite-v1:0` |
+| AWS KMS | An asymmetric ECC P-256 key signs every claim receipt (`kms:Sign` for `Records`, `Alerts` and `Check`); `Receipts` reads public keys with `kms:GetPublicKey`. The private key never leaves KMS |
 | AWS IAM | Per-function least-privilege grants: DSQL connect on the one cluster, `s3:PutObject` on the upload bucket and Bedrock invoke for `Check` only |
 | AWS CDK (TypeScript) | The whole stack as code, deployed by the coding agent |
 
