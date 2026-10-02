@@ -2,7 +2,7 @@ import { fileURLToPath } from "node:url"
 import { App, CfnOutput, Duration, RemovalPolicy, Stack, type StackProps } from "aws-cdk-lib"
 import { CfnStage, HttpApi, HttpMethod } from "aws-cdk-lib/aws-apigatewayv2"
 import { HttpLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations"
-import { AllowedMethods, CachePolicy, Distribution, OriginRequestPolicy, ViewerProtocolPolicy } from "aws-cdk-lib/aws-cloudfront"
+import { AllowedMethods, CachePolicy, Distribution, HeadersFrameOption, HeadersReferrerPolicy, OriginRequestPolicy, ResponseHeadersPolicy, ViewerProtocolPolicy } from "aws-cdk-lib/aws-cloudfront"
 import { HttpOrigin, S3BucketOrigin } from "aws-cdk-lib/aws-cloudfront-origins"
 import { CfnCluster } from "aws-cdk-lib/aws-dsql"
 import { PolicyStatement } from "aws-cdk-lib/aws-iam"
@@ -83,14 +83,27 @@ class UnforgedStack extends Stack {
     route("/api/alerts", alerts)
     route("/api/check", check)
     route("/api/race", race)
-    route("/api/spike/dkim", spike)
     route("/api/verify", verify)
     route("/api/ledger", books)
     route("/api/records/claim", records)
 
+    const headers = new ResponseHeadersPolicy(this, "SecurityHeaders", {
+      securityHeadersBehavior: {
+        strictTransportSecurity: { accessControlMaxAge: Duration.days(365), includeSubdomains: true, override: true },
+        contentTypeOptions: { override: true },
+        frameOptions: { frameOption: HeadersFrameOption.DENY, override: true },
+        referrerPolicy: { referrerPolicy: HeadersReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN, override: true },
+        contentSecurityPolicy: {
+          contentSecurityPolicy:
+            "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+          override: true,
+        },
+      },
+    })
+
     const distribution = new Distribution(this, "Cdn", {
       defaultRootObject: "index.html",
-      defaultBehavior: { origin: S3BucketOrigin.withOriginAccessControl(site), viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS, cachePolicy: CachePolicy.CACHING_OPTIMIZED },
+      defaultBehavior: { origin: S3BucketOrigin.withOriginAccessControl(site), viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS, cachePolicy: CachePolicy.CACHING_OPTIMIZED, responseHeadersPolicy: headers },
       additionalBehaviors: {
         "/api/*": {
           origin: new HttpOrigin(`${api.apiId}.execute-api.${this.region}.amazonaws.com`),
@@ -98,6 +111,7 @@ class UnforgedStack extends Stack {
           allowedMethods: AllowedMethods.ALLOW_ALL,
           cachePolicy: CachePolicy.CACHING_DISABLED,
           originRequestPolicy: OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+          responseHeadersPolicy: headers,
         },
       },
     })
