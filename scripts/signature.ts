@@ -1,17 +1,10 @@
-import { intEnv, meta, percentile, post, fmtMs, table, writeResult } from "./lib.js"
+import { fmtMs, intEnv, mboxMessages, meta, percentile, post, table, writeResult } from "./lib.js"
 
 type Sig = { domain: string; result: string; aligned: boolean; detail: string | null }
 type Verify = { from: string | null; signer: string | null; signatures?: Sig[]; notStoredBecause: string | null; bankCredit: unknown }
 
 const source = process.env.MBOX_URL ?? "https://lists.gnu.org/archive/mbox/help-gnu-emacs/2026-09"
 const limit = intEnv("LIMIT", 80)
-
-function messages(mbox: string): string[] {
-  return mbox
-    .split(/\n(?=From \S+ +\w{3} \w{3} +\d+ \d\d:\d\d:\d\d \d{4}\n)/)
-    .map((m) => m.replace(/^From [^\n]*\n/, "").replace(/\n>From /g, "\nFrom "))
-    .filter((m) => /^dkim-signature:/im.test(m))
-}
 
 function bodyStart(raw: string): number {
   const at = raw.indexOf("\n\n")
@@ -39,7 +32,7 @@ if (!res.ok) {
   console.error(`could not fetch ${source}: HTTP ${res.status}`)
   process.exit(1)
 }
-const all = messages((await res.text()).replace(/\r\n/g, "\n")).slice(0, limit)
+const all = mboxMessages(await res.text()).slice(0, limit)
 const info = meta()
 
 const results: { i: number; original: Verify; edited: Verify | null; spoofed: Verify | null }[] = []

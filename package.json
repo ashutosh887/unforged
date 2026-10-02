@@ -15,7 +15,8 @@
     "measure:dkim": "tsx scripts/dkim-latency.ts",
     "measure:forgery": "tsx scripts/forgery.ts",
     "measure:tamper": "tsx scripts/tamper.ts",
-    "measure:signature": "tsx scripts/signature.ts"
+    "measure:signature": "tsx scripts/signature.ts",
+    "measure:record-race": "tsx scripts/record-race.ts"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.1144.0",

@@ -80,3 +80,11 @@ export async function writeResult(name: string, data: unknown): Promise<string> 
 export function meta(): { apiUrl: string; startedAt: string; node: string } {
   return { apiUrl: apiUrl(), startedAt: new Date().toISOString(), node: process.version }
 }
+
+export function mboxMessages(mbox: string): string[] {
+  return mbox
+    .replace(/\r\n/g, "\n")
+    .split(/\n(?=From \S+ +\w{3} \w{3} +\d+ \d\d:\d\d:\d\d \d{4}\n)/)
+    .map((m) => m.replace(/^From [^\n]*\n/, "").replace(/\n>From /g, "\nFrom "))
+    .filter((m) => /^dkim-signature:/im.test(m))
+}
