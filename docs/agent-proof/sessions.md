@@ -59,3 +59,30 @@ the CLI. `sts:GetCallerIdentity` returned
 | `support:DescribeSeverityLevels` | `SubscriptionRequiredException`: the limit case cannot be filed by API on Basic support; it goes through the console |
 | `logs:FilterLogEvents` on the Check, Alerts and Race functions (24 h) | Check 1 invocation (max 2718 ms), Alerts 1 (477 ms), Race 39 (1947 ms) |
 | `cloudtrail:LookupEvents Username=unforged-agent` | 825 events, 13:10–15:09 UTC (the newest calls appear after CloudTrail's delivery lag) |
+
+## 2 Oct 2026: what the agent built, deployed by `unforged-agent`
+
+- `POST /api/verify` (the `Verify` Lambda): a DKIM report for any email,
+  storing nothing. Measured on 80 public-archive emails with
+  `pnpm measure:signature`: 37/37 broken by a one-character edit, 37/37
+  rejected with a bank From (`docs/measurements.md` §6).
+- The shop ledger, `POST /api/ledger` (the `Books` Lambda). Its new
+  `attempts_by_shop` index was built by invoking the migrate Lambda through
+  the AWS MCP Server (`lambda:Invoke`, payload `{"applied":11,...,"status":"completed"}`).
+- Amazon Textract as the last screenshot reader, so checks work while every
+  Bedrock model's daily quota is 0. Models out of quota are benched for 15 min.
+- Every deploy was `AWS_PROFILE=unforged-agent pnpm run deploy`; the stack was
+  `UPDATE_COMPLETE` at 07:55 UTC, confirmed through `aws___run_script`
+  (`sts:GetCallerIdentity` → `user/unforged-agent`).
+
+`claude mcp list` (`mcp-list.txt`, `mcp-list.png`) shows `aws-mcp` connected.
+The default health check timed out twice while `uvx` fetched
+`mcp-proxy-for-aws@latest`; with `MCP_TIMEOUT=90000` it reports connected.
+
+CloudTrail export refreshed (`scripts/agent-trail.sh`): **1,198 events** for
+`unforged-agent`, 1 Oct 18:40 IST to 2 Oct 13:35 IST, including 9
+`aws-mcp.amazonaws.com` `CallReadWriteTool` events, the MCP Server's own
+record of the agent's calls. Summary image: `cloudtrail-summary.png`
+(generated from the export, not a console screenshot). Lookup covers
+management events only, so data-plane calls such as Bedrock `Converse` and
+Lambda `Invoke` do not appear in it.

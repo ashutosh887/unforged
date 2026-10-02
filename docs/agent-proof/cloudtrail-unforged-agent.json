@@ -1,5 +1,3417 @@
 [
     {
+        "time": "2026-10-02T13:35:20+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:35:18+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:35:17+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:34:07+05:30",
+        "event": "GetCallerIdentity",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-02T13:34:07+05:30",
+        "event": "CallReadWriteTool",
+        "source": "aws-mcp.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-02T13:34:07+05:30",
+        "event": "DescribeStacks",
+        "source": "cloudformation.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-02T13:25:24+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:25:12+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:25:08+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:25:07+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:25:06+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:25:06+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:25:06+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:25:06+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:25:05+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:25:05+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:22:32+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:22:19+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:21:53+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:21:51+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:21:51+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:21:51+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:21:51+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:21:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:21:49+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T13:21:49+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T01:05:04+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T01:04:52+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T01:04:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T01:04:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T01:04:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T01:04:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T01:04:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T01:04:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T01:04:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T01:04:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T01:00:40+05:30",
+        "event": "CallReadWriteTool",
+        "source": "aws-mcp.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-02T00:58:08+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T00:57:57+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T00:57:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T00:57:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T00:57:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T00:57:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T00:57:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T00:57:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T00:57:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-02T00:57:50+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:29:58+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:29:52+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:29:49+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:29:49+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:29:49+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:29:48+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:29:48+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:29:47+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:29:47+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:29:47+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:24:58+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:24:46+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:24:42+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:24:42+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:24:42+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:24:42+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:24:42+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:24:42+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:24:42+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T23:24:42+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T22:41:35+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:35+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:35+05:30",
+        "event": "CallReadWriteTool",
+        "source": "aws-mcp.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:34+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:34+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:34+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:34+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:33+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:33+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:33+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:33+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:32+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:32+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:32+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:31+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:31+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:31+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:41:30+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:59+05:30",
+        "event": "CallReadWriteTool",
+        "source": "aws-mcp.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:59+05:30",
+        "event": "FilterLogEvents",
+        "source": "logs.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "/aws/lambda/Unforged-RaceADC8E832-2vAXUcSlRNbZ"
+        ]
+    },
+    {
+        "time": "2026-10-01T22:40:58+05:30",
+        "event": "FilterLogEvents",
+        "source": "logs.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "/aws/lambda/Unforged-RaceADC8E832-2vAXUcSlRNbZ"
+        ]
+    },
+    {
+        "time": "2026-10-01T22:40:58+05:30",
+        "event": "FilterLogEvents",
+        "source": "logs.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "/aws/lambda/Unforged-RaceADC8E832-2vAXUcSlRNbZ"
+        ]
+    },
+    {
+        "time": "2026-10-01T22:40:57+05:30",
+        "event": "FilterLogEvents",
+        "source": "logs.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "/aws/lambda/Unforged-Alerts91F83244-mKawqN7dIips"
+        ]
+    },
+    {
+        "time": "2026-10-01T22:40:57+05:30",
+        "event": "FilterLogEvents",
+        "source": "logs.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "/aws/lambda/Unforged-Alerts91F83244-mKawqN7dIips"
+        ]
+    },
+    {
+        "time": "2026-10-01T22:40:56+05:30",
+        "event": "FilterLogEvents",
+        "source": "logs.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "/aws/lambda/Unforged-Check8FEA48D3-BAANiXjpcirj"
+        ]
+    },
+    {
+        "time": "2026-10-01T22:40:56+05:30",
+        "event": "FilterLogEvents",
+        "source": "logs.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "/aws/lambda/Unforged-Check8FEA48D3-BAANiXjpcirj"
+        ]
+    },
+    {
+        "time": "2026-10-01T22:40:47+05:30",
+        "event": "ListRequestedServiceQuotaChangeHistory",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:47+05:30",
+        "event": "CallReadWriteTool",
+        "source": "aws-mcp.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:46+05:30",
+        "event": "DescribeCases",
+        "source": "support.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:46+05:30",
+        "event": "DescribeSeverityLevels",
+        "source": "support.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "Decrypt",
+        "source": "kms.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "CallReadWriteTool",
+        "source": "aws-mcp.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "Decrypt",
+        "source": "kms.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "Decrypt",
+        "source": "kms.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "Decrypt",
+        "source": "kms.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "Decrypt",
+        "source": "kms.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "Decrypt",
+        "source": "kms.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "Decrypt",
+        "source": "kms.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "Decrypt",
+        "source": "kms.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "Decrypt",
+        "source": "kms.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "ListFunctions20150331",
+        "source": "lambda.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:35+05:30",
+        "event": "Decrypt",
+        "source": "kms.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:33+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:31+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:29+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:28+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:25+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:24+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:23+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:23+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:21+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:19+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:17+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:17+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:16+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:16+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:16+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:16+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:16+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:16+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:16+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:16+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:16+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:15+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:15+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:15+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:15+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:15+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:15+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:15+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:15+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:15+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:14+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:14+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:14+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:14+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:14+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:14+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:14+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:14+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:14+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:14+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:13+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:13+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:13+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:13+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:13+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:13+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:13+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:13+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:13+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:12+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:12+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:12+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:12+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:12+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:12+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:12+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:12+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:12+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:12+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:11+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:11+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:11+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:11+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:11+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:11+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:11+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:11+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:11+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:11+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:10+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:10+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:10+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:10+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:10+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:10+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:10+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:10+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:09+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:09+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:09+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:09+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:09+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:09+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:09+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:09+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:09+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:09+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:08+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:08+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:08+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:08+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:08+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:08+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:08+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:08+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:07+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:07+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:07+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:07+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:07+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:07+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:07+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:07+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:07+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:06+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:06+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:06+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:06+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:06+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:06+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:06+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:06+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:06+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:05+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:05+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:05+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:05+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:05+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:05+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:05+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:05+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:04+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:04+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:04+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:04+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:04+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:04+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:04+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:04+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:04+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:03+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:03+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:03+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:40:03+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:53+05:30",
+        "event": "CallReadWriteTool",
+        "source": "aws-mcp.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:53+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:53+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:52+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:52+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:52+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:52+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:52+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:52+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:52+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:52+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:51+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:51+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:51+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:51+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:51+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:51+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:51+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:51+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:50+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:50+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:49+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:49+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:49+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:49+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:49+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:49+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:49+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:49+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:48+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:48+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:48+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:48+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:48+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:48+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:48+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:48+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:48+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:48+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:47+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:47+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:47+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:47+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:47+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:47+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:47+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:47+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:46+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:46+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:46+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:46+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:46+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:46+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:46+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:46+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:45+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:45+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:45+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:45+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:45+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:45+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:45+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:45+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:44+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:44+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:44+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:44+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:44+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:44+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:44+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:44+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:43+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:43+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:43+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:43+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:43+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:43+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:43+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:43+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:42+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:42+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:42+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:42+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:42+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:42+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:42+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:42+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:42+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:41+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:41+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:41+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:41+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:41+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:41+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:41+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:41+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:40+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:40+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:40+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:40+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:40+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:40+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:40+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:40+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:39+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:39+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:39+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:39+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:39+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:39+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:39+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:39+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:39+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:38+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:38+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:38+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:38+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:38+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:38+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:38+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:37+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:37+05:30",
+        "event": "GetCluster",
+        "source": "dsql.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ubud3ytzjhhzezzpiu3v5774de"
+        ]
+    },
+    {
+        "time": "2026-10-01T22:39:37+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:37+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:37+05:30",
+        "event": "ListServiceQuotas",
+        "source": "servicequotas.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:37+05:30",
+        "event": "DescribeStacks",
+        "source": "cloudformation.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:28+05:30",
+        "event": "CallReadWriteTool",
+        "source": "aws-mcp.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:28+05:30",
+        "event": "GetCallerIdentity",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T22:39:15+05:30",
+        "event": "CallReadWriteTool",
+        "source": "aws-mcp.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:39:38+05:30",
+        "event": "GetStages",
+        "source": "apigateway.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:39:36+05:30",
+        "event": "GetApis",
+        "source": "apigateway.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:38:46+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:38:37+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:38:32+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:38:31+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:38:31+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:38:31+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:38:31+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:38:31+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:38:31+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:38:29+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:36:35+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:36:19+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WERHRBECQHQ:aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-deploy-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-deploy-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:36:17+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:36:17+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:36:16+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:36:15+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:36:15+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:36:15+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:36:15+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:36:15+05:30",
+        "event": "AssumeRole",
+        "source": "sts.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": [
+            "ASIA[redacted]",
+            "AROA57DLD2WEQ2HZGAMQ5:aws-cdk-ashutosh887",
+            "aws-cdk-ashutosh887",
+            "arn:aws:sts::960149837193:assumed-role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1/aws-cdk-ashutosh887",
+            "arn:aws:iam::960149837193:role/cdk-hnb659fds-file-publishing-role-960149837193-us-east-1"
+        ]
+    },
+    {
+        "time": "2026-10-01T20:35:11+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:35:10+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:35:10+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:35:09+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:35:08+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:35:06+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:35:04+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:35:02+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:35:01+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:34:58+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:34:56+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:34:55+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:34:54+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:34:52+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:34:51+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:34:50+05:30",
+        "event": "LookupEvents",
+        "source": "cloudtrail.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:34:35+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:34:34+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
+        "time": "2026-10-01T20:34:34+05:30",
+        "event": "Converse",
+        "source": "bedrock.amazonaws.com",
+        "user": "unforged-agent",
+        "resources": []
+    },
+    {
         "time": "2026-10-01T18:55:13+05:30",
         "event": "AssumeRole",
         "source": "sts.amazonaws.com",
