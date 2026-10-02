@@ -9,6 +9,8 @@ works on any email its sender signs: refunds, payslips, deposits.
 
 Live: https://d1ajauwkb76on3.cloudfront.net
 
+Submission: [project on Builder Center](https://builder.aws.com/project/3K4xydlPqRKwDRLpYdZkq00UWR4/unforged-is-that-upi-payment-real-checked-against-the-banks-own-signed-alert) · [build article](https://builder.aws.com/content/3JztvFTHp1kaXp1h1nDiCkKltr4/a-payment-screenshot-is-a-picture-here-is-how-i-made-the-banks-signed-email-the-judge)
+
 Built by [@ashutosh887](https://github.com/ashutosh887) for the AWS Builder
 Center "Zero to Shipped" hackathon, `#daily-life-enhancement` and `#startups`.
 
