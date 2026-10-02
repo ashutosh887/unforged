@@ -52,7 +52,7 @@ that defence was checked. Status means:
 | DNS lookup for the key fails | The signature does not pass. The alert is refused, never stored as verified | Not tested |
 | Bank rotates its DKIM key | Stored credits keep their result. An old alert pasted after the key is removed stops verifying | Not tested |
 | No screenshot reader works | `/api/check` returns 503 and claims nothing. A reader failure never becomes a verdict | Seen live on 1 Oct while Bedrock's quota was 0, before Textract was added ([`agent-proof/sessions.md`](agent-proof/sessions.md)). Not in `measurements.md` |
-| A deploy recreates the KMS key | Receipts name their key id, and old keys are kept, so `/api/receipts` still verifies old receipts. `/api/receipts/key` serves only the current key, so an offline check of an old receipt fails to fetch its key | Found and fixed live, §9. Offline check of old receipts: broken since `9147f0e` |
+| A deploy recreates the KMS key | Receipts name their key id, and old keys are kept, so `/api/receipts` still verifies old receipts. `/api/receipts/key` serves the current key and any retired key that signed a stored receipt | Found and fixed live, §9 |
 
 ## Known gaps
 

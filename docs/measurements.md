@@ -272,12 +272,9 @@ What went wrong first, kept in the raw files:
   08:42, 08:46, 08:50 and 08:55 UTC). The current one is in the stack; the
   three retired ones stay so `/api/receipts` keeps verifying their receipts.
 
-Since commit `9147f0e`, `/api/receipts/key` returns only the current key.
-Every receipt in this section was signed by a retired key, so the two offline
-commands above (`measure:chain`, `measure:receipt`) can no longer fetch its
-public key and stop with an error. A new claim, as in
-[`verify-yourself.md`](verify-yourself.md), is signed by the current key and
-checks offline as described.
+`/api/receipts/key` serves the current key and any retired key that signed a
+stored receipt, so the offline commands above still fetch the key for every
+receipt in this section.
 
 ## 10. The one-character edit on the sample email
 

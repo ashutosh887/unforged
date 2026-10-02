@@ -67,9 +67,8 @@ RECEIPT_ID=<id from the claim above> pnpm measure:receipt
 
 The script fetches the receipt and the KMS public key named on it, then checks
 the ECDSA signature and the chain hash locally with `node:crypto`. It also
-edits one field and shows that both checks fail. The key route serves only the
-current key, so use a receipt from a claim you just made. The receipts in
-`measurements.md` §9 were signed by a retired key.
+edits one field and shows that both checks fail. The key route also serves retired
+keys that signed a stored receipt, so older receipts check the same way.
 
 ## Audit a whole ledger
 
