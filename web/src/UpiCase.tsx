@@ -27,7 +27,7 @@ async function base64Of(file: string): Promise<string> {
 async function readShot(file: string): Promise<ReadResult> {
   const res = await fetch("/api/read", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ image: await base64Of(file) }) })
   const data = (await res.json().catch(() => ({}))) as Partial<ReadResult> & { error?: string }
-  if (!res.ok || !data.read) throw new Error(data.error ?? `Request failed (${res.status})`)
+  if (!res.ok || !data.read) throw new Error(data.error ?? `The server answered with status ${res.status}. Try again.`)
   return data as ReadResult
 }
 
@@ -98,13 +98,14 @@ export function UpiCase({ onShop }: { onShop: () => void }) {
           With your bank's alert stored, the edited copy comes back amount mismatch. The real one comes back verified once, and already claimed every time after that. This page has no
           seller's bank alert, so that part runs in your own shop.
         </p>
-        <ul className="upi-verdicts" aria-label="The six verdicts">
+        <dl className="upi-verdicts">
           {order.map((v) => (
-            <li key={v} className={`chip ${verdicts[v].tone}`}>
-              {verdicts[v].label}
-            </li>
+            <div key={v} className={`upi-verdict ${verdicts[v].tone}`}>
+              <dt>{verdicts[v].label}</dt>
+              <dd>{verdicts[v].next}</dd>
+            </div>
           ))}
-        </ul>
+        </dl>
         <button type="button" className="secondary" onClick={onShop}>
           Set up your shop
         </button>

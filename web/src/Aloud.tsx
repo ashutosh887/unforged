@@ -71,7 +71,7 @@ export function Aloud({ items }: { items: Spoken[] }) {
         Announce aloud
       </button>
       <p className="aloud-line" aria-live="polite">
-        {on ? (last ? `Said: ${last}` : "Each new verified payment is read out on this device.") : "Hear each verified payment, like a soundbox for a personal UPI ID."}
+        {on ? (last ? `Last read out, "${last}"` : "Each new verified payment is read out on this device.") : "Hear each verified payment, like a soundbox for a personal UPI ID."}
       </p>
     </div>
   )

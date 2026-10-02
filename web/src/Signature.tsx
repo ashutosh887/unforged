@@ -127,7 +127,7 @@ function Report({ run }: { run: Run }) {
     >
       <dl className="facts">
         <dt>From</dt>
-        <dd>{result.from ?? "—"}</dd>
+        <dd>{result.from ?? "No From address"}</dd>
         {distinct(result.signatures).map((s) => (
           <SignatureRow key={`${s.domain}-${s.selector}-${s.result}`} s={s} />
         ))}
@@ -176,7 +176,7 @@ function ClaimOnce({ raw, edited }: { raw: string; edited: string | null }) {
     try {
       const res = await fetch("/api/records/claim", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ raw: text, claimRef }) })
       const result = (await res.json().catch(() => ({}))) as RecordClaimResult & { error?: string }
-      if (!res.ok && result.verdict !== "REJECTED") throw new Error(result.error ?? `Request failed (${res.status})`)
+      if (!res.ok && result.verdict !== "REJECTED") throw new Error(result.error ?? `The server answered with status ${res.status}. Try again.`)
       setClaims((all) => [{ label, result, claimRef }, ...all].slice(0, 3))
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))

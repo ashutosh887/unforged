@@ -20,11 +20,11 @@ export const verdicts: Record<Verdict, { label: string; tone: Tone; next: string
 export const toneIcon: Record<Tone, IconName> = { good: "check", warn: "replay", bad: "cross", neutral: "clock" }
 
 export function money(paise: number | null | undefined): string {
-  return paise === null || paise === undefined ? "—" : formatPaise(paise)
+  return paise === null || paise === undefined ? "Not shown" : formatPaise(paise)
 }
 
 export function utrGroups(utr: string | null | undefined): string {
-  if (!utr) return "—"
+  if (!utr) return "Not shown"
   return /^\d{12}$/.test(utr) ? utr.replace(/(\d{4})(?=\d)/g, "$1 ") : utr
 }
 
@@ -195,18 +195,18 @@ export function VerdictCard({
           </tr>
           <tr>
             <th scope="row">Amount</th>
-            <Cell value={read ? money(read.amountPaise) : "—"} off={result.verdict === "AMOUNT_MISMATCH"} />
-            <Cell value={bank ? money(bank.amountPaise) : "—"} />
+            <Cell value={read ? money(read.amountPaise) : "Not read"} off={result.verdict === "AMOUNT_MISMATCH"} />
+            <Cell value={bank ? money(bank.amountPaise) : "No alert"} />
           </tr>
           <tr>
             <th scope="row">Paid to</th>
-            <Cell value={read?.payeeVpa ?? "—"} off={result.verdict === "PAYEE_MISMATCH"} />
+            <Cell value={read?.payeeVpa ?? "Not read"} off={result.verdict === "PAYEE_MISMATCH"} />
             <Cell value="Your UPI ID" />
           </tr>
           <tr>
             <th scope="row">Signed by</th>
-            <Cell value={result.reader ? readerName(result.reader) : "—"} />
-            <Cell value={bank?.dkimDomain ?? "—"} />
+            <Cell value={result.reader ? readerName(result.reader) : "Not read"} />
+            <Cell value={bank?.dkimDomain ?? "No alert"} />
           </tr>
         </tbody>
       </table>
