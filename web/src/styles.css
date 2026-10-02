@@ -2211,6 +2211,18 @@ textarea {
   min-height: 40px;
 }
 
+.site-source {
+  color: var(--ink-2);
+  font-weight: 550;
+  font-size: var(--t-s);
+  text-decoration: none;
+  padding: 0 var(--s-2);
+}
+
+.site-source:hover {
+  color: var(--ink);
+}
+
 .site-cta.here {
   background: var(--ink);
   color: var(--paper);
@@ -2237,6 +2249,10 @@ textarea {
 
   .site-menu {
     display: inline-flex;
+  }
+
+  .site-source {
+    display: none;
   }
 
   .site-nav {
@@ -3285,4 +3301,9 @@ textarea {
 .ledger {
   display: grid;
   gap: var(--s-3);
+}
+
+.foot-base a,
+.foot-brand p a {
+  color: inherit;
 }
