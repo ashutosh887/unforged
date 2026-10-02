@@ -89,7 +89,7 @@ class UnforgedStack extends Stack {
     const api = new HttpApi(this, "Api", { createDefaultStage: true })
     const stage = api.defaultStage!.node.defaultChild as CfnStage
     stage.defaultRouteSettings = { throttlingRateLimit: 25, throttlingBurstLimit: 50 }
-    stage.routeSettings = { "POST /api/race": { throttlingRateLimit: 5, throttlingBurstLimit: 10 } }
+    stage.routeSettings = { "POST /api/race": { ThrottlingRateLimit: 5, ThrottlingBurstLimit: 10 } }
     const route = (path: string, f: NodejsFunction) => api.addRoutes({ path, methods: [HttpMethod.POST], integration: new HttpLambdaIntegration(`${f.node.id}Route`, f) })
     route("/api/shops", shops)
     route("/api/alerts", alerts)
