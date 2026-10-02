@@ -1,4 +1,5 @@
 import type { Conn, Pool } from "../db/client.js"
+import { bankLabel } from "./banks.js"
 import { formatPaise, istTime } from "./money.js"
 import { appendReceipt, ensureChain, linkOf, type ReceiptLink, type Signer } from "./receipts.js"
 import { decideBeforeClaim, normaliseUtr } from "./verdict.js"
@@ -17,7 +18,7 @@ function errorCode(e: unknown): string | undefined {
   return typeof e === "object" && e !== null && "code" in e ? String((e as { code: unknown }).code) : undefined
 }
 
-export function isConflict(e: unknown): boolean {
+function isConflict(e: unknown): boolean {
   const code = errorCode(e)
   return code !== undefined && conflictCodes.has(code)
 }
@@ -96,7 +97,7 @@ export async function claim(pool: Pool, input: ClaimInput, onRetry?: () => void,
     const prior = await priorClaim(pool, found.id)
     return { verdict: "ALREADY_CLAIMED", reason: `This bank credit was already used for order ${prior?.orderRef ?? "another order"}${prior ? ` at ${istTime(prior.createdAt)}` : ""}. The screenshot may be real, but it has been shown before.`, credit: found, ...(prior ? { priorClaim: prior } : {}) }
   }
-  return { verdict: "VERIFIED", reason: `${found.bank.toUpperCase()} credited this amount at ${istTime(found.creditedAt)}, signed by ${found.dkimDomain}. Claimed for order ${input.orderRef}.`, credit: found, ...(receipt ? { receipt } : {}) }
+  return { verdict: "VERIFIED", reason: `${bankLabel(found.bank, found.dkimDomain)} credited this amount at ${istTime(found.creditedAt)}, signed by ${found.dkimDomain}. Claimed for order ${input.orderRef}.`, credit: found, ...(receipt ? { receipt } : {}) }
 }
 
 export async function claimNaive(pool: Pool, creditId: string, orderRef: string): Promise<boolean> {

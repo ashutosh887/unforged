@@ -67,7 +67,8 @@ RECEIPT_ID=<id from the claim above> pnpm measure:receipt
 
 The script fetches the receipt and the KMS public key named on it, then checks
 the ECDSA signature and the chain hash locally with `node:crypto`. It also
-edits one field and shows that both checks fail.
+edits one field and shows that both checks fail. The key route also serves retired
+keys that signed a stored receipt, so older receipts check the same way.
 
 ## Audit a whole ledger
 
@@ -83,21 +84,22 @@ verifies every signature. Expect 0 breaks.
 | What | Command | Section |
 |---|---|---|
 | 50 claims of one bank credit at once, unique key against check-then-insert | `ROUNDS=20 N=50 pnpm measure:race` | §1 |
-| The same credit claimed twice in a row | `ROUNDS=10 SHOP_VPAS=demo@okicici pnpm measure:replay` | §2 |
+| The same credit claimed twice in a row | `ROUNDS=10 pnpm measure:replay` | §2 |
 | 80 real signed emails, edited and re-addressed | `pnpm measure:signature` | §6 |
-| Many simultaneous claims of one signed email | `ROUNDS=10 N=10 pnpm measure:record-race` | §7 |
+| Many simultaneous claims of one signed email | `ROUNDS=10 N=10 pnpm measure:record-race` (§7 also ran `N=50`) | §7 |
 | Textract reads of the two demo screenshots | `ROUNDS=10 pnpm exec tsx scripts/read-samples.ts` | §8 |
-| 32 receipts into one ledger, 8 at a time | `EML_DIR=<folder of .eml files> CONCURRENCY=8 pnpm measure:receipt-race` | §9 |
-| DKIM key lookup time, from your machine | `DKIM_LOCAL=1 DKIM_DOMAIN=gnu.org DKIM_SELECTOR=fencepost-gnu-org pnpm measure:dkim` | §4 |
+| 32 receipts into one ledger, 8 at a time | `EML_DIR=<folder of .eml files> LIMIT=32 CONCURRENCY=8 pnpm measure:receipt-race` | §9 |
+| DKIM key lookup time, from your machine | `DKIM_LOCAL=1 DKIM_DOMAIN=gnu.org DKIM_SELECTOR=fencepost-gnu-org pnpm measure:dkim` | §4 is still pending; this run is not recorded there |
 
 Notes on these runs:
 
 - The public Lambda route for DKIM timing was removed during hardening, so
   `measure:dkim` measures from your own machine with `DKIM_LOCAL=1`.
-- The account's Lambda concurrency limit is 10. Runs above 10 concurrent
-  requests get some HTTP 503s before the code runs. §7 explains this.
-- `measure:receipt-race` needs a folder of signed emails. The archive used in
-  §6 and §7 is public at `https://lists.gnu.org/archive/mbox/help-gnu-emacs/2026-09`.
+- The account's Lambda concurrency limit is 1,000. It was 10 when the §7 runs
+  were made, which is why they show HTTP 503s.
+- `measure:receipt-race` needs a folder of signed `.eml` files and reads the
+  first 24 unless `LIMIT` is set. The archive used in §6 and §7 is public at
+  `https://lists.gnu.org/archive/mbox/help-gnu-emacs/2026-09`.
 
 ## Run the tests
 

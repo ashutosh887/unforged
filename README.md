@@ -12,6 +12,19 @@ Live: https://d1ajauwkb76on3.cloudfront.net
 Built for the AWS Builder Center "Zero to Shipped" hackathon,
 `#daily-life-enhancement` and `#startups`.
 
+- **See it work:** open the live link. The proof runs as the page loads, see
+  [Try it in 30 seconds](#try-it-in-30-seconds).
+- **Architecture:** one CDK stack in `us-east-1`. CloudFront, S3, API Gateway,
+  Lambda, Aurora DSQL, Amazon Textract, Amazon Bedrock and AWS KMS. See
+  [Architecture](#architecture).
+- **How AWS and the coding agent were used:** Claude Code deployed and
+  measured the stack through the AWS MCP Server as the IAM user
+  `unforged-agent`. The MCP config, the IAM identity, the CloudTrail export
+  and the session log are indexed in
+  [`docs/agent-proof/README.md`](docs/agent-proof/README.md).
+- **Every number:** [`docs/measurements.md`](docs/measurements.md), with raw
+  JSON in [`measurements/`](measurements/).
+
 ## Try it in 30 seconds
 
 Open the live link. The page runs the whole proof on the live AWS stack as it
@@ -27,8 +40,9 @@ loads, with no input from you:
    back Already claimed and Release goods stays shut.
 5. The buyer's receipt, signed by an AWS KMS key, opens from a link.
 
-Then paste an email you received, or open the seller app and read a sample UPI
-screenshot with Amazon Textract.
+Then paste an email you received, or press Open the app. The app has four
+tabs: Counter, Check, Proof and Shop. The page also reads two sample UPI
+screenshots with Amazon Textract.
 
 ## How it works
 
@@ -36,7 +50,7 @@ screenshot with Amazon Textract.
 |---|---|---|
 | 1. Signature | `mailauth` fetches the sender's public key from DNS and checks the DKIM signature over the headers and body | [how-it-works.md, steps 1 to 3](docs/how-it-works.md) |
 | 2. Alignment | The signing domain must match the From domain, and for a bank alert the From domain must be on the allowlist | [step 4](docs/how-it-works.md#step-4-why-the-signer-must-match-the-from-address) |
-| 3. Claim once | The claim key is the PRIMARY KEY of a table in Aurora DSQL, written in one transaction. A second claim hits the key and becomes Already claimed | [step 5](docs/how-it-works.md#step-5-claim-once) |
+| 3. Claim once | Each claim is one Aurora DSQL transaction. For any signed email the claim key is a PRIMARY KEY. For a bank credit it is a unique index on the credit id. A second claim hits the key and becomes Already claimed | [step 5](docs/how-it-works.md#step-5-claim-once) |
 | 4. Receipt | The claim and a KMS-signed receipt are written together. Each receipt hashes the one before it, so a ledger is a chain | [step 6](docs/how-it-works.md#step-6-the-receipt-and-the-chain) |
 | 5. Screenshot | Textract reads the screenshot. Code picks the UTR, amount and payee, and leaves any field with two candidates empty | [step 7](docs/how-it-works.md#step-7-reading-the-screenshot) |
 | 6. Verdict | Code returns one of six verdicts, each with its reason. There is no fraud score | [step 8](docs/how-it-works.md#step-8-the-verdict) |
@@ -61,8 +75,8 @@ reproduces it.
 | One credit claimed twice in a row | 10 rounds | 0/10 second claims approved | The naive table also refuses 10/10; it fails only on simultaneous claims | `pnpm measure:replay`, §2 |
 | One body character changed on a real signed email | 37 emails that pass as archived, of 80 from a public list | 37/37 rejected | An untouched copy passes | `pnpm measure:signature`, §6 |
 | From rewritten to `alerts@hdfcbank.net` | The same 37 | 37/37 rejected, 0/80 stored as a bank credit | An untouched copy is refused only for being off the bank allowlist | `pnpm measure:signature`, §6 |
-| Simultaneous claims of one signed email | 10 rounds of 10 | 10/10 rounds with exactly one Verified | Bursts above 10 hit the account's Lambda limit, see §7 | `pnpm measure:record-race`, §7 |
-| A signature stripped to make a second claim | Emails with two signatures | Every stripped copy came back Already claimed | The first key design approved the stripped copy | §7 |
+| Simultaneous claims of one signed email | 10 rounds of 10 | 10/10 rounds with exactly one Verified | Run under the account's old Lambda limit of 10, see §7 | `pnpm measure:record-race`, §7 |
+| A signature stripped to make a second claim | 2 emails with two signatures | Every stripped copy came back Already claimed | The first key design approved the stripped copy | §7, no raw file |
 | KMS receipts written 8 at a time | 32 claims into one ledger | Receipts 1 to 32 with no gaps, 0 breaks on offline audit | | `pnpm measure:receipt-race`, `pnpm measure:chain`, §9 |
 | Textract reads of the demo screenshots | 2 synthetic images, 10 reads each | 10/10 on UTR, amount and payee, Textract p50 719 ms | Says nothing about real phone screenshots | `scripts/read-samples.ts`, §8 |
 
@@ -80,11 +94,11 @@ All in `us-east-1`, defined in one CDK stack, [`infra/app.ts`](infra/app.ts).
 | Amazon CloudFront | Serves the app from S3 and forwards `/api/*` to the HTTP API. HTTPS only, no caching on the API path, security headers on every response |
 | Amazon S3 | One private bucket holds the built app, reached through Origin Access Control. One holds checked screenshots and deletes them after 24 hours |
 | Amazon API Gateway HTTP API | Routes `/api/*` to Lambda, throttled to 25 requests a second with a burst of 50 |
-| AWS Lambda | Node.js 22 on arm64: `Shops`, `Alerts`, `Verify`, `Records`, `Check`, `Read`, `Receipts`, `Books`, `Race`, and `Migrate`, which sets up the schema and is invoked directly |
+| AWS Lambda | Node.js 22 on arm64: `Shops`, `Alerts`, `Verify`, `Records`, `Check`, `Read`, `Receipts`, `Books` and `Race` behind the API. `Migrate` sets up the schema and is invoked directly |
 | Amazon Aurora DSQL | Shops, credits, claims, receipts and chain heads. IAM token auth from Lambda, no VPC, no stored password |
-| Amazon Textract | `DetectDocumentText` reads every screenshot today |
-| Amazon Bedrock | Converse with a tool-use schema, tried first. This account's quota is 0 tokens a day, so reads fall through to Textract |
-| AWS KMS | An asymmetric P-256 key signs every receipt. The private key never leaves KMS |
+| Amazon Textract | `DetectDocumentText` reads every screenshot today, in `Check` and `Read` |
+| Amazon Bedrock | Converse with a tool-use schema, tried first by `Check`. This account's quota is 0 tokens a day, so reads fall through to Textract. `Read` uses Textract only |
+| AWS KMS | An asymmetric P-256 key signs every receipt, from `Records`, `Alerts` and `Check`. `Receipts` fetches public keys. The private key never leaves KMS |
 | AWS IAM | Grants per function, and the agent's own IAM user, `unforged-agent` |
 
 ### Why Aurora DSQL
@@ -119,15 +133,15 @@ All routes are `POST`, JSON in and out, under `/api/`.
 | Route | Body | Returns |
 |---|---|---|
 | `verify` | `{ raw }` | `{ from, signatures[], signer, bankCredit, notStoredBecause }`. Stores nothing |
-| `records/claim` | `{ raw, claimRef ≤ 80, ledger? }` | `VERIFIED { ledger, signer, claimRef, claimedAt, receipt }`, `ALREADY_CLAIMED { priorClaim }`, or `422 REJECTED { reason }` |
-| `read` | `{ image }`, base64 PNG, JPEG, GIF or WebP up to 4 MB | `{ read, reader, boxes[], ms }`. Stores nothing |
+| `records/claim` | `{ raw, claimRef ≤ 80, ledger? }` | `VERIFIED { ledger, signer, claimRef, claimedAt, receipt }`, `ALREADY_CLAIMED { priorClaim }`, or `422 REJECTED { reason }`, each with `retries` |
+| `read` | `{ image }`, base64 PNG or JPEG up to 4 MB | `{ read, reader, boxes[], ms }`. Stores nothing |
 | `receipts` | `{ id }` | `{ receipt, verified, check: { signature, hash } }` |
 | `receipts/key` | `{ keyId? }` | `{ keyId, algorithm, curve, publicKeyPem }` |
 | `receipts/chain` | `{ ledger, limit ≤ 50 }` | `{ ledger, receipts[], checks[] }` |
-| `race` | `{ n ≤ 50 }` or `{ mode: "replay" }` | `{ n, guarded, naive }` |
+| `race` | `{ n ≤ 50 }` or `{ mode: "replay" }` | `{ n, utr, guarded, naive }`, or for replay `{ mode, utr, guarded: { first, second }, naive: { first, second } }` |
 | `shops` | `{ name ≤ 80, vpas ≤ 5 }` | `201 { shopId, token }` |
 | `alerts` | `{ raw, orderRef? }` with `x-shop-token` | `{ credit, duplicate, decision? }` or `422 { error }` |
-| `check` | `{ image, orderRef }` with `x-shop-token` | `{ verdict, reason, credit?, priorClaim?, read, reader, retries }`. `400` for a non-image, `503` when no reader works |
+| `check` | `{ image, orderRef }` with `x-shop-token`, PNG, JPEG, GIF or WebP up to 4 MB | `{ verdict, reason, credit?, priorClaim?, read, reader, retries }`. `400` for a non-image, `503` when no reader works |
 | `ledger` | `{}` with `x-shop-token` | `{ shop, credits[], attempts[] }` |
 
 A shop has no login. It gets a private link holding a token, sent as
@@ -157,10 +171,11 @@ help-gnu-emacs archive, kept byte for byte so its signature verifies.
 Claude Code built and deployed Unforged, connected to AWS through the AWS MCP
 Server as the IAM user `unforged-agent`, so CloudTrail attributes every call.
 CloudTrail recorded 1,198 events for that user between 1 Oct 18:40 and 2 Oct
-13:35 IST. Twice the agent found that an async unique index enforced nothing
-while it was building. Twice the fix moved the guarantee to something the
-database enforces at once. The session log, the MCP connection and the
-CloudTrail export are in [`docs/agent-proof/`](docs/agent-proof/).
+13:35 IST. Twice, a live run showed that an async unique index enforced
+nothing while it was building. The first fix made the migration wait for every
+index build. The second made the claim key a PRIMARY KEY, which DSQL enforces
+from the moment the table exists. The session log, the MCP connection and the
+CloudTrail export are in [`docs/agent-proof/`](docs/agent-proof/README.md).
 
 ## Limits
 
@@ -169,8 +184,9 @@ CloudTrail export are in [`docs/agent-proof/`](docs/agent-proof/).
   original or upload the `.eml`.
 - A bank that does not sign its alerts cannot be checked.
 - An alert is not tied to the shop that receives it.
-- The account's Lambda concurrency limit is 10. Bursts above it get HTTP 503
-  before the code runs.
+- The 50-way runs of signed-email claims in §7 ran under the account's old
+  Lambda concurrency limit of 10, so most requests got HTTP 503. The limit is
+  now 1,000. Those runs have not been repeated.
 
 The full list, with what stops each attack, is in
 [`docs/threat-model.md`](docs/threat-model.md).

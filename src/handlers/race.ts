@@ -1,7 +1,7 @@
 import { randomInt, randomUUID } from "node:crypto"
 import { claim, claimNaive } from "../core/claim.js"
 import type { ScreenshotRead } from "../core/types.js"
-import { body, json, pool, type Event, type Result } from "./http.js"
+import { body, bounded, json, pool, type Event, type Result } from "./http.js"
 
 const raceShop = "00000000-0000-0000-0000-000000000000"
 const raceVpa = "race@unforged"
@@ -30,9 +30,9 @@ async function replay(): Promise<Result> {
 }
 
 export async function handler(event: Event): Promise<Result> {
-  const input = body<{ n?: number; mode?: string }>(event)
+  const input = body<{ n?: unknown; mode?: unknown }>(event)
   if (input?.mode === "replay") return replay()
-  const n = Math.min(Math.max(Math.trunc(input?.n ?? 50), 2), 50)
+  const n = bounded(input?.n, 50, 2, 50)
   const read = await seedCredit()
   const utr = read.utr
   let retries = 0

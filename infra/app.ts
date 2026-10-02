@@ -9,6 +9,7 @@ import { PolicyStatement } from "aws-cdk-lib/aws-iam"
 import { Key, KeySpec, KeyUsage } from "aws-cdk-lib/aws-kms"
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda"
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs"
+import { RetentionDays } from "aws-cdk-lib/aws-logs"
 import { BlockPublicAccess, Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3"
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment"
 import type { Construct } from "constructs"
@@ -19,7 +20,7 @@ class UnforgedStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props)
 
-    const cluster = new CfnCluster(this, "Ledger", { deletionProtectionEnabled: false, tags: [{ key: "app", value: "unforged" }] })
+    const cluster = new CfnCluster(this, "Ledger", { deletionProtectionEnabled: true, tags: [{ key: "app", value: "unforged" }] })
     const endpoint = cluster.attrEndpoint
 
     const uploads = new Bucket(this, "Uploads", {
@@ -41,7 +42,8 @@ class UnforgedStack extends Stack {
 
     const receiptKey = new Key(this, "ReceiptKey", { keySpec: KeySpec.ECC_NIST_P256, keyUsage: KeyUsage.SIGN_VERIFY, description: "Countersigns Unforged claim receipts", removalPolicy: RemovalPolicy.RETAIN })
 
-    const environment = { DSQL_ENDPOINT: endpoint, UPLOAD_BUCKET: uploads.bucketName, MODEL_ID: String(this.node.tryGetContext("modelId")), RECEIPT_KEY_ID: receiptKey.keyId }
+    const demoBanks = this.node.tryGetContext("demoBanks")
+    const environment = { DSQL_ENDPOINT: endpoint, UPLOAD_BUCKET: uploads.bucketName, MODEL_ID: String(this.node.tryGetContext("modelId")), RECEIPT_KEY_ID: receiptKey.keyId, ...(demoBanks ? { DEMO_BANKS: String(demoBanks) } : {}) }
     const fn = (name: string, timeout: number, memorySize = 512) => {
       const f = new NodejsFunction(this, name, {
         entry: root(`src/handlers/${name.toLowerCase()}.ts`),
@@ -52,7 +54,8 @@ class UnforgedStack extends Stack {
         memorySize,
         timeout: Duration.seconds(timeout),
         environment,
-        bundling: { target: "node22", minify: true, sourceMap: true, externalModules: ["pg-native"], loader: { ".sql": "text" } },
+        logRetention: RetentionDays.ONE_MONTH,
+        bundling: { target: "node22", minify: true, sourceMap: true, externalModules: ["pg-native"], loader: { ".sql": "text", ".eml": "text" } },
       })
       f.addToRolePolicy(new PolicyStatement({ actions: ["dsql:DbConnectAdmin", "dsql:DbConnect"], resources: [cluster.attrResourceArn] }))
       return f
@@ -63,7 +66,6 @@ class UnforgedStack extends Stack {
     const check = fn("Check", 29, 1024)
     const race = fn("Race", 29, 1024)
     const migrate = fn("Migrate", 120)
-    const spike = fn("Spike", 29, 256)
     const verify = fn("Verify", 15, 512)
     const books = fn("Books", 10)
     const records = fn("Records", 15)
@@ -71,6 +73,7 @@ class UnforgedStack extends Stack {
     for (const f of [records, alerts, check]) f.addToRolePolicy(new PolicyStatement({ actions: ["kms:Sign"], resources: [receiptKey.keyArn] }))
     receipts.addToRolePolicy(new PolicyStatement({ actions: ["kms:GetPublicKey"], resources: [Stack.of(this).formatArn({ service: "kms", resource: "key", resourceName: "*" })] }))
     const reader = fn("Read", 15, 512)
+    const status = fn("Status", 10, 256)
 
     uploads.grantPut(check)
     check.addToRolePolicy(
@@ -86,11 +89,12 @@ class UnforgedStack extends Stack {
     const api = new HttpApi(this, "Api", { createDefaultStage: true })
     const stage = api.defaultStage!.node.defaultChild as CfnStage
     stage.defaultRouteSettings = { throttlingRateLimit: 25, throttlingBurstLimit: 50 }
+    stage.routeSettings = { "POST /api/race": { ThrottlingRateLimit: 5, ThrottlingBurstLimit: 10 } }
     const route = (path: string, f: NodejsFunction) => api.addRoutes({ path, methods: [HttpMethod.POST], integration: new HttpLambdaIntegration(`${f.node.id}Route`, f) })
     route("/api/shops", shops)
     route("/api/alerts", alerts)
     route("/api/check", check)
-    route("/api/race", race)
+    stage.node.addDependency(...route("/api/race", race))
     route("/api/verify", verify)
     route("/api/ledger", books)
     route("/api/records/claim", records)
@@ -98,8 +102,11 @@ class UnforgedStack extends Stack {
       api.addRoutes({ path, methods: [HttpMethod.POST], integration: new HttpLambdaIntegration(name, receipts) })
     }
     route("/api/read", reader)
+    api.addRoutes({ path: "/api/demo/shop", methods: [HttpMethod.POST], integration: new HttpLambdaIntegration("DemoShopRoute", shops) })
+    api.addRoutes({ path: "/api/status", methods: [HttpMethod.GET], integration: new HttpLambdaIntegration("StatusRoute", status) })
 
     const headers = new ResponseHeadersPolicy(this, "SecurityHeaders", {
+      customHeadersBehavior: { customHeaders: [{ header: "permissions-policy", value: "camera=(), microphone=(), geolocation=(), payment=()", override: true }] },
       securityHeadersBehavior: {
         strictTransportSecurity: { accessControlMaxAge: Duration.days(365), includeSubdomains: true, override: true },
         contentTypeOptions: { override: true },

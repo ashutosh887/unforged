@@ -49,7 +49,7 @@ fencepost-gnu-org._domainkey.gnu.org   TXT   "v=DKIM1; k=rsa; p=MIIBIjANBg..."
 The `Verify`, `Alerts` and `Records` Lambdas look this record up on every
 check. The library is [`mailauth`](https://github.com/postalsys/mailauth),
 called from `inspectSignature` in
-[`src/core/alert.ts`](../src/core/alert.ts#L80). If DNS fails or the record is
+[`src/core/alert.ts`](../src/core/alert.ts#L84). If DNS fails or the record is
 missing, the signature does not pass and nothing is stored.
 
 ## Step 3. How the body hash catches an edit
@@ -65,7 +65,7 @@ bh= in the signature ───────────────────�
 Change one character in the body and the hash changes completely. On the live
 page, the browser computes this hash itself with `crypto.subtle`, shows it
 next to `bh=`, then changes one letter and shows the new hash: 43 of its 44
-characters differ. The live API then answers `body hash did not verify`.
+characters differ (§10 of [`measurements.md`](measurements.md)). The live API then answers `body hash did not verify`.
 
 If the attacker also rewrites `bh=` to match, the `b=` signature no longer
 fits, because `b=` covers `bh=`. Making a new `b=` needs the private key.
@@ -98,13 +98,13 @@ Every claim writes a row whose key identifies the signed record. For a bank
 credit the key is the credit's id. For any signed email it is:
 
 ```
-sha256( signer domain, From address, Date header, relaxed body hash )
+sha256( From domain, From address, Date header, relaxed body hash )
 ```
 
 These are parts every passing signature must cover. Removing one of two
 signatures leaves the key unchanged, so stripping a signature does not create
 a new record. The code is `claimKey` in
-[`src/core/alert.ts`](../src/core/alert.ts#L61). A claim is refused when the
+[`src/core/alert.ts`](../src/core/alert.ts#L64). A claim is refused when the
 signature does not cover Date, when the email has two Date headers, or when the
 signature signs only part of the body with `l=`.
 
@@ -116,10 +116,12 @@ claim A ──► BEGIN ─► INSERT (ledger, key) ─► COMMIT ─► Verifie
 claim B ──► BEGIN ─► INSERT (ledger, key) ─► unique key already taken (23505) ─► Already claimed
 ```
 
-The key is the table's PRIMARY KEY (`ledger_claims` in
-[`src/db/schema.sql`](../src/db/schema.sql#L55)). The database refuses a
-second row with the same key, whatever the code does and however many claims
-arrive at once.
+For any signed email, the key is the PRIMARY KEY of `ledger_claims` in
+[`src/db/schema.sql`](../src/db/schema.sql#L55). For a bank credit, it is the
+unique index `claims_once` on `claims (credit_id)`, and the migration waits
+for that index to finish building before the app uses it. Either way, the
+database refuses a second row with the same key, whatever the code does and
+however many claims arrive at once.
 
 ### What optimistic concurrency means here
 

@@ -1,8 +1,8 @@
 # Measurements
 
-Every number in the post comes from this file, and every number here comes
+Every number in these docs comes from this file, and every number here comes
 from a real run against the live stack. Raw JSON for each run is in
-`measurements/`.
+`measurements/`. Where a check has no raw file, its section says so.
 
 Stack: `https://d1ajauwkb76on3.cloudfront.net`, us-east-1, Lambda Node 22
 arm64, Aurora DSQL. The client is a MacBook in India calling through
@@ -28,11 +28,12 @@ Lambda, first through the claim transaction with the unique index
 
 Client round trip for a whole round (both arms), p50 492 ms, p95 888 ms.
 
-Caveats, stated in the post:
+Caveats:
 - The Lambda's pg pool holds 20 connections, so about 30 of the 50 claims wait
   for a connection. At most 20 are in flight at the database at once.
 - Batch time is for all 50 claims, not per claim.
-- OCC retries are reported by the handler per round (16–19 here).
+- OCC retries are reported by the handler per round: 16 to 19 here, 377 in
+  all.
 
 ## 2. Replay: the same credit claimed twice, one after the other
 
@@ -64,7 +65,8 @@ Pending the real bank's domain and selector.
 
 ## 5. Forgery matrix and extraction accuracy
 
-Pending the Bedrock quota increase (`docs/spikes.md`) and the real fixtures.
+Pending a real bank alert and real UPI screenshots. Screenshots no longer wait
+on Bedrock, since Textract reads them (§8).
 
 ## 6. Real signed emails: one character changed, or a bank From swapped in
 
@@ -121,7 +123,9 @@ What this shows: no email was ever claimed twice. What it does not show: a
 clean 50-way run. This account's Lambda concurrency limit is 10 (the default
 for a new account, `lambda:GetAccountSettings`), so most of each burst was
 throttled by Lambda before the handler ran. A quota increase to 1,000 was
-requested through Service Quotas on 2 Oct (`L-B99A9384`, status PENDING).
+requested through Service Quotas on 2 Oct (`L-B99A9384`). It was granted the
+same day: `lambda:GetAccountSettings` now reports `ConcurrentExecutions`
+1,000. The runs in this section were not repeated at the new limit.
 The in-Lambda race in §1 is not affected, since it runs all 50 claims inside
 one invocation.
 
@@ -145,18 +149,23 @@ Lambda refused before the handler ran.
 
 ### The claim key, and the attack that shaped it
 
-The claim key is `sha256(signer domain, From address, Date header, relaxed
-body hash)`, taken only from parts every passing signature must cover. A
-claim is refused if the passing signature does not cover Date (32/32
-passing signatures in the §6 sample do), if the email has more than one Date
-header, or if the signature uses an `l=` body-length limit.
+The claim key is `sha256(From domain, From address, Date header, relaxed
+body hash)`, taken only from parts every passing signature must cover. Until
+commit `ab891c8` (2 Oct) the first part was the signer domain. Two aligned
+signers, such as `bank.com` and `mail.bank.com`, then gave two keys, so
+stripping one signature allowed a second claim. The live checks below ran
+before that change. A
+claim is refused if the passing signature does not cover Date, if the email
+has more than one Date header, or if the signature uses an `l=` body-length
+limit.
 
 The first version keyed claims on the first passing signature's `b=` value.
 A review agent claimed an email with two valid signatures, deleted one
 `DKIM-Signature` header and claimed it again: VERIFIED twice. Keying on the
 set of signatures fails too: claim the copy with only signature B, then the
 copy with only signature A, and the sets are disjoint. The content key is the
-same whichever signatures remain. Live check after the fix (`claimtest`):
+same whichever signatures remain. Live check after the fix (`claimtest`, run
+by hand against `POST /api/records/claim`; no raw file was kept):
 
 | Claim | Result |
 | --- | --- |
@@ -204,7 +213,8 @@ One misread on the way. After I cropped the images shorter, Textract read the
 second copy of the payee on the edited image as `demo.seller@okicicl`. That
 gave the parser two different UPI IDs, so it left the payee empty instead of
 picking one, which is the rule in `src/core/ocr.ts`. I set the detail text one
-pixel larger and the misread stopped in every run since. On a real screenshot
+pixel larger and the misread stopped. The misread run was not saved, so
+neither raw file shows it: both have 10/10 payees right. On a real screenshot
 the same misread leaves the payee empty, and the payee check is skipped
 rather than guessed.
 
@@ -225,7 +235,7 @@ the claim. Each ledger keeps one chain head row. The transaction reads it with
 head conflict and one retries.
 
 **32 claims into one ledger, 8 at a time.** `EML_DIR=<dir of archive emails>
-CONCURRENCY=8 pnpm measure:receipt-race`. Raw:
+LIMIT=32 CONCURRENCY=8 pnpm measure:receipt-race`. Raw:
 `measurements/receipt-race-2026-10-02T08-44-13-364Z.json`.
 
 | Metric | Result |
@@ -257,6 +267,26 @@ What went wrong first, kept in the raw files:
   checkout without the receipt code removed the key from the stack. The key is
   retained, never deleted, so the next deploy made a new one. Receipts signed by
   the first key no longer matched the current public key. Verification now uses
-  the key id written into each receipt, and `/api/receipts/key` takes a `keyId`.
-  Four receipt keys exist in the account. The current one is in the stack; the
-  three retired ones stay so their receipts keep verifying.
+  the key id written into each receipt.
+  Four receipt keys exist in the account (`kms:ListKeys`, 2 Oct, created
+  08:42, 08:46, 08:50 and 08:55 UTC). The current one is in the stack; the
+  three retired ones stay so `/api/receipts` keeps verifying their receipts.
+
+`/api/receipts/key` serves the current key and any retired key that signed a
+stored receipt, so the offline commands above still fetch the key for every
+receipt in this section.
+
+## 10. The one-character edit on the sample email
+
+Computed 2 Oct 2026 on the committed sample, `web/public/samples/sample.eml`,
+with the page's own edit code (`firstEditable` and `editAt` in
+`web/src/proof.ts`) and Node's `crypto`. No raw file, since the result is the
+same on every run.
+
+| Value | Result |
+| --- | --- |
+| Character changed | First letter of the body, `T` to `U` |
+| Relaxed body hash before | `HMD2CH1liPuHESwWF3f+Of3R45wyySY1sMApDb2L+U0=`, equal to `bh=` |
+| Relaxed body hash after | `oSQ63toFe4jIcUNrfagTVsaVeYdXs8/CM1En5gExmgs=` |
+| Base64 characters that differ | 43 of 44 |
+

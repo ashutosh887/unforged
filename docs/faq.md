@@ -70,15 +70,17 @@ that deletes them after 24 hours. `/api/read` stores nothing.
 
 **What does it cost to run?**
 Every part scales to zero: Lambda, API Gateway, Aurora DSQL, Textract per page
-and KMS per signature, plus about $1 a month for each KMS key. I have not
-measured a cost per check, so I do not quote one.
+and KMS per signature, plus a monthly fee for each KMS key (see
+[AWS KMS pricing](https://aws.amazon.com/kms/pricing/)). I have not measured a
+cost per check, so I do not quote one.
 
 **What did the coding agent do?**
 Claude Code, connected to AWS through the AWS MCP Server as the IAM user
 `unforged-agent`, wrote the CDK stack, deployed it, ran the migrations and
-every measurement, and caught two bugs: an async index that enforced nothing
-while it was building, twice. CloudTrail recorded 1,198 events for that user between 1 Oct 18:40 and 2 Oct 13:35 IST.
-The proof is in [`agent-proof/`](agent-proof/).
+every measurement. Live runs caught the same bug twice: an async unique index
+that enforced nothing while it was building. CloudTrail recorded 1,198 events
+for that user between 1 Oct 18:40 and 2 Oct 13:35 IST. The proof is in
+[`agent-proof/`](agent-proof/).
 
 **What is not built?**
 No login, no fraud score, no WhatsApp bot, no multi-region setup and no

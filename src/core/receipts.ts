@@ -23,12 +23,12 @@ export function receiptId(): string {
   return Array.from(bytes, (b) => alphabet[b % 62]).join("")
 }
 
-export function canonical(body: ReceiptBody): string {
+function canonical(body: ReceiptBody): string {
   const ordered = Object.fromEntries(Object.entries(body).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)))
   return JSON.stringify(ordered)
 }
 
-export function chainHash(prevHash: string, text: string): string {
+function chainHash(prevHash: string, text: string): string {
   return createHash("sha256").update(prevHash).update(text).digest("hex")
 }
 
@@ -84,4 +84,9 @@ export async function findReceipt(sql: Sql, id: string): Promise<Receipt | null>
 export async function chainOf(sql: Sql, ledger: string, limit: number): Promise<Receipt[]> {
   const { rows } = await sql.query<ReceiptRow>(`SELECT ${columns} FROM receipts WHERE ledger = $1 ORDER BY seq LIMIT $2`, [ledger, limit])
   return rows.map(fromRow)
+}
+
+export async function signedWith(sql: Sql, keyId: string): Promise<boolean> {
+  const { rows } = await sql.query(`SELECT 1 FROM receipts WHERE key_id = $1 LIMIT 1`, [keyId])
+  return rows.length > 0
 }

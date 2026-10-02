@@ -4,7 +4,7 @@ import { TextractClient } from "@aws-sdk/client-textract"
 import { claim } from "../core/claim.js"
 import { imageFormat, readWithTextract } from "../core/ocr.js"
 import { readScreenshot } from "../core/read.js"
-import { body, env, json, limits, pool, refFrom, sha256, shopFor, unauthorised, type Event, type Result } from "./http.js"
+import { body, env, json, limits, pool, refFrom, sha256, shopFor, text, unauthorised, type Event, type Result } from "./http.js"
 import { receiptSigner } from "./signing.js"
 
 const bedrock = new BedrockRuntimeClient({ maxAttempts: 2 })
@@ -35,16 +35,17 @@ async function readWithFallback(models: string[], image: Uint8Array, format: Ima
   return null
 }
 
-type Input = { image?: string; orderRef?: string }
+type Input = { image?: unknown; orderRef?: unknown }
 
 export async function handler(event: Event): Promise<Result> {
   const shop = await shopFor(event)
   if (!shop) return unauthorised
   const input = body<Input>(event)
   const orderRef = refFrom(input?.orderRef)
-  if (!input?.image || !orderRef) return json(400, { error: "Send a screenshot and an order reference under 80 characters." })
-  if (input.image.length > Math.ceil((limits.imageBytes * 4) / 3) + 4) return json(413, { error: "That screenshot is over 4 MB. Send a smaller one." })
-  const image = Buffer.from(input.image, "base64")
+  const image64 = text(input?.image)
+  if (!image64 || !orderRef) return json(400, { error: "Send a screenshot and an order reference under 80 characters." })
+  if (image64.length > Math.ceil((limits.imageBytes * 4) / 3) + 4) return json(413, { error: "That screenshot is over 4 MB. Send a smaller one." })
+  const image = Buffer.from(image64, "base64")
   const format = imageFormat(image)
   if (!format) return json(400, { error: "That file is not a PNG, JPEG, GIF or WebP image." })
   const screenshotSha256 = sha256(image)

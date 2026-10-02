@@ -15,7 +15,7 @@ export async function handler(event: Event): Promise<Result> {
     pool().query<AttemptRow>("SELECT verdict, reason, extracted, created_at FROM attempts WHERE shop_id = $1 ORDER BY created_at DESC LIMIT 20", [shop.id]),
   ])
   return json(200, {
-    shop: { name: named.rows[0]?.name ?? "", vpas: shop.vpas },
+    shop: { name: named.rows[0]?.name ?? "", vpas: shop.vpas, demo: shop.demo },
     credits: credits.rows.map((r) => ({
       id: r.id,
       bank: r.bank,

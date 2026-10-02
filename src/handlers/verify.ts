@@ -1,12 +1,10 @@
 import { inspectSignature } from "../core/alert.js"
-import { body, json, type Event, type Result } from "./http.js"
-
-const maxBytes = 2_000_000
+import { body, json, limits, text, type Event, type Result } from "./http.js"
 
 export async function handler(event: Event): Promise<Result> {
-  const raw = body<{ raw?: string }>(event)?.raw
+  const raw = text(body<{ raw?: unknown }>(event)?.raw)
   if (!raw?.trim()) return json(400, { error: "Paste the raw email, headers included." })
-  if (Buffer.byteLength(raw) > maxBytes) return json(413, { error: "That email is over 2 MB. Paste one without large attachments." })
+  if (Buffer.byteLength(raw) > limits.emailBytes) return json(413, { error: "That email is over 2 MB. Paste one without large attachments." })
   const report = await inspectSignature(raw)
   return json(200, {
     from: report.from,

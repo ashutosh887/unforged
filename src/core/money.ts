@@ -4,7 +4,8 @@ export function rupeesToPaise(text: string): number | null {
   if (!match) return null
   const whole = Number(match[1])
   const fraction = Number((match[2] ?? "0").padEnd(2, "0"))
-  return whole * 100 + fraction
+  const paise = whole * 100 + fraction
+  return Number.isSafeInteger(paise) ? paise : null
 }
 
 export function formatPaise(paise: number): string {
