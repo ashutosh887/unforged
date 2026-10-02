@@ -2,252 +2,180 @@
 
 **A signed email is proof nobody can forge, and each proof can be claimed exactly once.**
 
-Banks, employers, marketplaces and airlines already DKIM-sign the emails they
-send: credit alerts, payslips, refunds, bookings. Unforged checks a claim
-against that signed email in code, and lets each signed record be claimed one
-time only.
+A buyer's UPI payment screenshot can be edited, or shown again for a second
+order. The seller's bank credit alert cannot, because the bank signs it with
+DKIM. Unforged checks the screenshot against that signed alert in code and lets
+each bank credit pay for one order.
 
-Live app: https://d1ajauwkb76on3.cloudfront.net
+Live: https://d1ajauwkb76on3.cloudfront.net
 
-## The first case: is that UPI payment real?
+Built for the AWS Builder Center "Zero to Shipped" hackathon,
+`#daily-life-enhancement` and `#startups`.
 
-A buyer shows a seller a UPI payment screenshot. A screenshot is a picture of a
-payment, not a payment. It can be edited, or it can be a real screenshot from
-an earlier order shown again.
+## Try it in 30 seconds
 
-The seller's bank has already sent the one record the buyer cannot edit: the
-credit alert email, signed with the bank's DKIM key. Unforged checks the
-screenshot against that alert. Bedrock reads the screenshot. Code makes the
-decision. Each bank credit can be claimed once, so an old, real screenshot
-shown for a second order is caught.
+Open the live link. The page runs the whole proof on the live AWS stack as it
+loads, with no input from you:
+
+1. A real signed email is checked. Your browser computes its body hash and it
+   matches the `bh=` value the sender signed.
+2. One character changes. The hash diverges and the API answers
+   `body hash did not verify`.
+3. Fifty claims hit one record at once. One gets through. The same fifty
+   against a check-then-insert table all get through, 49 double spends.
+4. The seller releases goods for order A12. The same email for order A13 comes
+   back Already claimed and Release goods stays shut.
+5. The buyer's receipt, signed by an AWS KMS key, opens from a link.
+
+Then paste an email you received, or open the seller app and read a sample UPI
+screenshot with Amazon Textract.
 
 ## How it works
 
-1. **Signed alert in.** The seller pastes the raw source of a bank credit alert
-   ("Show original" in Gmail). The `Alerts` Lambda verifies the DKIM signature
-   with [`mailauth`](https://github.com/postalsys/mailauth) against the bank's
-   own DNS key. The signing domain must pass, must be aligned with the From
-   address, and must belong to a bank on the allowlist in
-   [`src/core/alert.ts`](src/core/alert.ts). Only then is the amount and UTR
-   parsed and stored as a credit. An alert that fails DKIM, or comes from a
-   domain off the allowlist, is rejected with its reason and is never stored as
-   verified.
-2. **Screenshot read.** The `Check` Lambda sends the screenshot to Amazon
-   Bedrock Converse with a forced tool call and a JSON schema
-   ([`src/core/read.ts`](src/core/read.ts)). The model reports the UTR, amount,
-   payee VPA, payee name and app, or says the image is not readable. Code
-   validates the output: a UTR must have 12 digits and the amount must parse,
-   or the read counts as unreadable. The readers are tried in order (the
-   `modelId` list in `cdk.json`); the last is Amazon Textract, whose text
-   lines are parsed by code in [`src/core/ocr.ts`](src/core/ocr.ts): a UTR
-   next to its label, the one currency amount (or the one large number), the
-   UPI ID under "To". If any field has more than one candidate, it is left
-   empty, which makes the read `UNREADABLE`. The verdict card says which
-   reader was used.
-3. **Claimed once.** Code matches the read against the shop's credits
-   ([`src/core/verdict.ts`](src/core/verdict.ts)) and, if everything agrees,
-   inserts a claim row in one Aurora DSQL transaction
-   ([`src/core/claim.ts`](src/core/claim.ts)). A unique index on
-   `claims(credit_id)` means only one insert can ever succeed for a given bank
-   credit. DSQL uses optimistic concurrency, so a transaction that loses a
-   conflict (SQLSTATE `40001`, `OC000`, `OC001`) is retried with jittered
-   backoff, up to 8 attempts. A retry that then hits the unique key
-   (`23505`) becomes `ALREADY_CLAIMED`, never a second approval.
-
-4. **Any signed email, checked in the open.** `POST /api/verify` runs the same
-   DKIM check on any email and reports the signer, selector and alignment,
-   and whether it would be accepted as a bank credit. It stores nothing. The
-   Try it page uses it to let anyone paste an email they received, then
-   change one character and watch the signature break.
-5. **Any signed email, claimed once.** `POST /api/records/claim` takes any
-   email with a passing DKIM signature aligned with its From domain and a
-   claim reference ("Refund for order 1042"). The claim key is
-   `sha256(signer, From, Date, relaxed body hash)`, built only from parts
-   every passing signature covers, so removing one of several signatures
-   gives the same key. It is the PRIMARY KEY of `ledger_claims`, so a second
-   claim is refused from the first moment. Only the signer domain, the key,
-   the reference and the time are stored. The sample email on the Try it page
-   (`web/public/samples/sample.eml`) is a public post from the GNU
-   help-gnu-emacs archive (lists.gnu.org, September 2026), shipped byte for
-   byte so its signature still verifies.
-6. **The ledger.** `POST /api/ledger` (shop token) lists the shop's signed
-   credits, which order claimed each one and when, and the latest checks with
-   their verdicts.
-
-### API
-
-All routes are `POST`, JSON in and out, under `/api/`.
-
-| Route | Body | Returns |
+| Step | What happens | Detail |
 |---|---|---|
-| `shops` | `{ name, vpas: [..] }` (name ≤ 80, ≤ 5 VPAs) | `201 { shopId, token }` |
-| `alerts` | `{ raw, orderRef? }` + `x-shop-token` | `201/200 { credit, duplicate, decision? }`, `422 { error }` |
-| `check` | `{ image (base64 PNG/JPEG/GIF/WebP ≤ 4 MB), orderRef }` + token | `200 { verdict, reason, credit?, priorClaim?, read, reader, retries }`, `400` non-image, `503` no reader |
-| `verify` | `{ raw }` | `200 { from, signatures[], signer, bankCredit, notStoredBecause }` |
-| `records/claim` | `{ raw, claimRef (≤ 80), ledger? }` | `200 { verdict: VERIFIED, ledger, signer, claimRef, claimedAt, receipt }` or `{ verdict: ALREADY_CLAIMED, priorClaim }`, `422 { verdict: REJECTED, reason }` |
-| `ledger` | `{}` + token | `200 { shop, credits[], attempts[] }` |
-| `race` | `{ n ≤ 50 }` or `{ mode: "replay" }` | `200 { n, guarded, naive }` |
-| `receipts` | `{ id }` | `200 { receipt, verified, check: { signature, hash } }`, `404` |
-| `receipts/key` | `{ keyId? }` | `200 { keyId, algorithm, curve, publicKeyPem }` |
-| `receipts/chain` | `{ ledger, limit ≤ 50 }` | `200 { ledger, receipts[], checks[] }` |
+| 1. Signature | `mailauth` fetches the sender's public key from DNS and checks the DKIM signature over the headers and body | [how-it-works.md, steps 1 to 3](docs/how-it-works.md) |
+| 2. Alignment | The signing domain must match the From domain, and for a bank alert the From domain must be on the allowlist | [step 4](docs/how-it-works.md#step-4-why-the-signer-must-match-the-from-address) |
+| 3. Claim once | The claim key is the PRIMARY KEY of a table in Aurora DSQL, written in one transaction. A second claim hits the key and becomes Already claimed | [step 5](docs/how-it-works.md#step-5-claim-once) |
+| 4. Receipt | The claim and a KMS-signed receipt are written together. Each receipt hashes the one before it, so a ledger is a chain | [step 6](docs/how-it-works.md#step-6-the-receipt-and-the-chain) |
+| 5. Screenshot | Textract reads the screenshot. Code picks the UTR, amount and payee, and leaves any field with two candidates empty | [step 7](docs/how-it-works.md#step-7-reading-the-screenshot) |
+| 6. Verdict | Code returns one of six verdicts, each with its reason. There is no fraud score | [step 8](docs/how-it-works.md#step-8-the-verdict) |
 
-### Receipts
+More reading:
 
-Every VERIFIED claim gets a receipt the seller can send the buyer: the signer's
-domain, what the record was claimed for, when, and two hashes. The receipt is
-canonical JSON signed by an AWS KMS key (ECDSA P-256), and its hash includes
-the previous receipt's hash in the same ledger, so a ledger is a chain. The
-claim and the receipt are written in one DSQL transaction. Two claims racing
-for the same chain head conflict, and DSQL makes one retry. The page at
-`/#r=<id>` shows a receipt and the server's check of it.
+- [`docs/how-it-works.md`](docs/how-it-works.md) follows the sample email through every step with its real values.
+- [`docs/threat-model.md`](docs/threat-model.md) lists every attack, what stops it, and whether that was tested live.
+- [`docs/verify-yourself.md`](docs/verify-yourself.md) has a command for every claim in this README.
+- [`docs/faq.md`](docs/faq.md) answers the questions a judge asks.
+- [`docs/measurements.md`](docs/measurements.md) has every number, with raw JSON in `measurements/`.
 
-Verify one yourself, with no AWS account:
+## Measured on the live stack
 
-```bash
-API_URL=https://d1ajauwkb76on3.cloudfront.net RECEIPT_ID=<id> pnpm measure:receipt
-API_URL=https://d1ajauwkb76on3.cloudfront.net LEDGER=<ledger> pnpm measure:chain
-```
+Every number here comes from a real run, recorded in
+[`docs/measurements.md`](docs/measurements.md) with the command that
+reproduces it.
 
-The first fetches the receipt and the public key named on it and checks the
-signature and hash with `node:crypto`. The second recomputes every hash and link
-in a ledger. Results from the live stack are in `docs/measurements.md` §9.
+| What | Set | Result | Baseline | Command |
+|---|---|---|---|---|
+| 50 claims of one bank credit at once | 20 rounds, 1 Oct | 20/20 rounds with one winner, 20 approvals | Check-then-insert: 0/20 rounds, 1,000 approvals | `pnpm measure:race`, §1 |
+| One credit claimed twice in a row | 10 rounds | 0/10 second claims approved | The naive table also refuses 10/10; it fails only on simultaneous claims | `pnpm measure:replay`, §2 |
+| One body character changed on a real signed email | 37 emails that pass as archived, of 80 from a public list | 37/37 rejected | An untouched copy passes | `pnpm measure:signature`, §6 |
+| From rewritten to `alerts@hdfcbank.net` | The same 37 | 37/37 rejected, 0/80 stored as a bank credit | An untouched copy is refused only for being off the bank allowlist | `pnpm measure:signature`, §6 |
+| Simultaneous claims of one signed email | 10 rounds of 10 | 10/10 rounds with exactly one Verified | Bursts above 10 hit the account's Lambda limit, see §7 | `pnpm measure:record-race`, §7 |
+| A signature stripped to make a second claim | Emails with two signatures | Every stripped copy came back Already claimed | The first key design approved the stripped copy | §7 |
+| KMS receipts written 8 at a time | 32 claims into one ledger | Receipts 1 to 32 with no gaps, 0 breaks on offline audit | | `pnpm measure:receipt-race`, `pnpm measure:chain`, §9 |
+| Textract reads of the demo screenshots | 2 synthetic images, 10 reads each | 10/10 on UTR, amount and payee, Textract p50 719 ms | Says nothing about real phone screenshots | `scripts/read-samples.ts`, §8 |
 
-### Verdicts
+Not measured yet: anything on a real bank alert or a real UPI screenshot.
+Sections 4 and 5 of `measurements.md` stay open until a real sample exists.
 
-Every verdict is decided by code, never by a prompt. There is no fraud score.
-Each verdict is discrete and carries its reason.
+## Architecture
 
-| # | Condition | Verdict |
-|---|---|---|
-| 1 | Screenshot unreadable, or missing UTR or amount | `UNREADABLE` (nothing is guessed) |
-| 2 | No credit with this UTR for the shop | `NOT_FOUND_YET` (alerts can lag; check again) |
-| 3 | Credit exists, amount differs | `AMOUNT_MISMATCH` (both amounts shown) |
-| 4 | Payee on the screenshot is not the shop's VPA | `PAYEE_MISMATCH` |
-| 5 | Claim insert hits the unique key | `ALREADY_CLAIMED` (shows the earlier order) |
-| 6 | Otherwise | `VERIFIED` (shows bank, alert time and DKIM domain) |
-
-### What it deliberately does not do
-
-- **No UTR date-digit check.** Older advice says to check the "YDDD" digits
-  of a UTR. NPCI revised the RRN in 2024 and told banks to stop validating
-  YDDD by 31 May 2024
-  ([source](https://lexplosion.in/npci-revises-retrieval-reference-number-in-upi-to-avoid-duplicates-psps-and-banks-to-implement-revised-rrn-and-remove-validation-of-yddd-by-31st-may-2024/)),
-  so Unforged does not use it.
-- **No fraud score and no guessing.** `UNREADABLE` is a valid answer.
-- **No unsigned source shown as verified.** A credit exists only if its email
-  passed DKIM from an allowlisted bank domain.
-- **No login.** Each shop gets a capability token (sent as `x-shop-token`,
-  stored only as a SHA-256 hash).
-
-## AWS services
-
-All in one region, `us-east-1`. Defined in [`infra/app.ts`](infra/app.ts).
+All in `us-east-1`, defined in one CDK stack, [`infra/app.ts`](infra/app.ts).
 
 ![Architecture](docs/architecture.svg)
 
 | Service | What it does here |
 |---|---|
-| Amazon CloudFront | Serves the SPA from S3 and forwards `/api/*` to the HTTP API, HTTPS only, no caching on the API path |
-| Amazon S3 (site bucket) | Holds the built SPA. Private, reached only through CloudFront Origin Access Control |
-| Amazon S3 (upload bucket) | Stores each checked screenshot under its SHA-256. Private, SSL enforced, lifecycle rule deletes objects after 1 day (24 h) |
-| Amazon API Gateway HTTP API | `POST /api/shops`, `/api/alerts`, `/api/check`, `/api/verify`, `/api/records/claim`, `/api/receipts`, `/api/receipts/key`, `/api/receipts/chain`, `/api/ledger`, `/api/race`; throttled to 25 req/s, burst 50 |
-| AWS Lambda | Functions, Node.js 22 on arm64, bundled with esbuild: `Shops`, `Alerts`, `Verify` (DKIM report for any email, stores nothing), `Records` (claim any signed email once), `Check`, `Receipts` (receipt, public key and chain lookups), `Books` (the shop's ledger), `Race`, `Spike` (DKIM DNS timing), and `Migrate` (schema setup, invoked directly, not routed) |
-| Amazon Aurora DSQL | Shops, credits, claims, attempts and the naive control table. IAM token auth from Lambda (`dsql:DbConnectAdmin`), no VPC, no passwords. Unique indexes built with `CREATE UNIQUE INDEX ASYNC` |
-| Amazon Bedrock | Converse API with vision and a tool-use JSON schema. The model ID is a CDK context value; the default in `cdk.json` is `us.amazon.nova-2-lite-v1:0` |
-| AWS KMS | An asymmetric ECC P-256 key signs every claim receipt (`kms:Sign` for `Records`, `Alerts` and `Check`); `Receipts` reads public keys with `kms:GetPublicKey`. The private key never leaves KMS |
-| AWS IAM | Per-function least-privilege grants: DSQL connect on the one cluster, `s3:PutObject` on the upload bucket and Bedrock invoke for `Check` only |
-| AWS CDK (TypeScript) | The whole stack as code, deployed by the coding agent |
+| Amazon CloudFront | Serves the app from S3 and forwards `/api/*` to the HTTP API. HTTPS only, no caching on the API path, security headers on every response |
+| Amazon S3 | One private bucket holds the built app, reached through Origin Access Control. One holds checked screenshots and deletes them after 24 hours |
+| Amazon API Gateway HTTP API | Routes `/api/*` to Lambda, throttled to 25 requests a second with a burst of 50 |
+| AWS Lambda | Node.js 22 on arm64: `Shops`, `Alerts`, `Verify`, `Records`, `Check`, `Read`, `Receipts`, `Books`, `Race`, and `Migrate`, which sets up the schema and is invoked directly |
+| Amazon Aurora DSQL | Shops, credits, claims, receipts and chain heads. IAM token auth from Lambda, no VPC, no stored password |
+| Amazon Textract | `DetectDocumentText` reads every screenshot today |
+| Amazon Bedrock | Converse with a tool-use schema, tried first. This account's quota is 0 tokens a day, so reads fall through to Textract |
+| AWS KMS | An asymmetric P-256 key signs every receipt. The private key never leaves KMS |
+| AWS IAM | Grants per function, and the agent's own IAM user, `unforged-agent` |
 
-### Why Aurora DSQL, and the honest alternative
+### Why Aurora DSQL
 
-The claim-once rule could be built on Amazon DynamoDB: a `TransactWriteItems`
-call with a `ConditionExpression` of `attribute_not_exists` on a claim item
-keyed by the credit ID. That gives the same exactly-once result and would work
-well.
+DynamoDB gives the same claim-once result with `TransactWriteItems` and an
+`attribute_not_exists` condition. I chose DSQL because the app reads its data
+relationally, and the guarantee becomes a plain unique key in one SQL
+transaction that any Postgres reader can audit. The price is optimistic
+concurrency. A transaction that loses at commit gets `40001`, `OC000` or
+`OC001`, and the claim path retries it up to 8 times. A retry that meets the
+unique key, `23505`, becomes Already claimed. The AWS docs on
+[DSQL concurrency control](https://docs.aws.amazon.com/aurora-dsql/latest/userguide/working-with-concurrency-control.html)
+and
+[async indexes](https://docs.aws.amazon.com/aurora-dsql/latest/userguide/working-with-create-index-async.html)
+cover both behaviours.
 
-DSQL was chosen because the data is relational and queried relationally
-(credits by shop and UTR, the claim that beat you, every attempt with its
-verdict), and because the guarantee is then a plain unique index and one SQL
-transaction that any Postgres reader can audit. DSQL also needs no VPC, no
-connection secrets and no capacity planning from Lambda: IAM signs a short-lived
-token. The cost of that choice is optimistic concurrency, which is why the
-claim path has a bounded retry, and why the race test exists to show it holds.
+## Verdicts
 
-### The race test
+| Verdict | When |
+|---|---|
+| `UNREADABLE` | The screenshot shows no readable UTR or amount. Nothing is guessed |
+| `NOT_FOUND_YET` | No signed credit with this UTR has reached the shop. Alerts can lag, so check again |
+| `AMOUNT_MISMATCH` | The credit exists but the amount differs. Both amounts are shown |
+| `PAYEE_MISMATCH` | The screenshot was paid to another UPI ID |
+| `ALREADY_CLAIMED` | The credit already paid for another order, which is named |
+| `VERIFIED` | Everything matches and this claim won. Shows the bank, the time and the signing domain |
 
-`POST /api/race` inserts a fixture credit and fires 50 claims at it at once
-(configurable from 2 to 100). It then runs the same number against
-`claims_naive`, a table with no unique index, using select-then-insert. The
-response reports winners, `ALREADY_CLAIMED` counts, errors and OCC retries for
-the guarded path, and accepted claims for the naive one.
+## API
 
-## Measurements
+All routes are `POST`, JSON in and out, under `/api/`.
 
-Every number about Unforged comes from a real run against the live stack and
-is recorded in [`docs/measurements.md`](docs/measurements.md), with raw JSON in
-`measurements/`. Forgery matrix, screenshot extraction accuracy and DKIM DNS
-latency are pending real samples and are not quoted until they exist there.
+| Route | Body | Returns |
+|---|---|---|
+| `verify` | `{ raw }` | `{ from, signatures[], signer, bankCredit, notStoredBecause }`. Stores nothing |
+| `records/claim` | `{ raw, claimRef ≤ 80, ledger? }` | `VERIFIED { ledger, signer, claimRef, claimedAt, receipt }`, `ALREADY_CLAIMED { priorClaim }`, or `422 REJECTED { reason }` |
+| `read` | `{ image }`, base64 PNG, JPEG, GIF or WebP up to 4 MB | `{ read, reader, boxes[], ms }`. Stores nothing |
+| `receipts` | `{ id }` | `{ receipt, verified, check: { signature, hash } }` |
+| `receipts/key` | `{ keyId? }` | `{ keyId, algorithm, curve, publicKeyPem }` |
+| `receipts/chain` | `{ ledger, limit ≤ 50 }` | `{ ledger, receipts[], checks[] }` |
+| `race` | `{ n ≤ 50 }` or `{ mode: "replay" }` | `{ n, guarded, naive }` |
+| `shops` | `{ name ≤ 80, vpas ≤ 5 }` | `201 { shopId, token }` |
+| `alerts` | `{ raw, orderRef? }` with `x-shop-token` | `{ credit, duplicate, decision? }` or `422 { error }` |
+| `check` | `{ image, orderRef }` with `x-shop-token` | `{ verdict, reason, credit?, priorClaim?, read, reader, retries }`. `400` for a non-image, `503` when no reader works |
+| `ledger` | `{}` with `x-shop-token` | `{ shop, credits[], attempts[] }` |
 
-**Race, 1 Oct 2026** (`pnpm measure:race`, 20 rounds × 50 claims of one fresh
-credit at the same instant):
-
-| Metric | Unique index | Naive control |
-| --- | --- | --- |
-| Rounds with exactly one winner | 20/20 | 0/20 |
-| Rounds with more than one winner | 0/20 | 20/20 |
-| Total approvals (1 is correct per round) | 20 | 1000 |
-| Errors | 0 | 0 |
-| Batch time p50 | 134 ms | 40 ms |
-| Batch time p95 | 198 ms | 73 ms |
-
-Client round trip for a whole round (both arms): p50 492 ms, p95 888 ms. The
-Lambda's pg pool holds 20 connections, so at most 20 of the 50 claims are in
-flight at the database at once. Batch time is for all 50 claims, not per claim.
-
-**Replay, 1 Oct 2026** (`pnpm measure:replay`, 10 rounds, the same credit
-claimed twice one after the other):
-
-| Path | Approved first claims | Approved second claims |
-| --- | --- | --- |
-| Unique index | 10/10 | 0/10 |
-| Naive check-then-insert | 10/10 | 0/10 |
-
-A sequential replay is caught even by a naive check. The naive path fails only
-when claims arrive together (the race above). The unique index holds under
-both.
+A shop has no login. It gets a private link holding a token, sent as
+`x-shop-token` and stored only as a SHA-256 hash.
 
 ## Run it
 
-Requirements: Node.js 22, pnpm, and for deploys an AWS account with CDK
-bootstrapped in `us-east-1`.
+Node.js 22 and pnpm. Deploying needs an AWS account with CDK bootstrapped in
+`us-east-1`.
 
 ```sh
 pnpm install
-pnpm check          # tsc on src, infra and web, then vitest
-pnpm web            # run the SPA locally with Vite
-pnpm synth          # build the SPA and synthesise the CDK stack
-pnpm deploy         # build the SPA and deploy the stack
+pnpm check                                                  # typecheck src, infra and web, then run the tests
+API_URL=https://d1ajauwkb76on3.cloudfront.net pnpm web      # run the app locally against the live API
+pnpm run deploy                                             # build the app and deploy the stack
 ```
 
-After the first deploy, invoke the function named in the `MigrateFunction`
-stack output once to create the tables and indexes. The `Url` output is the
-public CloudFront address. To try a different Bedrock model:
-`pnpm deploy -c modelId=<model or inference profile id>`.
+After the first deploy, invoke the `MigrateFunction` from the stack outputs
+once. It creates the tables and waits for every async index build to finish.
 
-Real `.eml` files are gitignored. Only redacted fixtures under
-`test/fixtures/` are committed.
+Real `.eml` files are gitignored. The one committed email,
+`web/public/samples/sample.eml`, is a public post from the GNU
+help-gnu-emacs archive, kept byte for byte so its signature verifies.
 
-## Coding agent
+## How the coding agent built it
 
-Unforged is built with a coding agent connected to AWS, which also deploys it
-as the IAM identity `unforged-agent`. The proof (MCP connection, transcript,
-CloudTrail events for that identity) goes in
-[`docs/agent-proof/`](docs/agent-proof/).
+Claude Code built and deployed Unforged, connected to AWS through the AWS MCP
+Server as the IAM user `unforged-agent`, so CloudTrail attributes every call.
+CloudTrail recorded 1,198 events for that user between 1 Oct 18:40 and 2 Oct
+13:35 IST. Twice the agent found that an async unique index enforced nothing
+while it was building. Twice the fix moved the guarantee to something the
+database enforces at once. The session log, the MCP connection and the
+CloudTrail export are in [`docs/agent-proof/`](docs/agent-proof/).
+
+## Limits
+
+- No real bank alert or real UPI screenshot has been tested yet.
+- Forwarding an alert the ordinary way breaks its signature. Paste the
+  original or upload the `.eml`.
+- A bank that does not sign its alerts cannot be checked.
+- An alert is not tied to the shop that receives it.
+- The account's Lambda concurrency limit is 10. Bursts above it get HTTP 503
+  before the code runs.
+
+The full list, with what stops each attack, is in
+[`docs/threat-model.md`](docs/threat-model.md).
 
 ## Lineage
 
 The claim-once pattern comes from my earlier project, Stub. The code here is
 new and written for this problem.
-
-Built for the AWS Builder Center "Zero to Shipped" hackathon:
-`#daily-life-enhancement`, `#startups`.
