@@ -1,7 +1,6 @@
 import { useEffect, useState, type DragEvent, type FormEvent } from "react"
 import { encodeImage, post, type AlertResult, type CheckResult } from "./api"
 import { Demo } from "./Demo"
-import { Guilloche } from "./Guilloche"
 import { Ledger } from "./Ledger"
 import { money, Race, RawEmailField, useAction, VerdictCard } from "./parts"
 import { SignatureCheck } from "./Signature"
@@ -58,34 +57,43 @@ export function App() {
   if (receiptId) {
     return (
       <main>
-        <header className="hero">
-          <Guilloche />
-          <h1>Unforged</h1>
-          <p className="lede">A receipt for one signed record, claimed once. AWS KMS signed it, and every receipt in its ledger links to the one before.</p>
+        <Masthead />
+        <header className="hero hero-receipt">
+          <h1>A receipt for one signed record, claimed once.</h1>
+          <p className="lede">AWS KMS signed it, and every receipt in its ledger links to the one before.</p>
         </header>
-        <ReceiptPage id={receiptId} />
-        <a className="ghost-link" href="#try">
-          See how Unforged checks a payment
-        </a>
+        <div className="narrow">
+          <ReceiptPage id={receiptId} />
+          <a className="ghost-link" href="#try">
+            See how Unforged checks a payment
+          </a>
+        </div>
       </main>
     )
   }
 
   return (
     <main>
+      <Masthead onShop={() => setView("shop")} />
       <header className="hero">
-        <Guilloche />
-        <h1>Unforged</h1>
-        <p className="claim">A signed email is proof nobody can forge, and each one can be claimed exactly once.</p>
-        <p className="lede">
-          A UPI screenshot can be edited or shown twice. The bank's signed alert cannot. Watch it run on the live AWS stack below, then try your own email.
-        </p>
-        <p className="live-badge">
-          <span className="dot" aria-hidden="true" /> Live on AWS · 20 of 20 races ended with one winner · 37 of 37 tampered signatures caught
-        </p>
+        <h1>Proof nobody can forge, claimed exactly once.</h1>
+        <div className="hero-side">
+          <p className="lede">
+            A signed email is that proof. A buyer's UPI screenshot can be edited, or shown again for a second order. The bank's signed credit alert can't. Below, a real signed email goes through the live AWS stack, one step at a time.
+          </p>
+          <p className="live-badge">
+            <span className="dot" aria-hidden="true" />
+            Live on AWS. In recorded runs, 20 of 20 races ended with one winner and 37 of 37 edited emails were caught.
+          </p>
+        </div>
       </header>
       <Theater />
       <UpiCase onShop={() => setView("shop")} />
+      <div className="app" id="app">
+      <div className="app-head">
+        <h2>Try it yourself</h2>
+        <p className="muted">Check any email you received, or set up a shop and check real payment screenshots against your bank's alerts.</p>
+      </div>
       <nav className="tabs" aria-label="Views">
         <button type="button" className={view === "try" ? "on" : ""} aria-pressed={view === "try"} onClick={() => setView("try")}>
           Try it
@@ -107,7 +115,43 @@ export function App() {
       ) : (
         <ShopSetup onToken={setToken} />
       )}
+      </div>
     </main>
+  )
+}
+
+function Masthead({ onShop }: { onShop?: () => void }) {
+  return (
+    <nav className="masthead" aria-label="Unforged">
+      <a className="wordmark" href="#try">
+        <Seal />
+        Unforged
+      </a>
+      <span className="masthead-links">
+        <a href="#own">Check your own email</a>
+        {onShop && (
+          <a
+            href="#app"
+            onClick={() => {
+              onShop()
+            }}
+          >
+            Your shop
+          </a>
+        )}
+      </span>
+    </nav>
+  )
+}
+
+function Seal() {
+  return (
+    <svg className="seal" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <rect x="3" y="5" width="18" height="14" rx="1.5" fill="none" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M3.5 6l8.5 6.5L20.5 6" fill="none" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="17.5" cy="16.5" r="4" fill="var(--carbon)" stroke="var(--sheet)" strokeWidth="1.4" />
+      <path d="M15.8 16.6l1.2 1.2 2.3-2.4" fill="none" stroke="var(--sheet)" strokeWidth="1.4" />
+    </svg>
   )
 }
 
@@ -132,7 +176,8 @@ function ShopSetup({ onToken }: { onToken: (t: string) => void }) {
 
   return (
     <section className="card">
-      <h2>Your shop</h2>
+      <h2>Set up your shop</h2>
+      <p className="muted small">You get a private link instead of a login. Anyone with the link can check payments for this shop, so keep it to yourself.</p>
       <form onSubmit={submit} className="stack">
         <label>
           Shop name
