@@ -18,6 +18,8 @@ export type RecordClaimResult =
   | { verdict: "VERIFIED"; reason: string; signer: string; claimRef: string; claimedAt: string; receipt?: ReceiptLink }
   | { verdict: "ALREADY_CLAIMED"; reason: string; signer: string; priorClaim: { claimRef: string; createdAt: string } }
   | { verdict: "REJECTED"; reason: string }
+export type FieldBox = { field: "utr" | "amount" | "payee"; text: string; left: number; top: number; width: number; height: number }
+export type ReadResult = { read: ScreenshotRead; reader: string; boxes: FieldBox[]; ms: number }
 export type ReceiptLink = { id: string; url: string; seq: number; hash: string; prevHash: string }
 export type Receipt = { id: string; kind: "signed-email" | "bank-credit"; ledger: string; seq: number; signer: string; what: string; claimedAt: string; fingerprint: string; prevHash: string; keyId: string; hash: string; signature: string }
 export type ReceiptResult = { receipt: Receipt; verified: boolean; check: { signature: boolean; hash: boolean } }
@@ -41,9 +43,9 @@ export async function post<T>(path: string, body: unknown, token?: string): Prom
 
 const maxBytes = 3_500_000
 
-export async function encodeImage(file: File): Promise<{ image: string; format: string }> {
+export async function encodeImage(file: File, formats: string[] = ["png", "jpeg", "gif", "webp"]): Promise<{ image: string; format: string }> {
   const format = file.type.replace("image/", "")
-  if (file.size <= maxBytes && ["png", "jpeg", "gif", "webp"].includes(format)) {
+  if (file.size <= maxBytes && formats.includes(format)) {
     return { image: await toBase64(file), format }
   }
   const bitmap = await createImageBitmap(file)

@@ -1,23 +1,31 @@
-import { useCallback, useState } from "react"
+import { useCallback, useState, type ReactNode } from "react"
 import type { Credit, Decision, ScreenshotRead, Verdict } from "../../src/core/types.js"
 import { formatPaise } from "../../src/core/money.js"
 import { post, type RaceResult } from "./api"
+import { Icon, type IconName } from "./Icon"
 
 export type Tone = "good" | "warn" | "bad" | "neutral"
 
 export type BankRow = Pick<Credit, "bank" | "utr" | "amountPaise" | "dkimDomain" | "creditedAt">
 
-export const verdicts: Record<Verdict, { label: string; tone: Tone }> = {
-  VERIFIED: { label: "Verified", tone: "good" },
-  ALREADY_CLAIMED: { label: "Already claimed", tone: "warn" },
-  AMOUNT_MISMATCH: { label: "Amount mismatch", tone: "bad" },
-  PAYEE_MISMATCH: { label: "Payee mismatch", tone: "bad" },
-  NOT_FOUND_YET: { label: "Not found yet", tone: "neutral" },
-  UNREADABLE: { label: "Unreadable", tone: "neutral" },
+export const verdicts: Record<Verdict, { label: string; tone: Tone; next: string }> = {
+  VERIFIED: { label: "Verified", tone: "good", next: "The bank's signed alert matches. Release the goods." },
+  ALREADY_CLAIMED: { label: "Already claimed", tone: "warn", next: "Don't release. This payment already paid for another order." },
+  AMOUNT_MISMATCH: { label: "Amount mismatch", tone: "bad", next: "Don't release. Your bank received a different amount." },
+  PAYEE_MISMATCH: { label: "Payee mismatch", tone: "bad", next: "Don't release. This payment went to a different UPI ID." },
+  NOT_FOUND_YET: { label: "Not found yet", tone: "neutral", next: "No signed bank alert has this UTR yet. Wait for your bank's email, then check again." },
+  UNREADABLE: { label: "Unreadable", tone: "neutral", next: "Ask the buyer for a clearer screenshot that shows the UTR and the amount." },
 }
+
+export const toneIcon: Record<Tone, IconName> = { good: "check", warn: "replay", bad: "cross", neutral: "clock" }
 
 export function money(paise: number | null | undefined): string {
   return paise === null || paise === undefined ? "—" : formatPaise(paise)
+}
+
+export function utrGroups(utr: string | null | undefined): string {
+  if (!utr) return "—"
+  return /^\d{12}$/.test(utr) ? utr.replace(/(\d{4})(?=\d)/g, "$1 ") : utr
 }
 
 export function useAction<T>() {
@@ -46,7 +54,7 @@ export function RawEmailField({ value, onChange, label }: { value: string; onCha
   }
   return (
     <label
-      className={over ? "over" : ""}
+      className={`field${over ? " over" : ""}`}
       onDragOver={(e) => {
         e.preventDefault()
         setOver(true)
@@ -58,10 +66,10 @@ export function RawEmailField({ value, onChange, label }: { value: string; onCha
         void load(e.dataTransfer.files[0])
       }}
     >
-      {label}
+      <span className="field-label">{label}</span>
       <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={6} spellCheck={false} placeholder="Paste here, or drop an .eml file" />
-      <span className="file small">
-        or open an .eml file <input type="file" accept=".eml,message/rfc822,text/plain" onChange={(e) => void load(e.target.files?.[0])} />
+      <span className="file">
+        Or open an .eml file <input type="file" accept=".eml,message/rfc822,text/plain" onChange={(e) => void load(e.target.files?.[0])} />
       </span>
     </label>
   )
@@ -72,7 +80,7 @@ export function BankFacts({ row, empty }: { row: BankRow | null | undefined; emp
   return (
     <dl className="facts">
       <dt>Bank UTR</dt>
-      <dd className="mono">{row.utr}</dd>
+      <dd className="num">{utrGroups(row.utr)}</dd>
       <dt>Bank amount</dt>
       <dd>{money(row.amountPaise)}</dd>
       <dt>Signed by</dt>
@@ -83,16 +91,55 @@ export function BankFacts({ row, empty }: { row: BankRow | null | undefined; emp
 
 export type CardResult = Decision & { read?: ScreenshotRead; reader?: string }
 
-function readerName(reader: string): string {
+export function readerName(reader: string): string {
   if (reader === "textract") return "Amazon Textract"
-  if (reader.includes("nova")) return "Amazon Nova (Bedrock)"
-  if (reader.includes("claude")) return "Claude (Bedrock)"
+  if (reader.includes("nova")) return "Amazon Nova on Bedrock"
+  if (reader.includes("claude")) return "Claude on Bedrock"
   return reader
 }
 
 export function clockTime(iso: string): string {
   const at = new Date(iso)
   return Number.isNaN(at.getTime()) ? iso : at.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })
+}
+
+export function Panel({ tone, title, kicker, line, amount, children, action }: { tone: Tone; title: string; kicker?: ReactNode; line?: ReactNode; amount?: string | null; children?: ReactNode; action?: ReactNode }) {
+  return (
+    <article className={`panel ${tone}`}>
+      <div className="panel-top">
+        {kicker && <p className="panel-kicker">{kicker}</p>}
+        <div className="panel-head">
+          <span className="panel-mark">
+            <Icon name={toneIcon[tone]} size={22} />
+          </span>
+          <h3>{title}</h3>
+        </div>
+        {amount && <p className="panel-amount">{amount}</p>}
+        {line && <p className="panel-line">{line}</p>}
+      </div>
+      {children && <div className="panel-body">{children}</div>}
+      {action && <div className="panel-action">{action}</div>}
+    </article>
+  )
+}
+
+export function ReleaseAction({ state, onRelease }: { state: { kind: "open" } | { kind: "done"; text: string } | { kind: "blocked"; reason: string }; onRelease?: () => void }) {
+  if (state.kind === "done") {
+    return (
+      <p className="released" role="status">
+        <Icon name="check" size={18} /> {state.text}
+      </p>
+    )
+  }
+  return (
+    <button type="button" className="primary release-btn" disabled={state.kind === "blocked"} title={state.kind === "blocked" ? state.reason : "Mark this order released"} onClick={onRelease}>
+      Release goods
+    </button>
+  )
+}
+
+function Cell({ value, off }: { value: string; off?: boolean }) {
+  return <td className={off ? "off" : undefined}>{value}</td>
 }
 
 export function VerdictCard({
@@ -110,55 +157,61 @@ export function VerdictCard({
   const [releasedFor, setReleasedFor] = useState<CardResult | null>(null)
   const canRelease = result.verdict === "VERIFIED"
   const released = canRelease && releasedFor === result
+  const bank = result.credit ?? bankFallback ?? null
+  const read = result.read
+  const amount = bank?.amountPaise ?? read?.amountPaise ?? null
+  const line =
+    result.verdict === "ALREADY_CLAIMED" && result.priorClaim
+      ? `First claimed for order ${result.priorClaim.orderRef} at ${clockTime(result.priorClaim.createdAt)}. ${v.next}`
+      : v.next
   return (
-    <article className={`verdict ${v.tone}`}>
-      <h3>{v.label}</h3>
-      {result.verdict === "ALREADY_CLAIMED" && result.priorClaim && (
-        <p className="claimed">
-          Already claimed · first claimed {clockTime(result.priorClaim.createdAt)} · order <span className="mono">{result.priorClaim.orderRef}</span>
-        </p>
-      )}
-      <p>{result.reason}</p>
-      <div className="compare">
-        <div>
-          <h4>Screenshot</h4>
-          {result.read ? (
-            <dl className="facts">
-              <dt>UTR</dt>
-              <dd className="mono">{result.read.utr ?? "—"}</dd>
-              <dt>Amount</dt>
-              <dd>{money(result.read.amountPaise)}</dd>
-              <dt>Paid to</dt>
-              <dd>{result.read.payeeVpa ?? "—"}</dd>
-              {result.reader && (
-                <>
-                  <dt>Read by</dt>
-                  <dd>{readerName(result.reader)}</dd>
-                </>
-              )}
-            </dl>
-          ) : (
-            <p className="muted small">No screenshot, alert claimed directly.</p>
-          )}
-        </div>
-        <div>
-          <h4>Bank alert</h4>
-          <BankFacts row={result.credit ?? bankFallback} {...(bankEmpty ? { empty: bankEmpty } : {})} />
-        </div>
-      </div>
-      <div className="release">
-        {released ? (
-          <p className="released">Released for order {orderRef ? <span className="mono">{orderRef}</span> : "this payment"}</p>
-        ) : (
-          <>
-            <button type="button" disabled={!canRelease} title={canRelease ? "Mark this order released" : result.reason} onClick={() => setReleasedFor(result)}>
-              Release goods
-            </button>
-            {!canRelease && <p className="muted small">Not releasable: {result.reason}</p>}
-          </>
-        )}
-      </div>
-    </article>
+    <Panel
+      tone={v.tone}
+      title={v.label}
+      kicker={orderRef ? `Order ${orderRef}` : undefined}
+      amount={amount === null ? null : money(amount)}
+      line={line}
+      action={
+        <ReleaseAction
+          state={released ? { kind: "done", text: `Released for order ${orderRef || "this payment"}` } : canRelease ? { kind: "open" } : { kind: "blocked", reason: result.reason }}
+          onRelease={() => setReleasedFor(result)}
+        />
+      }
+    >
+      <p className="reason">{result.reason}</p>
+      <table className="match">
+        <thead>
+          <tr>
+            <th scope="col" />
+            <th scope="col">Screenshot</th>
+            <th scope="col">Bank alert</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">UTR</th>
+            <Cell value={read ? utrGroups(read.utr) : "No screenshot"} />
+            <Cell value={bank ? utrGroups(bank.utr) : "None"} />
+          </tr>
+          <tr>
+            <th scope="row">Amount</th>
+            <Cell value={read ? money(read.amountPaise) : "—"} off={result.verdict === "AMOUNT_MISMATCH"} />
+            <Cell value={bank ? money(bank.amountPaise) : "—"} />
+          </tr>
+          <tr>
+            <th scope="row">Paid to</th>
+            <Cell value={read?.payeeVpa ?? "—"} off={result.verdict === "PAYEE_MISMATCH"} />
+            <Cell value="Your UPI ID" />
+          </tr>
+          <tr>
+            <th scope="row">Signed by</th>
+            <Cell value={result.reader ? readerName(result.reader) : "—"} />
+            <Cell value={bank?.dkimDomain ?? "—"} />
+          </tr>
+        </tbody>
+      </table>
+      {!bank && bankEmpty && <p className="muted small">{bankEmpty}</p>}
+    </Panel>
   )
 }
 
@@ -166,28 +219,26 @@ export function Race() {
   const action = useAction<RaceResult>()
   const n = 50
   return (
-    <section className="card">
-      <h2>Race</h2>
-      <p className="muted">{n} claims for one bank credit at the same instant, with and without the unique index.</p>
-      <button type="button" disabled={action.busy} onClick={() => void action.run(() => post("race", { n }))}>
-        {action.busy ? "Racing…" : `Race ${n} claims`}
+    <section className="sheet">
+      <h2>Race 50 claims</h2>
+      <p className="muted">Fifty claims for one bank credit at the same instant, with the unique index and without it.</p>
+      <button type="button" className="secondary" disabled={action.busy} onClick={() => void action.run(() => post("race", { n }))}>
+        {action.busy ? "Racing" : `Race ${n} claims`}
       </button>
       {action.error && <p className="error">{action.error}</p>}
       {action.result && (
-        <div className="compare">
+        <div className="tallies">
           <div className={`tally ${action.result.guarded.verified === 1 ? "good" : "bad"}`}>
             <strong>{action.result.guarded.verified}</strong>
             <span>accepted with the unique index</span>
             <small>
-              {action.result.guarded.verified === 1 ? "no double spends" : `${action.result.guarded.verified - 1} double spends`} · {action.result.guarded.alreadyClaimed} already claimed · {action.result.guarded.retries} retries · {action.result.guarded.ms} ms
+              {action.result.guarded.alreadyClaimed} already claimed, {action.result.guarded.retries} retries, {action.result.guarded.ms} ms
             </small>
           </div>
           <div className={`tally ${action.result.naive.accepted === 1 ? "good" : "bad"}`}>
             <strong>{action.result.naive.accepted}</strong>
             <span>accepted by check-then-insert</span>
-            <small>
-              {action.result.naive.accepted > 1 ? `${action.result.naive.accepted - 1} of these would be double spends` : "no double spends"} · {action.result.naive.errors} errors
-            </small>
+            <small>{action.result.naive.accepted > 1 ? `${action.result.naive.accepted - 1} double spends` : "No double spends"}</small>
           </div>
         </div>
       )}

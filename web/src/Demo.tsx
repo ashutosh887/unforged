@@ -171,20 +171,20 @@ export function Demo() {
 
   return (
     <>
-      <section className="card">
+      <section className="sheet">
         <h2>Six cases</h2>
         <p className="muted">
-          No bank account needed. One tap creates a demo shop paid on <span className="mono">{ready.shop.vpa}</span>, checks the real screenshot before and after its signed bank alert
+          No bank account needed. One tap creates a demo shop paid on <span className="num">{ready.shop.vpa}</span>, checks the real screenshot before and after its signed bank alert
           arrives, then runs the edited and reused copies. Every verdict below comes from the live API.
         </p>
-        <button type="button" onClick={() => void run()} disabled={running}>
-          {running ? "Running…" : steps.length ? "Run again" : "Run every case"}
+        <button type="button" className="primary" onClick={() => void run()} disabled={running}>
+          {running ? "Running" : steps.length ? "Run again" : "Run every case"}
         </button>
         {elapsed !== null && !running && <p className="muted small">Finished in {elapsed} s.</p>}
         {error && <p className="error">{error}</p>}
       </section>
 
-      <section className="card">
+      <section className="sheet">
         <h2>{ready.alert.label}</h2>
         {alertMissing || alertStep.state === "pending" ? (
           <p className="muted">Fixture pending.</p>
@@ -195,7 +195,7 @@ export function Demo() {
               <dt>Bank</dt>
               <dd>{alertStep.result.credit.bank.toUpperCase()}</dd>
               <dt>UTR</dt>
-              <dd className="mono">{alertStep.result.credit.utr}</dd>
+              <dd className="num">{alertStep.result.credit.utr}</dd>
               <dt>Amount</dt>
               <dd>{money(alertStep.result.credit.amountPaise)}</dd>
               <dt>Signed by</dt>
@@ -205,7 +205,7 @@ export function Demo() {
         ) : alertStep.state === "error" ? (
           <p className="error">{alertStep.message}</p>
         ) : (
-          <p className="muted">{alertStep.state === "running" ? "Checking signature…" : "Posted after the first check, so the screenshot is seen once before the bank record exists."}</p>
+          <p className="muted">{alertStep.state === "running" ? "Checking the signature" : "Posted after the first check, so the screenshot is seen once before the bank record exists."}</p>
         )}
       </section>
 
@@ -222,20 +222,20 @@ function Case({ fixture, step, preview, storedAlert }: { fixture: FixtureCheck; 
   const expected = verdicts[fixture.expect]
   const matched = step.state === "done" ? step.result.verdict === fixture.expect : null
   return (
-    <li className="card case">
+    <li className="sheet case">
       <div className="case-head">
         {preview ? <img src={preview} alt={fixture.label} /> : <div className="thumb-empty">No image</div>}
         <div>
           <h3>{fixture.label}</h3>
           <p className="muted small">
-            Order <span className="mono">{fixture.order}</span> · expects {expected.label}
-            {matched !== null && <strong className={matched ? "match" : "miss"}>{matched ? " · matches" : " · differs"}</strong>}
+            Order <span className="num">{fixture.order}</span>, expects {expected.label}
+            {matched !== null && <strong className={matched ? "match" : "miss"}>{matched ? ", matches" : ", differs"}</strong>}
           </p>
         </div>
       </div>
       {step.state === "pending" && <p className="muted">Fixture pending.</p>}
       {step.state === "skipped" && <p className="muted">{step.why}</p>}
-      {step.state === "running" && <p className="muted">Reading the screenshot…</p>}
+      {step.state === "running" && <p className="muted">Reading the screenshot</p>}
       {step.state === "error" && <p className="error">{step.message}</p>}
       {step.state === "done" && (
         <VerdictCard

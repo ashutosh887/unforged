@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react"
 import { post, type RecordClaimResult, type VerifyResult } from "./api"
-import { clockTime, money, RawEmailField } from "./parts"
+import { clockTime, money, Panel, RawEmailField } from "./parts"
 
 type Edit = { raw: string; at: number; was: string; now: string }
 type Run = { label: string; result: VerifyResult; edit?: Edit }
@@ -79,30 +79,30 @@ export function SignatureCheck({ sample }: { sample?: { label: string; load: () 
   const original = runs[0]
 
   return (
-    <section className="card" id="own">
+    <section className="sheet">
       <h2>Check any signed email</h2>
       <p className="muted small">
-        Paste the raw source of any email you received (Gmail: ⋮ → Show original → Copy to clipboard). Unforged checks its DKIM signature against the sender's DNS key. Then change one
-        character and watch the signature break. Nothing you paste is stored.
+        Paste the raw source of any email you received. In Gmail, open the message menu, choose Show original, then Copy to clipboard. Unforged checks its DKIM signature against the
+        sender's key in DNS. Then change one character and watch the signature break. Nothing you paste is stored.
       </p>
-      <form onSubmit={submit} className="stack">
+      <form onSubmit={submit} className="check-form">
         <RawEmailField value={raw} onChange={setRaw} label="Raw email, headers included" />
         <div className="row">
-          <button disabled={busy || !raw.trim()}>{busy ? "Checking…" : "Check signature"}</button>
-          <button type="button" className="ghost" disabled={busy || !original?.result.signer} onClick={tamper}>
+          <button className="primary" disabled={busy || !raw.trim()}>{busy ? "Checking" : "Check signature"}</button>
+          <button type="button" className="secondary" disabled={busy || !original?.result.signer} onClick={tamper}>
             Change one character, check again
           </button>
           {sample && hasSample && (
-            <button type="button" className="ghost" disabled={busy} onClick={() => void useSample()}>
+            <button type="button" className="secondary" disabled={busy} onClick={() => void useSample()}>
               {sample.label}
             </button>
           )}
         </div>
-        {!original?.result.signer && <p className="muted small">Check a signed email first; then you can change one character and claim it once.</p>}
+        {!original?.result.signer && <p className="muted small">Check a signed email first. Then you can change one character, and claim it once.</p>}
       </form>
       {error && <p className="error">{error}</p>}
       {runs.length > 0 && (
-        <div className="compare">
+        <div className="panels">
           {runs.map((run) => (
             <Report key={run.label} run={run} />
           ))}
@@ -119,17 +119,15 @@ function Report({ run }: { run: Run }) {
   const tone = signed ? "good" : result.signatures.length ? "bad" : "neutral"
   const failing = result.signatures.find((s) => s.result !== "pass")
   return (
-    <article className={`verdict ${tone}`}>
-      <h4>{run.label}</h4>
-      <h3>{signed ? `Signed by ${result.signer}` : result.signatures.length ? "Signature broken" : "Not signed"}</h3>
-      {edit && (
-        <p className="small">
-          Body character {edit.at + 1}: <span className="mono">{edit.was}</span> → <span className="mono">{edit.now}</span>
-        </p>
-      )}
+    <Panel
+      tone={tone}
+      kicker={run.label}
+      title={signed ? `Signed by ${result.signer}` : result.signatures.length ? "Signature broken" : "Not signed"}
+      line={edit ? `Body character ${edit.at + 1} changed from "${edit.was}" to "${edit.now}".` : undefined}
+    >
       <dl className="facts">
         <dt>From</dt>
-        <dd className="mono">{result.from ?? "—"}</dd>
+        <dd>{result.from ?? "—"}</dd>
         {distinct(result.signatures).map((s) => (
           <SignatureRow key={`${s.domain}-${s.selector}-${s.result}`} s={s} />
         ))}
@@ -140,9 +138,9 @@ function Report({ run }: { run: Run }) {
           </>
         )}
         <dt>As a bank credit</dt>
-        <dd>{result.bankCredit ? `${result.bankCredit.bank.toUpperCase()} · ${money(result.bankCredit.amountPaise)} · UTR ${result.bankCredit.utr}` : result.notStoredBecause}</dd>
+        <dd>{result.bankCredit ? `${result.bankCredit.bank.toUpperCase()}, ${money(result.bankCredit.amountPaise)}, UTR ${result.bankCredit.utr}` : result.notStoredBecause}</dd>
       </dl>
-    </article>
+    </Panel>
   )
 }
 
@@ -155,10 +153,10 @@ function SignatureRow({ s }: { s: VerifyResult["signatures"][number] }) {
     <>
       <dt>DKIM</dt>
       <dd>
-        <span className="mono">
+        <span className="hex">
           d={s.domain} s={s.selector}
         </span>{" "}
-        · {s.result === "pass" ? (s.aligned ? "passes, aligned with From" : "passes, not aligned with From") : "fails"}
+        {s.result === "pass" ? (s.aligned ? "passes, aligned with From" : "passes, not aligned with From") : "fails"}
       </dd>
     </>
   )
@@ -196,19 +194,19 @@ function ClaimOnce({ raw, edited }: { raw: string; edited: string | null }) {
     <div className="claim-once">
       <h3>Claim this email once</h3>
       <p className="muted small">
-        A signed email can back one claim: one refund, one reimbursement, one payment. Claim it, then claim it again. The second claim is refused by a unique index in Aurora DSQL, not by
-        a model. Only the signer's domain, a fingerprint of the signature and your reference are stored.
+        A signed email can back one claim, such as one refund or one payment. Claim it, then claim it again. A unique index in Aurora DSQL refuses the second claim. Unforged stores only
+        the signer's domain, a fingerprint of the signature and your reference.
       </p>
-      <form onSubmit={submit} className="stack">
-        <label>
-          What is it being claimed for?
+      <form onSubmit={submit} className="check-form">
+        <label className="field">
+          <span className="field-label">What is it being claimed for?</span>
           <input value={claimRef} onChange={(e) => setClaimRef(e.target.value)} placeholder="Refund for order 1042" maxLength={80} required />
         </label>
         <div className="row">
-          <button disabled={busy || !claimRef.trim()}>{busy ? "Claiming…" : "Claim this email"}</button>
+          <button className="primary" disabled={busy || !claimRef.trim()}>{busy ? "Claiming" : "Claim this email"}</button>
           {!claimRef.trim() && <p className="muted small">Say what it is being claimed for to enable the button.</p>}
           {edited && (
-            <button type="button" className="ghost" disabled={busy || !claimRef.trim()} onClick={() => void claim("The edited copy", edited)}>
+            <button type="button" className="secondary" disabled={busy || !claimRef.trim()} onClick={() => void claim("The edited copy", edited)}>
               Claim the edited copy
             </button>
           )}
@@ -226,16 +224,6 @@ function ClaimStamp({ claimed }: { claimed: Claimed }) {
   const { result, label } = claimed
   const tone = result.verdict === "VERIFIED" ? "good" : result.verdict === "ALREADY_CLAIMED" ? "warn" : "bad"
   const title = result.verdict === "VERIFIED" ? "Verified" : result.verdict === "ALREADY_CLAIMED" ? "Already claimed" : "Rejected"
-  return (
-    <article className={`verdict ${tone}`}>
-      <h4>{label}, claimed for “{claimed.claimRef}”</h4>
-      <h3>{title}</h3>
-      {result.verdict === "ALREADY_CLAIMED" && (
-        <p className="claimed">
-          First claimed {result.priorClaim.createdAt ? clockTime(result.priorClaim.createdAt) : ""} for “{result.priorClaim.claimRef}”
-        </p>
-      )}
-      <p>{result.reason}</p>
-    </article>
-  )
+  const first = result.verdict === "ALREADY_CLAIMED" ? `First claimed${result.priorClaim.createdAt ? ` at ${clockTime(result.priorClaim.createdAt)}` : ""} for "${result.priorClaim.claimRef}". ` : ""
+  return <Panel tone={tone} kicker={`${label}, for "${claimed.claimRef}"`} title={title} line={`${first}${result.reason}`} />
 }

@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react"
 import { post, type ReceiptResult } from "./api"
+import { Icon } from "./Icon"
+import { receiptDesignFixture } from "./receiptDesignFixture"
 
-type Load = { state: "loading" } | { state: "error"; message: string } | { state: "ready"; data: ReceiptResult }
+export type BuyerReceipt = { id: string; signer: string; what: string; claimedAt: string; hash: string; prevHash: string; signature: string; verified: boolean; seq?: number; kind?: "signed-email" | "bank-credit" }
+
+type Load = { state: "loading" } | { state: "error"; message: string } | { state: "ready"; receipt: BuyerReceipt }
+
+export const receiptPreviewKey = "receipt-preview"
 
 function ist(iso: string): string {
   const at = new Date(iso)
@@ -9,67 +15,109 @@ function ist(iso: string): string {
 }
 
 export function receiptIdFromHash(): string | null {
-  const id = new URLSearchParams(location.hash.slice(1)).get("r")
+  const params = new URLSearchParams(location.hash.slice(1))
+  if (params.has(receiptPreviewKey)) return receiptPreviewKey
+  const id = params.get("r")
   return id && /^[0-9A-Za-z]{22}$/.test(id) ? id : null
 }
 
+function fromResult({ receipt, verified }: ReceiptResult): BuyerReceipt {
+  return { id: receipt.id, signer: receipt.signer, what: receipt.what, claimedAt: receipt.claimedAt, hash: receipt.hash, prevHash: receipt.prevHash, signature: receipt.signature, verified, seq: receipt.seq, kind: receipt.kind }
+}
+
+function short(hex: string): string {
+  return /^0+$/.test(hex) ? "None, first entry" : `${hex.slice(0, 8)}…${hex.slice(-8)}`
+}
+
 export function ReceiptPage({ id }: { id: string }) {
-  const [load, setLoad] = useState<Load>({ state: "loading" })
+  const preview = id === receiptPreviewKey
+  const [load, setLoad] = useState<Load>(preview ? { state: "ready", receipt: receiptDesignFixture } : { state: "loading" })
   const [copied, setCopied] = useState(false)
+  const [full, setFull] = useState(false)
+  const [key, setKey] = useState<string | null>(null)
+  const showKey = async () => {
+    const data = await post<{ publicKeyPem: string }>("receipts/key", {}).catch((e: unknown) => ({ publicKeyPem: e instanceof Error ? e.message : String(e) }))
+    setKey(data.publicKeyPem)
+  }
 
   useEffect(() => {
+    if (preview) return
     let live = true
     post<ReceiptResult>("receipts", { id })
-      .then((data) => live && setLoad({ state: "ready", data }))
+      .then((data) => live && setLoad({ state: "ready", receipt: fromResult(data) }))
       .catch((e: unknown) => live && setLoad({ state: "error", message: e instanceof Error ? e.message : String(e) }))
     return () => {
       live = false
     }
-  }, [id])
+  }, [id, preview])
 
   const copy = async () => {
     await navigator.clipboard.writeText(location.href).catch(() => undefined)
     setCopied(true)
   }
 
-  if (load.state === "loading") return <section className="card muted">Loading receipt {id}</section>
-  if (load.state === "error") return <section className="card"><h2>Receipt not found</h2><p className="error">{load.message}</p></section>
+  if (load.state === "loading") return <section className="slip loading" aria-busy="true"><p className="muted">Loading receipt {id}</p></section>
+  if (load.state === "error")
+    return (
+      <section className="slip">
+        <h2>Receipt not found</h2>
+        <p className="error">{load.message}</p>
+      </section>
+    )
 
-  const { receipt, verified, check } = load.data
-  const tone = verified ? "good" : "bad"
+  const r = load.receipt
   return (
-    <article className={`verdict receipt ${tone}`}>
-      <h4>Claim receipt</h4>
-      <h3>{verified ? "Verified · claimed once" : "Receipt failed its check"}</h3>
-      <p>
-        {receipt.kind === "bank-credit" ? "A bank credit alert" : "A signed email"} from <strong>{receipt.signer}</strong> was claimed for <strong>{receipt.what}</strong>.
-      </p>
-      <dl className="facts">
-        <dt>Claimed</dt>
-        <dd>{ist(receipt.claimedAt)}</dd>
+    <article className={`slip ${r.verified ? "good" : "bad"}`}>
+      {preview && <p className="preview-flag">Design preview with made-up values. This is not a real receipt.</p>}
+      <header className="slip-top">
+        <span className="slip-mark">
+          <Icon name={r.verified ? "check" : "cross"} size={26} />
+        </span>
+        <p className="slip-state">{r.verified ? "Claimed once" : "This receipt failed its check"}</p>
+        <h1 className="slip-what">{r.what.charAt(0).toUpperCase() + r.what.slice(1)}</h1>
+        <p className="slip-sub">
+          {r.kind === "signed-email" ? "Signed email" : "Bank credit"} from <strong>{r.signer}</strong>
+        </p>
+        <p className="slip-time">{ist(r.claimedAt)}</p>
+      </header>
+      <div className="slip-tear" aria-hidden="true" />
+      <dl className="slip-facts">
         <dt>Receipt</dt>
-        <dd className="mono">{receipt.id}</dd>
-        <dt>Ledger</dt>
-        <dd className="mono">
-          {receipt.ledger}, entry {receipt.seq}
+        <dd className="hex">{r.id}</dd>
+        <dt>Chain</dt>
+        <dd>
+          <span className="chain">
+            <span className="chain-link">
+              <small>Before</small>
+              <span className="hex">{short(r.prevHash)}</span>
+            </span>
+            <span className="chain-arrow" aria-hidden="true" />
+            <span className="chain-link this">
+              <small>{r.seq ? `This, entry ${r.seq}` : "This receipt"}</small>
+              <span className="hex">{short(r.hash)}</span>
+            </span>
+          </span>
         </dd>
-        <dt>Hash</dt>
-        <dd className="mono">{receipt.hash}</dd>
-        <dt>Previous</dt>
-        <dd className="mono">{receipt.prevHash}</dd>
         <dt>Signature</dt>
         <dd>
-          ECDSA P-256 by AWS KMS, {check.signature ? "checks out" : "does not check out"}. Hash {check.hash ? "matches" : "does not match"} its contents.
+          <span className={`sig-state ${r.verified ? "good" : "bad"}`}>
+            <Icon name={r.verified ? "check" : "cross"} size={15} /> {r.verified ? "ECDSA P-256 by AWS KMS, checks out" : "Does not check out"}
+          </span>
+          <button type="button" className="hex sig" aria-expanded={full} onClick={() => setFull((f) => !f)}>
+            {full ? r.signature : `${r.signature.slice(0, 28)}…`}
+          </button>
         </dd>
       </dl>
-      <div className="release">
-        <button type="button" onClick={() => void copy()}>
-          {copied ? "Link copied" : "Copy link"}
+      <div className="slip-actions">
+        <button type="button" className="primary" onClick={() => void copy()}>
+          <Icon name="copy" size={16} /> {copied ? "Link copied" : "Copy receipt link"}
         </button>
-        <p className="muted small">
-          Anyone can check this receipt offline against the public key at <span className="mono">/api/receipts/key</span>. The receipt holds no email body and no UPI ID.
-        </p>
+        <button type="button" className="secondary" disabled={key !== null} onClick={() => void showKey()}>
+          Show the public key
+        </button>
       </div>
+      {key && <pre className="pem">{key}</pre>}
+      <p className="slip-foot">Anyone can check this receipt offline with that key. It holds no email body and no UPI ID.</p>
     </article>
   )
 }

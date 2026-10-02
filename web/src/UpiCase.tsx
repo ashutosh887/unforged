@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react"
-import type { ScreenshotRead, Verdict } from "../../src/core/types.js"
-import { money, verdicts } from "./parts"
+import type { Verdict } from "../../src/core/types.js"
+import type { ReadResult } from "./api"
+import { ShotFrame } from "./Check"
+import { money, utrGroups, verdicts } from "./parts"
 
-type FieldBox = { field: "utr" | "amount" | "payee"; text: string; left: number; top: number; width: number; height: number }
-type ReadResult = { read: ScreenshotRead; reader: string; boxes: FieldBox[]; ms: number }
 type Shot = { file: string; label: string }
 type State = { state: "waiting" } | { state: "reading" } | { state: "done"; result: ReadResult } | { state: "failed"; message: string }
 
@@ -12,7 +12,6 @@ const shots: Shot[] = [
   { file: "/samples/upi-edited.png", label: "Amount edited" },
 ]
 
-const fieldNames: Record<FieldBox["field"], string> = { utr: "UTR", amount: "Amount", payee: "Paid to" }
 const order: Verdict[] = ["VERIFIED", "ALREADY_CLAIMED", "AMOUNT_MISMATCH", "PAYEE_MISMATCH", "NOT_FOUND_YET", "UNREADABLE"]
 
 async function base64Of(file: string): Promise<string> {
@@ -72,39 +71,41 @@ export function UpiCase({ onShop }: { onShop: () => void }) {
 
   return (
     <section className="upi-case" ref={ref} aria-labelledby="upi-title">
-      <h2 id="upi-title">The first case: a UPI screenshot at the counter</h2>
-      <p className="muted">
-        Two sample screenshots made for this demo. Amazon Textract reads each one live, and code picks out the UTR, the amount and the UPI ID it was paid to. The boxes are
-        where Textract found them.
-      </p>
+      <div className="band-head">
+        <h2 id="upi-title">Two screenshots, one UTR</h2>
+        <p className="muted">
+          Both were made for this demo. Amazon Textract reads each one live when you reach this part of the page, and code picks out the UTR, the amount and the UPI ID. The boxes show where
+          Textract found them.
+        </p>
+      </div>
       <div className="upi-shots">
         {shots.map((shot, i) => (
           <ShotCard key={shot.file} shot={shot} state={states[i]!} />
         ))}
       </div>
       <div className="upi-next">
-        <p>
+        <p className="upi-punch">
           {paid && edited && paid.utr === edited.utr && paid.amountPaise !== edited.amountPaise ? (
             <>
-              Both screenshots carry UTR <span className="mono">{paid.utr}</span>, but one says {money(paid.amountPaise)} and the other {money(edited.amountPaise)}. A photo
-              editor can do that in a minute. Only the bank's signed alert for that UTR says which amount arrived.
+              Same UTR <span className="num">{utrGroups(paid.utr)}</span>. One says {money(paid.amountPaise)}, the other {money(edited.amountPaise)}. Only the bank's signed alert says which
+              amount arrived.
             </>
           ) : (
-            <>Both screenshots carry the same UTR with different amounts. Only the bank's signed alert for that UTR says which amount arrived.</>
+            <>Both screenshots carry the same UTR with different amounts. Only the bank's signed alert says which amount arrived.</>
           )}
         </p>
-        <p>
-          With the seller's signed alert stored, the edited copy comes back amount mismatch, and the real one comes back verified once and already claimed after that. This
-          public page has no seller's bank alert, so that step runs in your own shop.
+        <p className="muted">
+          With your bank's alert stored, the edited copy comes back amount mismatch. The real one comes back verified once, and already claimed every time after that. This page has no
+          seller's bank alert, so that part runs in your own shop.
         </p>
         <ul className="upi-verdicts" aria-label="The six verdicts">
           {order.map((v) => (
-            <li key={v} className={`pill ${verdicts[v].tone}`}>
+            <li key={v} className={`chip ${verdicts[v].tone}`}>
               {verdicts[v].label}
             </li>
           ))}
         </ul>
-        <button type="button" className="ghost" onClick={onShop}>
+        <button type="button" className="secondary" onClick={onShop}>
           Set up your shop
         </button>
       </div>
@@ -117,31 +118,20 @@ function ShotCard({ shot, state }: { shot: Shot; state: State }) {
   return (
     <figure className="upi-shot">
       <figcaption>{shot.label}</figcaption>
-      <div className="upi-frame">
-        <img src={shot.file} alt={`${shot.label}, a sample screenshot made for this demo`} />
-        {result?.boxes.map((b) => (
-          <span
-            key={b.field}
-            className={`upi-box ${b.field}`}
-            style={{ left: `${b.left * 100}%`, top: `${b.top * 100}%`, width: `${b.width * 100}%`, height: `${b.height * 100}%` }}
-          >
-            <b>{fieldNames[b.field]}</b>
-          </span>
-        ))}
-      </div>
-      {state.state === "waiting" && <p className="muted small">Reads when this section scrolls into view.</p>}
-      {state.state === "reading" && <p className="tstep-live">Amazon Textract is reading it</p>}
+      <ShotFrame src={shot.file} boxes={result?.boxes ?? []} scanning={state.state === "reading"} alt={`${shot.label}, a sample screenshot made for this demo`} />
+      {state.state === "waiting" && <p className="muted small">Reads when this part scrolls into view.</p>}
+      {state.state === "reading" && <p className="lstep-live">Amazon Textract is reading it</p>}
       {state.state === "failed" && <p className="error">{state.message}</p>}
       {result && (
         <dl className="facts">
           <dt>UTR</dt>
-          <dd className="mono">{result.read.utr ?? "not found"}</dd>
+          <dd className="num">{result.read.utr ? utrGroups(result.read.utr) : "Not found"}</dd>
           <dt>Amount</dt>
           <dd>{money(result.read.amountPaise)}</dd>
           <dt>Paid to</dt>
-          <dd>{result.read.payeeVpa ?? "not found"}</dd>
+          <dd>{result.read.payeeVpa ?? "Not found"}</dd>
           <dt>Read in</dt>
-          <dd>{result.ms} ms by Amazon Textract</dd>
+          <dd>{result.ms} ms</dd>
         </dl>
       )}
     </figure>
