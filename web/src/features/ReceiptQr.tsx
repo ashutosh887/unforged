@@ -48,8 +48,8 @@ export function ReceiptQr({ url, size = 176, label = "Scan to open this receipt"
     <figure className="qr" style={{ margin: 0 }}>
       <span className="qr-plate" style={{ width: size }}>
         <svg viewBox={`${-quiet} ${-quiet} ${box} ${box}`} role="img" aria-label={`QR code for ${full}`} shapeRendering="crispEdges">
-          <rect x={-quiet} y={-quiet} width={box} height={box} fill="#ffffff" />
-          <path d={path} fill="#1a1631" />
+          <rect x={-quiet} y={-quiet} width={box} height={box} className="qr-light" />
+          <path d={path} className="qr-dark" />
         </svg>
       </span>
       <figcaption className="qr-label">{label}</figcaption>

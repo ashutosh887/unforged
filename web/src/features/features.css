@@ -39,8 +39,16 @@
   display: block;
   padding: 0.6rem;
   border-radius: 12px;
-  background: #ffffff;
+  background: var(--qr-light);
   line-height: 0;
+}
+
+.qr-light {
+  fill: var(--qr-light);
+}
+
+.qr-dark {
+  fill: var(--qr-dark);
 }
 
 .qr-plate svg {
