@@ -180,3 +180,26 @@ The test rows were deleted.
 
 The same eight checks were rerun inside a fresh ledger after the ledger change
 (2 Oct, 08:33 UTC) with identical results.
+
+## 8. Amazon Textract on two sample screenshots made for this demo
+
+Run 2 Oct 2026, 08:41 UTC. `API_URL=https://d1ajauwkb76on3.cloudfront.net pnpm exec tsx scripts/read-samples.ts`
+(10 rounds per image) against `POST /api/read`. Raw:
+`measurements/read-samples-2026-10-02T08-41-51-620Z.json`.
+
+The two images are synthetic. I rendered them from one HTML page in a
+generic UPI layout, with a fictitious payee `demo.seller@okicici` and UTR
+`412345678901`. They differ only in the amount: ₹500 in `upi-paid.png`, ₹5,000
+in `upi-edited.png`. They are the images the live page reads in its UPI
+section.
+
+| Image | UTR right | Amount right | Payee right | 3 field boxes drawn | Textract p50 / p95 | Round trip p50 / p95 |
+| --- | --- | --- | --- | --- | --- | --- |
+| upi-paid.png | 10/10 | 10/10 | 10/10 | 10/10 | 1064 / 1384 ms | 1519 / 2698 ms |
+| upi-edited.png | 10/10 | 10/10 | 10/10 | 10/10 | 742 / 1212 ms | 1174 / 2358 ms |
+
+What this does not show: accuracy on real phone screenshots, which are
+compressed, cropped and vary by app. Clean rendered text is the easy case.
+Real screenshots are still pending (section 5). "Textract" is the Lambda's
+`DetectDocumentText` call; the round trip adds the laptop in India to
+CloudFront to Lambda.

@@ -1,0 +1,343 @@
+{
+  "apiUrl": "https://d1ajauwkb76on3.cloudfront.net",
+  "startedAt": "2026-10-02T08:41:19.544Z",
+  "node": "v24.14.0",
+  "rounds": 10,
+  "truth": {
+    "utr": "412345678901",
+    "payeeVpa": "demo.seller@okicici"
+  },
+  "samples": [
+    {
+      "file": "upi-paid.png",
+      "amountPaise": 50000
+    },
+    {
+      "file": "upi-edited.png",
+      "amountPaise": 500000
+    }
+  ],
+  "runs": [
+    {
+      "file": "upi-paid.png",
+      "round": 1,
+      "status": 200,
+      "ms": 2697.707958,
+      "serverMs": 1064,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 50000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-paid.png",
+      "round": 2,
+      "status": 200,
+      "ms": 1998.827625,
+      "serverMs": 731,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 50000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-paid.png",
+      "round": 3,
+      "status": 200,
+      "ms": 1322.6842500000002,
+      "serverMs": 951,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 50000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-paid.png",
+      "round": 4,
+      "status": 200,
+      "ms": 1518.5564169999998,
+      "serverMs": 1119,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 50000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-paid.png",
+      "round": 5,
+      "status": 200,
+      "ms": 1642.524958,
+      "serverMs": 1206,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 50000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-paid.png",
+      "round": 6,
+      "status": 200,
+      "ms": 1156.0940410000003,
+      "serverMs": 804,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 50000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-paid.png",
+      "round": 7,
+      "status": 200,
+      "ms": 1430.2972499999996,
+      "serverMs": 1088,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 50000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-paid.png",
+      "round": 8,
+      "status": 200,
+      "ms": 1144.0197499999995,
+      "serverMs": 783,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 50000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-paid.png",
+      "round": 9,
+      "status": 200,
+      "ms": 1746.4287920000006,
+      "serverMs": 1384,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 50000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-paid.png",
+      "round": 10,
+      "status": 200,
+      "ms": 1660.3813750000008,
+      "serverMs": 1316,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 50000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-edited.png",
+      "round": 1,
+      "status": 200,
+      "ms": 1168.2453330000008,
+      "serverMs": 742,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 500000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-edited.png",
+      "round": 2,
+      "status": 200,
+      "ms": 1066.6713339999988,
+      "serverMs": 716,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 500000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-edited.png",
+      "round": 3,
+      "status": 200,
+      "ms": 2358.446583000001,
+      "serverMs": 1212,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 500000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-edited.png",
+      "round": 4,
+      "status": 200,
+      "ms": 1872.8907499999987,
+      "serverMs": 735,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 500000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-edited.png",
+      "round": 5,
+      "status": 200,
+      "ms": 1174.0405829999982,
+      "serverMs": 801,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 500000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-edited.png",
+      "round": 6,
+      "status": 200,
+      "ms": 1971.9371250000004,
+      "serverMs": 731,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 500000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-edited.png",
+      "round": 7,
+      "status": 200,
+      "ms": 1110.2147079999995,
+      "serverMs": 750,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 500000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-edited.png",
+      "round": 8,
+      "status": 200,
+      "ms": 1980.8050829999993,
+      "serverMs": 846,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 500000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-edited.png",
+      "round": 9,
+      "status": 200,
+      "ms": 1096.0010000000002,
+      "serverMs": 742,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 500000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    },
+    {
+      "file": "upi-edited.png",
+      "round": 10,
+      "status": 200,
+      "ms": 1952.054750000003,
+      "serverMs": 846,
+      "read": {
+        "readable": true,
+        "utr": "412345678901",
+        "amountPaise": 500000,
+        "payeeVpa": "demo.seller@okicici",
+        "payeeName": "Demo Seller",
+        "app": null
+      },
+      "boxes": 3
+    }
+  ],
+  "finishedAt": "2026-10-02T08:41:51.620Z"
+}
