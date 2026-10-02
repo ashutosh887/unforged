@@ -183,6 +183,25 @@ Functions with DSQL integration", any prize pool other than "$5,000 AWS
 credits per winner". The UPI figure is sourced to Business Standard (NPCI
 data, 24.51 bn in Aug 2026); no scam-count figure has a source.
 
+## State (2 Oct 2026, afternoon IST)
+
+- **Live and measured:** the page runs the proof on load against the live API:
+  signature, one-character break with the body hash computed in the browser,
+  50-claim race, A12 released, A13 already claimed, KMS-signed receipt.
+  Any-email claims (`/api/records/claim`, per-visit ledgers), KMS receipts in
+  a hash chain, and Textract reads with field boxes (`/api/read`). Numbers in
+  `docs/measurements.md` §6 to §9.
+- **Docs:** README is the front door. New: `docs/how-it-works.md`,
+  `docs/threat-model.md` (24 rows with tested status), `docs/verify-yourself.md`
+  (every command tested against the live stack on 2 Oct), `docs/faq.md`.
+- **Posts:** `docs/post/project-no-alert.md` is publishable now apart from
+  [[UPLOAD]] and [[YOUTUBE]]. `docs/post/project.md` keeps the two bank-alert
+  [[MEASURE]] slots. `docs/post/article.md` needs only the project URL.
+  `docs/post/submit-checklist.md` and `docs/post/demo-script.md` match the
+  new page.
+- **Still open:** a real bank alert and real screenshots; the Lambda
+  concurrency quota increase (pending); repo visibility; the demo video.
+
 ## State (1 Oct 2026, 19:15 IST)
 
 - **Live:** https://d1ajauwkb76on3.cloudfront.net, stack `Unforged`, DSQL
