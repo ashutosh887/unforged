@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-export type Page = "home" | "proof" | "screenshots" | "check" | "architecture" | "ledger" | "uses" | "shop"
+export type Page = "home" | "proof" | "screenshots" | "check" | "architecture" | "ledger" | "uses" | "status" | "shop"
 export type Route = { page: Page; arg?: string } | { page: "receipt"; arg: string }
 
 const paths: Record<string, Page> = {
@@ -11,6 +11,7 @@ const paths: Record<string, Page> = {
   architecture: "architecture",
   ledger: "ledger",
   "use-cases": "uses",
+  status: "status",
   shop: "shop",
 }
 
@@ -22,6 +23,7 @@ export const hrefOf: Record<Page, string> = {
   architecture: "#/architecture",
   ledger: "#/ledger",
   uses: "#/use-cases",
+  status: "#/status",
   shop: "#/shop",
 }
 

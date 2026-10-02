@@ -39,11 +39,16 @@ export function parseStatus(raw: unknown): LiveStatusData {
   const dkim = asObject(top.dkim)
   const dsql = asObject(top.dsql)
   const kms = asObject(top.kms)
-  const reader = Array.isArray(top.reader) ? top.reader.filter((r): r is string => typeof r === "string") : typeof top.reader === "string" ? [top.reader] : undefined
+  const readers = asObject(top.readers)
+  const named = readers ? [str(readers.check) && `check ${str(readers.check)}`, str(readers.read) && `read ${str(readers.read)}`].filter((r): r is string => Boolean(r)) : undefined
+  const reader = named ?? (Array.isArray(top.reader) ? top.reader.filter((r): r is string => typeof r === "string") : typeof top.reader === "string" ? [top.reader] : undefined)
+  const keyId = str(top.receiptKeyId) ?? str(kms?.keyId)
   return {
-    ...(dkim ? { dkim: { domain: str(dkim.domain), selector: str(dkim.selector), fingerprint: str(dkim.fingerprint), verifies: bool(dkim.verifies), ms: num(dkim.ms) } } : {}),
-    ...(dsql ? { dsql: { ok: bool(dsql.ok), ms: num(dsql.ms) } } : {}),
-    ...(kms ? { kms: { keyId: str(kms.keyId) } } : {}),
+    ...(dkim
+      ? { dkim: { domain: str(dkim.domain), selector: str(dkim.selector), fingerprint: str(dkim.keySha256) ?? str(dkim.fingerprint), verifies: bool(dkim.verifiesSample) ?? bool(dkim.verifies), ms: num(dkim.lookupMs) ?? num(dkim.ms) } }
+      : {}),
+    ...(dsql ? { dsql: { ok: bool(dsql.reachable) ?? bool(dsql.ok), ms: num(dsql.ms) } } : {}),
+    ...(keyId ? { kms: { keyId } } : {}),
     ...(reader ? { reader } : {}),
   }
 }

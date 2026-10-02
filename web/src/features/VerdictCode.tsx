@@ -191,7 +191,7 @@ export function VerdictCode({ title = "The model reads. Code decides.", showClai
             ))}
           </ol>
           <p className="vcode-model">
-            Bedrock only fills a form: the <code>utr</code>, <code>amount</code> and <code>payeeVpa</code> it sees, and whether it could read them. It never picks the verdict.
+            The reader only returns the <code>utr</code>, <code>amount</code> and <code>payeeVpa</code> it sees. It never picks the verdict.
           </p>
         </div>
       </div>

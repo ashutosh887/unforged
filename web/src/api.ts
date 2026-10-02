@@ -32,16 +32,6 @@ export type RaceResult = {
 
 export type ChainResult = { ledger: string; receipts: Receipt[]; checks: { id: string; signature: boolean; hash: boolean }[] }
 
-type Listener = (up: boolean) => void
-const listeners = new Set<Listener>()
-let reached = false
-
-export function onHealth(listener: Listener): () => void {
-  listeners.add(listener)
-  listener(reached)
-  return () => listeners.delete(listener)
-}
-
 export async function call(path: string, body: unknown, init: { token?: string; signal?: AbortSignal } = {}): Promise<Response> {
   const res = await fetch(`/api/${path}`, {
     method: "POST",
@@ -49,10 +39,6 @@ export async function call(path: string, body: unknown, init: { token?: string; 
     body: JSON.stringify(body),
     ...(init.signal ? { signal: init.signal } : {}),
   })
-  if (res.status < 500 && !reached && (res.headers.get("content-type") ?? "").includes("json")) {
-    reached = true
-    listeners.forEach((l) => l(true))
-  }
   return res
 }
 

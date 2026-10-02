@@ -1,3 +1,4 @@
+import { VerdictCode } from "./features/VerdictCode"
 import { useMedia } from "./media"
 import { PageHead, Section } from "./Site"
 
@@ -114,15 +115,6 @@ const pieces: [string, string][] = [
   ["DNS", "Lambda fetches each sender's DKIM public key on every check."],
 ]
 
-const rules: [string, string][] = [
-  ["Unreadable", "The screenshot has no readable UTR or amount. Never guess."],
-  ["Not found yet", "No signed credit with this UTR for the shop."],
-  ["Amount mismatch", "A credit exists and the amount differs."],
-  ["Payee mismatch", "The payee on the screenshot is not the shop's UPI ID."],
-  ["Already claimed", "The claim insert hits the unique key."],
-  ["Verified", "Everything else."],
-]
-
 const numbers: [string, string, string][] = [
   ["50 claims of one bank credit at once, 20 rounds", "20 of 20 rounds had one winner. Check-then-insert approved 1,000.", "§1"],
   ["The same credit claimed twice in a row, 10 rounds", "0 of 10 second claims approved", "§2"],
@@ -163,15 +155,8 @@ export function Architecture() {
         </p>
       </Section>
 
-      <Section title="Verdict order" sub="Code checks these in order and returns the first that applies. No model decides.">
-        <ol className="rules">
-          {rules.map(([name, rule]) => (
-            <li key={name}>
-              <strong>{name}</strong>
-              <span>{rule}</span>
-            </li>
-          ))}
-        </ol>
+      <Section title="Verdict order" sub="Code checks six rules in order and returns the first that applies. This is the source this page was built from.">
+        <VerdictCode title="src/core/verdict.ts" />
       </Section>
 
       <Section title="Measured on the live stack" sub="Every number comes from a recorded run.">

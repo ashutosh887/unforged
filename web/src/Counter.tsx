@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import type { Verdict } from "../../src/core/types.js"
 import { post, type LedgerResult } from "./api"
-import { Aloud, spellOrder, type Spoken } from "./Aloud"
+import { Aloud, hindiLine, spellOrder, type Spoken } from "./Aloud"
+import { ReceiptQr } from "./features/ReceiptQr"
 import { Icon } from "./Icon"
 import { orders, type Done, type LiveRun, type Step } from "./live"
 import { clockTime, money, Panel, ReleaseAction, toneIcon, utrGroups, verdicts } from "./parts"
@@ -53,6 +54,7 @@ function OrderPanel({ order, step }: { order: string; step: Step }) {
         <dt>Answered in</dt>
         <dd>{step.ms} ms</dd>
       </dl>
+      {step.claim?.verdict === "VERIFIED" && step.claim.receipt && <ReceiptQr url={step.claim.receipt.url} size={120} label="Buyer scans for the receipt" showUrl={false} />}
     </Panel>
   )
 }
@@ -144,7 +146,7 @@ export function ShopCounter({ token, version, onCheck }: { token: string; versio
 
   const claimed = ledger.credits.filter((c) => c.claim).length
   const total = ledger.credits.reduce((sum, c) => sum + c.amountPaise, 0)
-  const spoken: Spoken[] = ledger.credits.map((c) => ({ id: c.id, text: `${money(c.amountPaise)} received. Signed by ${c.dkimDomain}.` }))
+  const spoken: Spoken[] = ledger.credits.map((c) => ({ id: c.id, text: `${money(c.amountPaise)} received. Signed by ${c.dkimDomain}.`, hi: hindiLine("VERIFIED", c.amountPaise, c.claim?.orderRef) }))
   return (
     <div className="counter">
       <Aloud items={spoken} />

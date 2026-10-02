@@ -12,6 +12,7 @@ import { SignatureCheck } from "./Signature"
 import { Footer, Header, PageHead } from "./Site"
 import { UpiCase } from "./UpiCase"
 import { UseCases } from "./UseCases"
+import { LiveStatus } from "./features/LiveStatus"
 
 const sampleEmail = {
   label: "Use a sample signed email",
@@ -45,6 +46,7 @@ const titles: Record<string, string> = {
   architecture: "Architecture",
   ledger: "Ledger",
   uses: "Use cases",
+  status: "Status",
   shop: "Your shop",
   receipt: "Receipt",
 }
@@ -95,6 +97,12 @@ export function App() {
         {route.page === "architecture" && <Architecture />}
         {route.page === "ledger" && <Ledger ledger={route.arg} visitLedger={visitLedger} />}
         {route.page === "uses" && <UseCases />}
+        {route.page === "status" && (
+          <>
+            <PageHead title="Status" sub="The deployed stack, checked when you open this page. The API caches the result for 60 s." />
+            <LiveStatus title="Live stack" />
+          </>
+        )}
         {route.page === "shop" && <ShopApp token={token} onToken={setToken} live={live} start={route.arg === "setup" ? "shop" : "counter"} />}
         {route.page === "receipt" && <ReceiptPage id={route.arg} />}
       </main>

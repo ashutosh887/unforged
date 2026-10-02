@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react"
-import { onHealth } from "./api"
+import { AliveDot } from "./features/LiveStatus"
 import { Icon } from "./Icon"
 import { hrefOf, type Page } from "./router"
 
@@ -51,17 +51,6 @@ export function Header({ page }: { page: Page | "receipt" }) {
   )
 }
 
-function Health() {
-  const [up, setUp] = useState(false)
-  useEffect(() => onHealth(setUp), [])
-  return (
-    <span className={`health${up ? " up" : ""}`} role="status">
-      <i aria-hidden="true" />
-      {up ? "Live API answered" : "Live API not called yet"}
-    </span>
-  )
-}
-
 const columns: { title: string; links: { label: string; href: string }[] }[] = [
   {
     title: "Product",
@@ -78,6 +67,7 @@ const columns: { title: string; links: { label: string; href: string }[] }[] = [
       { label: "Architecture", href: hrefOf.architecture },
       { label: "Ledger", href: hrefOf.ledger },
       { label: "Use cases", href: hrefOf.uses },
+      { label: "Status", href: hrefOf.status },
     ],
   },
   {
@@ -119,7 +109,9 @@ export function Footer() {
         <div className="foot-base">
           <span>Built on AWS for Zero to Shipped</span>
           <span>us-east-1</span>
-          <Health />
+          <a href={hrefOf.status} className="foot-status">
+            <AliveDot />
+          </a>
         </div>
       </div>
     </footer>
