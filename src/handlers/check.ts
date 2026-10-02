@@ -15,11 +15,20 @@ function readWith(model: string, image: Uint8Array, format: ImageFormat) {
   return model === "textract" ? readWithTextract(textract, image) : readScreenshot(bedrock, model, image, format)
 }
 
+const benchedUntil = new Map<string, number>()
+const benchMs = 15 * 60 * 1000
+
+function outOfDailyQuota(e: unknown): boolean {
+  return e instanceof Error && e.name === "ThrottlingException" && /per day/i.test(e.message)
+}
+
 async function readWithFallback(models: string[], image: Uint8Array, format: ImageFormat) {
-  for (const model of models) {
+  const ready = models.filter((m) => (benchedUntil.get(m) ?? 0) <= Date.now())
+  for (const model of ready.length ? ready : models) {
     try {
       return { read: await readWith(model, image, format), reader: model }
     } catch (e) {
+      if (outOfDailyQuota(e)) benchedUntil.set(model, Date.now() + benchMs)
       console.error(JSON.stringify({ event: "reader_failed", model, error: e instanceof Error ? `${e.name}: ${e.message}` : String(e) }))
     }
   }
