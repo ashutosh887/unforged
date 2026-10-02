@@ -125,6 +125,24 @@ requested through Service Quotas on 2 Oct (`L-B99A9384`, status PENDING).
 The in-Lambda race in §1 is not affected, since it runs all 50 claims inside
 one invocation.
 
+### After the fix: one ledger per run, within the account's concurrency
+
+Run 2 Oct 2026, 08:33–08:35 UTC, each run on a fresh `ledger` so no earlier
+claim interferes (the 08:30 run reused emails the first run had already
+claimed, so 7 of its 10 rounds correctly returned ALREADY_CLAIMED ×10; it was
+discarded). Raw: `measurements/record-race-2026-10-02T08-34-01-650Z.json`
+and `measurements/record-race-2026-10-02T08-34-30-167Z.json`.
+
+| Run | Exactly one VERIFIED | Total VERIFIED | ALREADY_CLAIMED | HTTP 503 (Lambda throttle) | p50 / p95 |
+| --- | --- | --- | --- | --- | --- |
+| 10 rounds × 10 at once | 10/10, rest ALREADY_CLAIMED | 10 | 90 | 0 | 681 / 2076 ms |
+| 5 rounds × 50 at once | 5/5 had one winner | 5 | 101 | 144 | 436 / 913 ms |
+
+At 10 concurrent requests, the account's Lambda limit, every request reached
+the code and every round had exactly one winner. At 50, the claim-once rule
+still held (one VERIFIED per round, never two), and the 503s are requests
+Lambda refused before the handler ran.
+
 ### The claim key, and the attack that shaped it
 
 The claim key is `sha256(signer domain, From address, Date header, relaxed
@@ -159,3 +177,6 @@ index was building (08:16:02.214 and 08:16:02.720 UTC) were both VERIFIED. The
 index build then failed on those duplicates. Fix: the claim key is now the
 table's PRIMARY KEY, which DSQL enforces from the moment the table exists.
 The test rows were deleted.
+
+The same eight checks were rerun inside a fresh ledger after the ledger change
+(2 Oct, 08:33 UTC) with identical results.
