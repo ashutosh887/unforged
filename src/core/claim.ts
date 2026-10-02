@@ -1,4 +1,5 @@
 import type { Conn, Pool } from "../db/client.js"
+import { istTime } from "./money.js"
 import { decideBeforeClaim, normaliseUtr } from "./verdict.js"
 import type { Credit, Decision, ScreenshotRead } from "./types.js"
 
@@ -82,9 +83,9 @@ export async function claim(pool: Pool, input: ClaimInput, onRetry?: () => void)
   } catch (e) {
     if (!isUniqueViolation(e)) throw e
     const prior = await priorClaim(pool, found.id)
-    return { verdict: "ALREADY_CLAIMED", reason: `This bank credit was already used for order ${prior?.orderRef ?? "another order"}. The screenshot may be real, but it has been shown before.`, credit: found, ...(prior ? { priorClaim: prior } : {}) }
+    return { verdict: "ALREADY_CLAIMED", reason: `This bank credit was already used for order ${prior?.orderRef ?? "another order"}${prior ? ` at ${istTime(prior.createdAt)}` : ""}. The screenshot may be real, but it has been shown before.`, credit: found, ...(prior ? { priorClaim: prior } : {}) }
   }
-  return { verdict: "VERIFIED", reason: `${found.bank.toUpperCase()} credited this amount at ${found.creditedAt}, signed by ${found.dkimDomain}. Claimed for order ${input.orderRef}.`, credit: found }
+  return { verdict: "VERIFIED", reason: `${found.bank.toUpperCase()} credited this amount at ${istTime(found.creditedAt)}, signed by ${found.dkimDomain}. Claimed for order ${input.orderRef}.`, credit: found }
 }
 
 export async function claimNaive(pool: Pool, creditId: string, orderRef: string): Promise<boolean> {

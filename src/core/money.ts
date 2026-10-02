@@ -13,3 +13,9 @@ export function formatPaise(paise: number): string {
   const grouped = rupees.toLocaleString("en-IN")
   return fraction === 0 ? `₹${grouped}` : `₹${grouped}.${String(fraction).padStart(2, "0")}`
 }
+
+export function istTime(iso: string): string {
+  const at = new Date(iso)
+  if (Number.isNaN(at.getTime())) return iso
+  return `${at.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })} IST`
+}
