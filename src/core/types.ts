@@ -35,4 +35,5 @@ export type Decision = {
   reason: string
   credit?: Credit
   priorClaim?: PriorClaim
+  receipt?: { id: string; url: string; seq: number; hash: string; prevHash: string }
 }

@@ -60,3 +60,27 @@ CREATE TABLE IF NOT EXISTS ledger_claims (
   created_at timestamptz NOT NULL DEFAULT now(),
   PRIMARY KEY (ledger, fingerprint)
 );
+
+CREATE TABLE IF NOT EXISTS chain_heads (
+  ledger text PRIMARY KEY,
+  seq bigint NOT NULL,
+  hash text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS receipts (
+  id text PRIMARY KEY,
+  ledger text NOT NULL,
+  seq bigint NOT NULL,
+  kind text NOT NULL,
+  signer text NOT NULL,
+  what text NOT NULL,
+  claimed_at text NOT NULL,
+  fingerprint text NOT NULL,
+  prev_hash text NOT NULL,
+  hash text NOT NULL,
+  key_id text NOT NULL,
+  signature text NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX ASYNC IF NOT EXISTS receipts_by_ledger ON receipts (ledger, seq);

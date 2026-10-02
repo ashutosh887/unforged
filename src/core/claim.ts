@@ -1,5 +1,6 @@
 import type { Conn, Pool } from "../db/client.js"
-import { istTime } from "./money.js"
+import { formatPaise, istTime } from "./money.js"
+import { appendReceipt, ensureChain, linkOf, type ReceiptLink, type Signer } from "./receipts.js"
 import { decideBeforeClaim, normaliseUtr } from "./verdict.js"
 import type { Credit, Decision, ScreenshotRead } from "./types.js"
 
@@ -67,16 +68,26 @@ async function priorClaim(pool: Pool, creditId: string) {
   return rows[0] ? { orderRef: rows[0].order_ref, createdAt: new Date(rows[0].created_at).toISOString() } : undefined
 }
 
-export async function claim(pool: Pool, input: ClaimInput, onRetry?: () => void): Promise<Decision> {
+export async function claim(pool: Pool, input: ClaimInput, onRetry?: () => void, signer?: Signer): Promise<Decision> {
   const utr = input.read.utr ? normaliseUtr(input.read.utr) : null
   const credit = utr ? await findCredit(pool, input.shopId, utr) : null
   const early = decideBeforeClaim({ read: input.read, credit, shopVpas: input.shopVpas })
   if (early) return early
   const found = credit!
 
+  const ledger = `shop-${input.shopId}`
+  let receipt: ReceiptLink | null = null
   try {
-    await withRetry(
-      () => inTx(pool, (c) => c.query("INSERT INTO claims (shop_id, credit_id, order_ref, screenshot_sha256) VALUES ($1, $2, $3, $4)", [input.shopId, found.id, input.orderRef, input.screenshotSha256])),
+    if (signer) await ensureChain(pool, ledger)
+    receipt = await withRetry(
+      () =>
+        inTx(pool, async (c) => {
+          const { rows } = await c.query<{ created_at: Date }>("INSERT INTO claims (shop_id, credit_id, order_ref, screenshot_sha256) VALUES ($1, $2, $3, $4) RETURNING created_at", [input.shopId, found.id, input.orderRef, input.screenshotSha256])
+          if (!signer) return null
+          const what = `UTR ${found.utr}, ${formatPaise(found.amountPaise)}, order ${input.orderRef}`
+          const made = await appendReceipt(c, signer, { kind: "bank-credit", ledger, signer: found.dkimDomain, what, claimedAt: new Date(rows[0]!.created_at).toISOString(), fingerprint: found.id })
+          return linkOf(made)
+        }),
       8,
       onRetry,
     )
@@ -85,7 +96,7 @@ export async function claim(pool: Pool, input: ClaimInput, onRetry?: () => void)
     const prior = await priorClaim(pool, found.id)
     return { verdict: "ALREADY_CLAIMED", reason: `This bank credit was already used for order ${prior?.orderRef ?? "another order"}${prior ? ` at ${istTime(prior.createdAt)}` : ""}. The screenshot may be real, but it has been shown before.`, credit: found, ...(prior ? { priorClaim: prior } : {}) }
   }
-  return { verdict: "VERIFIED", reason: `${found.bank.toUpperCase()} credited this amount at ${istTime(found.creditedAt)}, signed by ${found.dkimDomain}. Claimed for order ${input.orderRef}.`, credit: found }
+  return { verdict: "VERIFIED", reason: `${found.bank.toUpperCase()} credited this amount at ${istTime(found.creditedAt)}, signed by ${found.dkimDomain}. Claimed for order ${input.orderRef}.`, credit: found, ...(receipt ? { receipt } : {}) }
 }
 
 export async function claimNaive(pool: Pool, creditId: string, orderRef: string): Promise<boolean> {
