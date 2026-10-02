@@ -9,6 +9,7 @@ import { PolicyStatement } from "aws-cdk-lib/aws-iam"
 import { Key, KeySpec, KeyUsage } from "aws-cdk-lib/aws-kms"
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda"
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs"
+import { RetentionDays } from "aws-cdk-lib/aws-logs"
 import { BlockPublicAccess, Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3"
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment"
 import type { Construct } from "constructs"
@@ -52,6 +53,7 @@ class UnforgedStack extends Stack {
         memorySize,
         timeout: Duration.seconds(timeout),
         environment,
+        logRetention: RetentionDays.ONE_MONTH,
         bundling: { target: "node22", minify: true, sourceMap: true, externalModules: ["pg-native"], loader: { ".sql": "text" } },
       })
       f.addToRolePolicy(new PolicyStatement({ actions: ["dsql:DbConnectAdmin", "dsql:DbConnect"], resources: [cluster.attrResourceArn] }))
