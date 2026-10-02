@@ -94,7 +94,8 @@ async function claim(raw: string, claimRef: string, ledger: string, onRetry?: Re
 }
 
 function failure(result: VerifyResult): string {
-  return result.signatures.find((s) => s.detail)?.detail ?? "The signature no longer verifies"
+  const detail = result.signatures.find((s) => s.detail)?.detail ?? "the signature no longer verifies"
+  return detail.charAt(0).toUpperCase() + detail.slice(1)
 }
 
 function claimStep(result: RecordClaimResult, ms: number): Done {

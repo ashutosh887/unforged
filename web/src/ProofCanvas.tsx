@@ -7,7 +7,8 @@ import type { SignedMail } from "./proof"
 type Tone = "good" | "warn" | "bad"
 
 function failure(result: VerifyResult): string {
-  return result.signatures.find((s) => s.detail)?.detail ?? "No passing signature"
+  const detail = result.signatures.find((s) => s.detail)?.detail ?? "no passing signature"
+  return detail.charAt(0).toUpperCase() + detail.slice(1)
 }
 
 function claimTone(c: Claimed): Tone {
