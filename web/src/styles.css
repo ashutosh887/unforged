@@ -880,3 +880,29 @@ label.over textarea {
     height: 20rem;
   }
 }
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-self: start;
+  margin: 0.25rem 0 0;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid var(--rule);
+  background: var(--slip);
+}
+
+.live-badge .dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--good);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .live-badge .dot {
+    animation: pulse 1.2s ease-in-out infinite alternate;
+  }
+}

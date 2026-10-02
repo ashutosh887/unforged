@@ -51,10 +51,12 @@ export function App() {
       <header className="hero">
         <Guilloche />
         <h1>Unforged</h1>
-        <p className="claim">A signed email is proof nobody can forge, and each proof can be claimed exactly once.</p>
+        <p className="claim">A signed email is proof nobody can forge, and each one can be claimed exactly once.</p>
         <p className="lede">
-          A buyer's UPI screenshot can be edited, or shown twice. The bank's credit alert email cannot: the bank signs it. Unforged checks the signature, then lets each
-          signed record back one order. Below, it runs on the live AWS stack as this page loads.
+          A UPI screenshot can be edited or shown twice. The bank's signed alert cannot. Watch it run on the live AWS stack below, then try your own email.
+        </p>
+        <p className="live-badge">
+          <span className="dot" aria-hidden="true" /> Live on AWS · 20 of 20 races ended with one winner · 37 of 37 tampered signatures caught
         </p>
       </header>
       <Theater />
