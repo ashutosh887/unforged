@@ -1,6 +1,6 @@
 import type { MouseEvent } from "react"
 import type { RaceResult, ReceiptLink, ReceiptResult, VerifyResult } from "./api"
-import { senderName, titles, type Claimed, type GateState, type LiveRun, type Probe, type Step } from "./live"
+import { titles, type Claimed, type GateState, type LiveRun, type Probe, type Step } from "./live"
 import { clockTime } from "./parts"
 import type { SignedMail } from "./proof"
 import { Why } from "./Site"
@@ -87,7 +87,7 @@ function MailObject({ mail, probe, onPick }: { mail: SignedMail | null; probe: P
       <div className="pc-mail" aria-label="The signed email, as structured fields">
         <dl className="pc-mail-heads">
           <dt>From</dt>
-          <dd>{mail ? `${senderName(mail.from)}, ${mail.domain}` : "Loading"}</dd>
+          <dd>{mail ? `A public mailing-list post, ${mail.domain}` : "Loading"}</dd>
           <dt>Subject</dt>
           <dd>{mail?.subject}</dd>
           <dt>Date</dt>

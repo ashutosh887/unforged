@@ -27,13 +27,8 @@ export const orders = ["order A12", "order A13"]
 const pause = (ms: number) => new Promise((r) => setTimeout(r, ms))
 const reducedMotion = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches
 
-export function senderName(from: string): string {
-  const name = from.replace(/<[^>]*>/, "").replace(/"/g, "").trim()
-  return name || from.replace(/^.*@/, "").replace(/>.*$/, "")
-}
-
 function asMail(m: SignedMail): Mail {
-  return { from: senderName(m.from), subject: m.subject, domain: m.domain, selector: m.selector, lines: m.lines.map((l) => l.text) }
+  return { from: m.domain, subject: m.subject, domain: m.domain, selector: m.selector, lines: m.lines.map((l) => l.text) }
 }
 
 function newLedger(): string {
