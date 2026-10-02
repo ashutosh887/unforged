@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react"
-import { post, type VerifyResult } from "./api"
-import { money, RawEmailField } from "./parts"
+import { post, type RecordClaimResult, type VerifyResult } from "./api"
+import { clockTime, money, RawEmailField } from "./parts"
 
 type Edit = { raw: string; at: number; was: string; now: string }
 type Run = { label: string; result: VerifyResult; edit?: Edit }
@@ -107,6 +107,7 @@ export function SignatureCheck({ sample }: { sample?: { label: string; load: () 
           ))}
         </div>
       )}
+      {original?.result.signer && <ClaimOnce raw={raw} edited={runs[1]?.edit?.raw ?? null} />}
     </section>
   )
 }
@@ -159,5 +160,80 @@ function SignatureRow({ s }: { s: VerifyResult["signatures"][number] }) {
         · {s.result === "pass" ? (s.aligned ? "passes, aligned with From" : "passes, not aligned with From") : "fails"}
       </dd>
     </>
+  )
+}
+
+type Claimed = { label: string; result: RecordClaimResult; claimRef: string }
+
+function ClaimOnce({ raw, edited }: { raw: string; edited: string | null }) {
+  const [claimRef, setClaimRef] = useState("")
+  const [claims, setClaims] = useState<Claimed[]>([])
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState("")
+
+  const claim = async (label: string, text: string) => {
+    setBusy(true)
+    setError("")
+    try {
+      const res = await fetch("/api/records/claim", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ raw: text, claimRef }) })
+      const result = (await res.json().catch(() => ({}))) as RecordClaimResult & { error?: string }
+      if (!res.ok && result.verdict !== "REJECTED") throw new Error(result.error ?? `Request failed (${res.status})`)
+      setClaims((all) => [{ label, result, claimRef }, ...all].slice(0, 3))
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault()
+    void claim("This email", raw)
+  }
+
+  return (
+    <div className="claim-once">
+      <h3>Claim this email once</h3>
+      <p className="muted small">
+        A signed email can back one claim: one refund, one reimbursement, one payment. Claim it, then claim it again. The second claim is refused by a unique index in Aurora DSQL, not by
+        a model. Only the signer's domain, a fingerprint of the signature and your reference are stored.
+      </p>
+      <form onSubmit={submit} className="stack">
+        <label>
+          What is it being claimed for?
+          <input value={claimRef} onChange={(e) => setClaimRef(e.target.value)} placeholder="Refund for order 1042" maxLength={120} required />
+        </label>
+        <div className="row">
+          <button disabled={busy || !claimRef.trim()}>{busy ? "Claiming…" : "Claim this email"}</button>
+          {edited && (
+            <button type="button" className="ghost" disabled={busy || !claimRef.trim()} onClick={() => void claim("The edited copy", edited)}>
+              Claim the edited copy
+            </button>
+          )}
+        </div>
+      </form>
+      {error && <p className="error">{error}</p>}
+      {claims.map((c, i) => (
+        <ClaimStamp key={`${claims.length - i}`} claimed={c} />
+      ))}
+    </div>
+  )
+}
+
+function ClaimStamp({ claimed }: { claimed: Claimed }) {
+  const { result, label } = claimed
+  const tone = result.verdict === "VERIFIED" ? "good" : result.verdict === "ALREADY_CLAIMED" ? "warn" : "bad"
+  const title = result.verdict === "VERIFIED" ? "Verified" : result.verdict === "ALREADY_CLAIMED" ? "Already claimed" : "Rejected"
+  return (
+    <article className={`verdict ${tone}`}>
+      <h4>{label}, claimed for “{claimed.claimRef}”</h4>
+      <h3>{title}</h3>
+      {result.verdict === "ALREADY_CLAIMED" && (
+        <p className="claimed">
+          First claimed {result.priorClaim.createdAt ? clockTime(result.priorClaim.createdAt) : ""} for “{result.priorClaim.claimRef}”
+        </p>
+      )}
+      <p>{result.reason}</p>
+    </article>
   )
 }

@@ -14,6 +14,10 @@ export type LedgerResult = {
   credits: { id: string; bank: string; utr: string; amountPaise: number; creditedAt: string; dkimDomain: string; claim: { orderRef: string; createdAt: string } | null }[]
   attempts: { verdict: string; reason: string; alertOnly: boolean; createdAt: string }[]
 }
+export type RecordClaimResult =
+  | { verdict: "VERIFIED"; reason: string; signer: string; claimRef: string; claimedAt: string }
+  | { verdict: "ALREADY_CLAIMED"; reason: string; signer: string; priorClaim: { claimRef: string; createdAt: string } }
+  | { verdict: "REJECTED"; reason: string }
 export type RaceResult = {
   n: number
   utr: string

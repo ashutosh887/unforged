@@ -561,3 +561,25 @@ label.over textarea {
     padding: 1.5rem 1.6rem;
   }
 }
+
+.compare > .tally {
+  border-top: 3px solid var(--tone);
+  padding-top: 0.75rem;
+}
+
+.claim-once {
+  margin-top: 1.25rem;
+  padding-top: 1.1rem;
+  border-top: 2px solid var(--ink);
+  display: grid;
+  gap: 0.6rem;
+}
+
+.claim-once > h3 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.claim-once > .verdict {
+  margin-top: 0.4rem;
+}
