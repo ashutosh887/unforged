@@ -1,11 +1,11 @@
 import { TextractClient } from "@aws-sdk/client-textract"
 import { fieldBoxes, imageFormat, readLines, textractLines } from "../core/ocr.js"
-import { body, json, limits, type Event, type Result } from "./http.js"
+import { body, json, limits, text, type Event, type Result } from "./http.js"
 
 const textract = new TextractClient({})
 
 export async function handler(event: Event): Promise<Result> {
-  const image64 = body<{ image?: string }>(event)?.image
+  const image64 = text(body<{ image?: unknown }>(event)?.image)
   if (!image64) return json(400, { error: "Send a screenshot as base64." })
   if (image64.length > Math.ceil((limits.imageBytes * 4) / 3) + 4) return json(413, { error: "That screenshot is over 4 MB. Send a smaller one." })
   const image = Buffer.from(image64, "base64")

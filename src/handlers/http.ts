@@ -48,10 +48,19 @@ export async function shopFor(event: Event): Promise<Shop | null> {
   return row ? { id: row.id, vpas: row.vpas.split(",").filter(Boolean) } : null
 }
 
-export const limits = { shopName: 80, vpas: 5, vpa: 100, ref: 80, imageBytes: 4_000_000 }
+export const limits = { shopName: 80, vpas: 5, vpa: 100, ref: 80, imageBytes: 4_000_000, emailBytes: 2_000_000 }
 
-export function refFrom(value: string | undefined): string | null {
-  const ref = value?.trim()
+export function text(value: unknown): string | undefined {
+  return typeof value === "string" ? value : undefined
+}
+
+export function bounded(value: unknown, fallback: number, min: number, max: number): number {
+  const n = typeof value === "number" && Number.isFinite(value) ? Math.trunc(value) : fallback
+  return Math.min(Math.max(n, min), max)
+}
+
+export function refFrom(value: unknown): string | null {
+  const ref = text(value)?.trim()
   return ref && ref.length <= limits.ref ? ref : null
 }
 
