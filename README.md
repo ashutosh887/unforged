@@ -59,9 +59,34 @@ shown for a second order is caught.
    and whether it would be accepted as a bank credit. It stores nothing. The
    Try it page uses it to let anyone paste an email they received, then
    change one character and watch the signature break.
-5. **The ledger.** `POST /api/ledger` (shop token) lists the shop's signed
+5. **Any signed email, claimed once.** `POST /api/records/claim` takes any
+   email with a passing DKIM signature aligned with its From domain and a
+   claim reference ("Refund for order 1042"). The claim key is
+   `sha256(signer, From, Date, relaxed body hash)`, built only from parts
+   every passing signature covers, so removing one of several signatures
+   gives the same key. It is the PRIMARY KEY of `ledger_claims`, so a second
+   claim is refused from the first moment. Only the signer domain, the key,
+   the reference and the time are stored. The sample email on the Try it page
+   (`web/public/samples/sample.eml`) is a public post from the GNU
+   help-gnu-emacs archive (lists.gnu.org, September 2026), shipped byte for
+   byte so its signature still verifies.
+6. **The ledger.** `POST /api/ledger` (shop token) lists the shop's signed
    credits, which order claimed each one and when, and the latest checks with
    their verdicts.
+
+### API
+
+All routes are `POST`, JSON in and out, under `/api/`.
+
+| Route | Body | Returns |
+|---|---|---|
+| `shops` | `{ name, vpas: [..] }` (name ≤ 80, ≤ 5 VPAs) | `201 { shopId, token }` |
+| `alerts` | `{ raw, orderRef? }` + `x-shop-token` | `201/200 { credit, duplicate, decision? }`, `422 { error }` |
+| `check` | `{ image (base64 PNG/JPEG/GIF/WebP ≤ 4 MB), orderRef }` + token | `200 { verdict, reason, credit?, priorClaim?, read, reader, retries }`, `400` non-image, `503` no reader |
+| `verify` | `{ raw }` | `200 { from, signatures[], signer, bankCredit, notStoredBecause }` |
+| `records/claim` | `{ raw, claimRef (≤ 80), ledger? }` | `200 { verdict: VERIFIED, ledger, signer, claimRef, claimedAt }` or `{ verdict: ALREADY_CLAIMED, priorClaim }`, `422 { verdict: REJECTED, reason }` |
+| `ledger` | `{}` + token | `200 { shop, credits[], attempts[] }` |
+| `race` | `{ n ≤ 50 }` or `{ mode: "replay" }` | `200 { n, guarded, naive }` |
 
 ### Verdicts
 
@@ -101,8 +126,8 @@ All in one region, `us-east-1`. Defined in [`infra/app.ts`](infra/app.ts).
 | Amazon CloudFront | Serves the SPA from S3 and forwards `/api/*` to the HTTP API, HTTPS only, no caching on the API path |
 | Amazon S3 (site bucket) | Holds the built SPA. Private, reached only through CloudFront Origin Access Control |
 | Amazon S3 (upload bucket) | Stores each checked screenshot under its SHA-256. Private, SSL enforced, lifecycle rule deletes objects after 1 day (24 h) |
-| Amazon API Gateway HTTP API | `POST /api/shops`, `/api/alerts`, `/api/check`, `/api/verify`, `/api/ledger`, `/api/race`, `/api/spike/dkim`; throttled to 25 req/s, burst 50 |
-| AWS Lambda | Eight functions, Node.js 22 on arm64, bundled with esbuild: `Shops`, `Alerts`, `Verify` (DKIM report for any email, stores nothing), `Check`, `Books` (the shop's ledger), `Race`, `Spike` (DKIM DNS timing), and `Migrate` (schema setup, invoked directly, not routed) |
+| Amazon API Gateway HTTP API | `POST /api/shops`, `/api/alerts`, `/api/check`, `/api/verify`, `/api/records/claim`, `/api/ledger`, `/api/race`; throttled to 25 req/s, burst 50 |
+| AWS Lambda | Eight functions, Node.js 22 on arm64, bundled with esbuild: `Shops`, `Alerts`, `Verify` (DKIM report for any email, stores nothing), `Records` (claim any signed email once), `Check`, `Books` (the shop's ledger), `Race`, `Spike` (DKIM DNS timing), and `Migrate` (schema setup, invoked directly, not routed) |
 | Amazon Aurora DSQL | Shops, credits, claims, attempts and the naive control table. IAM token auth from Lambda (`dsql:DbConnectAdmin`), no VPC, no passwords. Unique indexes built with `CREATE UNIQUE INDEX ASYNC` |
 | Amazon Bedrock | Converse API with vision and a tool-use JSON schema. The model ID is a CDK context value; the default in `cdk.json` is `us.amazon.nova-2-lite-v1:0` |
 | AWS IAM | Per-function least-privilege grants: DSQL connect on the one cluster, `s3:PutObject` on the upload bucket and Bedrock invoke for `Check` only |
