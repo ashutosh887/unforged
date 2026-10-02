@@ -202,7 +202,7 @@ code,
   font-weight: 750;
   letter-spacing: -0.032em;
   line-height: 1.02;
-  max-width: 16ch;
+  max-width: 21ch;
   text-wrap: balance;
 }
 
@@ -239,6 +239,10 @@ code,
   max-width: 46rem;
   display: grid;
   gap: 1rem;
+}
+
+.rail-now {
+  display: none;
 }
 
 .proof {
@@ -1462,25 +1466,58 @@ strong.miss {
     border-top: 1px solid var(--rule);
   }
 
+  .hero-side {
+    font-size: 0.92rem;
+  }
+
   .rail {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    border-bottom: 0;
   }
 
-  .rail-step {
-    padding: 0.6rem 0.7rem;
-    border-left: 1px solid var(--rule);
-  }
-
-  .rail-step:nth-child(odd) {
+  .rail-step,
+  .rail-step:nth-child(4),
+  .rail-step:nth-child(n + 4) {
+    display: grid;
+    place-items: center;
+    padding: 0.55rem 0;
+    border-top: 0;
     border-left: 0;
   }
 
-  .rail-step:nth-child(4) {
-    border-left: 1px solid var(--rule);
+  .rail-n {
+    grid-row: auto;
   }
 
-  .rail-step:nth-child(n + 3) {
+  .rail-title,
+  .rail-out {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .rail-now {
+    display: block;
+    margin: 0;
+    max-width: none;
+    padding: 0.55rem 1rem 0.65rem;
+    font-size: 0.85rem;
+    color: var(--ink-2);
+    background: var(--page);
     border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .rail-now b {
+    color: var(--ink);
+    font-weight: 650;
+  }
+
+  .rail-now.running {
+    color: var(--carbon);
   }
 
   .proof-foot {
