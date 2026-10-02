@@ -94,3 +94,68 @@ Caveats:
   counted as tampering results.
 - These are real signatures from real senders, but not from a bank. The bank
   case is section 4 and the forgery matrix, pending the real alert.
+
+## 7. Any signed email, claimed once: 50 simultaneous claims
+
+Run 2 Oct 2026, 08:21–08:22 UTC. `SKIP=40 pnpm measure:record-race` against
+`POST /api/records/claim` on the live stack. Raw:
+`measurements/record-race-2026-10-02T08-22-55-446Z.json`.
+
+Each round takes a fresh signed email from the same public archive as §6 and
+sends 50 claims for it at once, each with a different claim reference, from a
+laptop in India through CloudFront. Every claim runs its own DKIM check, then
+inserts into `claimed_records`, whose primary key is the claim key.
+
+| Metric | Result |
+| --- | --- |
+| Rounds | 10 × 50 requests |
+| VERIFIED per round | exactly 1 in 10/10 rounds |
+| Total VERIFIED (1 is correct per round) | 10 |
+| ALREADY_CLAIMED | 162 |
+| REJECTED | 1 (round 8; the reason was not captured, the script now records it) |
+| HTTP 503, throttled before reaching the code | 327 |
+| OCC retries reported | 13 |
+| Request time p50 / p95 | 781 ms / 1221 ms |
+
+What this shows: no email was ever claimed twice. What it does not show: a
+clean 50-way run. This account's Lambda concurrency limit is 10 (the default
+for a new account, `lambda:GetAccountSettings`), so most of each burst was
+throttled by Lambda before the handler ran. A quota increase to 1,000 was
+requested through Service Quotas on 2 Oct (`L-B99A9384`, status PENDING).
+The in-Lambda race in §1 is not affected, since it runs all 50 claims inside
+one invocation.
+
+### The claim key, and the attack that shaped it
+
+The claim key is `sha256(signer domain, From address, Date header, relaxed
+body hash)`, taken only from parts every passing signature must cover. A
+claim is refused if the passing signature does not cover Date (32/32
+passing signatures in the §6 sample do), if the email has more than one Date
+header, or if the signature uses an `l=` body-length limit.
+
+The first version keyed claims on the first passing signature's `b=` value.
+A review agent claimed an email with two valid signatures, deleted one
+`DKIM-Signature` header and claimed it again: VERIFIED twice. Keying on the
+set of signatures fails too: claim the copy with only signature B, then the
+copy with only signature A, and the sets are disjoint. The content key is the
+same whichever signatures remain. Live check after the fix (`claimtest`):
+
+| Claim | Result |
+| --- | --- |
+| Email with two signatures, as sent | VERIFIED |
+| Same email, signature A removed | ALREADY_CLAIMED (prior: the original) |
+| Same email, signature B removed | ALREADY_CLAIMED |
+| One body character changed | REJECTED, body hash did not verify |
+| Second email: signature A removed first | VERIFIED |
+| Then signature B removed | ALREADY_CLAIMED (prior: the A-removed copy) |
+| Then as sent | ALREADY_CLAIMED |
+| Email with its only signature removed | REJECTED, no DKIM signature |
+
+### The async index, a second time
+
+The same review found the §3 failure again: the first schema for these claims
+used `CREATE UNIQUE INDEX ASYNC`, and two claims of one email sent while the
+index was building (08:16:02.214 and 08:16:02.720 UTC) were both VERIFIED. The
+index build then failed on those duplicates. Fix: the claim key is now the
+table's PRIMARY KEY, which DSQL enforces from the moment the table exists.
+The test rows were deleted.
