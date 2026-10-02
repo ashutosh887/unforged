@@ -58,7 +58,7 @@ function relaxedBodyHash(body: string): string {
   return createHash("sha256").update(lines.length ? `${lines.join("\r\n")}\r\n` : "").digest("hex")
 }
 
-function claimKey(text: string, signer: string, from: string, signedHeaders: string, lengthLimited: boolean): { key: string | null; blocked: string | null } {
+function claimKey(text: string, from: string, signedHeaders: string, lengthLimited: boolean): { key: string | null; blocked: string | null } {
   if (lengthLimited) return { key: null, blocked: "The signature covers only part of the body (l= tag), so the email could be extended without breaking it." }
   if (!signedHeaders.split(":").map((h) => h.trim().toLowerCase()).includes("date")) return { key: null, blocked: "The signature does not cover the Date header, so the email cannot be told apart from a resent copy." }
   const end = text.search(/\r?\n\r?\n/)
@@ -66,7 +66,8 @@ function claimKey(text: string, signer: string, from: string, signedHeaders: str
   const dates = [...head.matchAll(/^date:[ \t]*(.*(?:\r?\n[ \t].*)*)/gim)].map((m) => m[1]!.replace(/\s+/g, " ").trim())
   if (dates.length !== 1) return { key: null, blocked: "The email must have exactly one Date header." }
   const body = end < 0 ? "" : text.slice(end).replace(/^\r?\n\r?\n/, "")
-  return { key: createHash("sha256").update([signer, from.toLowerCase(), dates[0], relaxedBodyHash(body)].join("\n")).digest("hex"), blocked: null }
+  const address = from.toLowerCase()
+  return { key: createHash("sha256").update([address.split("@").pop()!, address, dates[0], relaxedBodyHash(body)].join("\n")).digest("hex"), blocked: null }
 }
 
 const maxSignatures = 8
@@ -82,20 +83,20 @@ export async function inspectSignature(raw: string | Buffer, resolver?: DNSResol
     return { from: null, signatures: [], signer: null, fingerprint: null, claimBlocked: null, alert: { ok: false, reason: `More than ${maxSignatures} DKIM signatures. Paste the original email.` } }
   }
   const dkim = await dkimVerify(raw, resolver ? { resolver } : {})
-  const signatures = dkim.results
-    .filter((r) => r.signingDomain)
-    .map((r) => ({
-      domain: r.signingDomain!.toLowerCase(),
-      selector: r.selector ?? "",
-      result: r.status.result,
-      aligned: Boolean(r.status.aligned),
-      detail: r.status.comment ?? null,
-    }))
+  const signed = dkim.results.filter((r) => r.signingDomain)
+  const signatures = signed.map((r) => ({
+    domain: r.signingDomain!.toLowerCase(),
+    selector: r.selector ?? "",
+    result: r.status.result,
+    aligned: Boolean(r.status.aligned),
+    detail: r.status.comment ?? null,
+  }))
   const from = dkim.fromFields === 1 && dkim.headerFrom.length === 1 ? dkim.headerFrom[0]! : null
   const passing = dkim.results.find((r) => r.signingDomain && r.status.result === "pass" && r.status.aligned)
   const signer = passing?.signingDomain?.toLowerCase() ?? null
-  const claim = passing && signer && from ? claimKey(typeof raw === "string" ? raw : raw.toString("latin1"), signer, from, passing.signingHeaders?.keys ?? "", Boolean(passing.canonBodyLengthLimited)) : { key: null, blocked: null }
-  return { from, signatures, signer, fingerprint: claim.key, claimBlocked: claim.blocked, alert: await decide(raw, from, signatures) }
+  const claim = passing && signer && from ? claimKey(typeof raw === "string" ? raw : raw.toString("latin1"), from, passing.signingHeaders?.keys ?? "", Boolean(passing.canonBodyLengthLimited)) : { key: null, blocked: null }
+  const fullBody = signatures.filter((_, i) => !signed[i]!.canonBodyLengthLimited)
+  return { from, signatures, signer, fingerprint: claim.key, claimBlocked: claim.blocked, alert: await decide(raw, from, fullBody) }
 }
 
 export async function verifyAlert(raw: string | Buffer, resolver?: DNSResolver): Promise<AlertResult> {
