@@ -1,13 +1,8 @@
 import { Resolver } from "node:dns/promises"
 import { readFile } from "node:fs/promises"
-import { fmtMs, intEnv, percentile, post, table, writeResult } from "./lib.js"
+import { fmtMs, intEnv, percentile, table, writeResult } from "./lib.js"
 
 type Sample = { ms: number; ok: boolean; error?: string }
-type SpikeBody = { region?: string; name?: string; samples: Sample[] }
-
-function isSpikeBody(value: unknown): value is SpikeBody {
-  return typeof value === "object" && value !== null && Array.isArray((value as { samples?: unknown }).samples)
-}
 
 function tagFrom(header: string, tag: string): string | null {
   const match = header.match(new RegExp(`(?:^|;)\\s*${tag}=([^;\\s]+)`, "i"))
@@ -57,23 +52,12 @@ async function localSamples(name: string, n: number): Promise<Sample[]> {
 }
 
 const n = intEnv("N", 50)
-const local = process.env.DKIM_LOCAL === "1"
 const targets = await signingTargets()
-const runs: { where: string; domain: string; selector: string; name: string; status?: number; samples: Sample[]; raw?: unknown }[] = []
+const runs: { where: string; domain: string; selector: string; name: string; samples: Sample[] }[] = []
 
 for (const { domain, selector } of targets) {
   const name = `${selector}._domainkey.${domain}`
-  if (local) {
-    runs.push({ where: "local", domain, selector, name, samples: await localSamples(name, n) })
-    continue
-  }
-  const res = await post<unknown>("/api/spike/dkim", { domain, selector, n })
-  if (res.status !== 200 || !isSpikeBody(res.body)) {
-    console.error(`POST /api/spike/dkim returned HTTP ${res.status}; the Lambda endpoint is not deployed`)
-    runs.push({ where: "lambda", domain, selector, name, status: res.status, samples: [], raw: res.body })
-    continue
-  }
-  runs.push({ where: `lambda${res.body.region ? ` ${res.body.region}` : ""}`, domain, selector, name, status: res.status, samples: res.body.samples })
+  runs.push({ where: "local", domain, selector, name, samples: await localSamples(name, n) })
 }
 
 const rows = runs.map((r) => {
@@ -82,7 +66,6 @@ const rows = runs.map((r) => {
 })
 
 const file = await writeResult("dkim-latency", {
-  apiUrl: local ? null : process.env.API_URL ?? null,
   finishedAt: new Date().toISOString(),
   node: process.version,
   n,

@@ -65,7 +65,6 @@ class UnforgedStack extends Stack {
     const check = fn("Check", 29, 1024)
     const race = fn("Race", 29, 1024)
     const migrate = fn("Migrate", 120)
-    const spike = fn("Spike", 29, 256)
     const verify = fn("Verify", 15, 512)
     const books = fn("Books", 10)
     const records = fn("Records", 15)
