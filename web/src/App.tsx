@@ -8,6 +8,7 @@ import { ReceiptPage, receiptIdFromHash } from "./Receipt"
 import { Brand, Shell, useMedia, type Tab } from "./Shell"
 import { AlertBox, ShopLink, ShopSetup, tokenKey } from "./Shop"
 import { SignatureCheck } from "./Signature"
+import { ProofCanvas } from "./ProofCanvas"
 import { Theater } from "./Theater"
 import { UpiCase } from "./UpiCase"
 
@@ -153,6 +154,16 @@ export function App() {
           <div className="device">{screen("device")}</div>
         </div>
       </section>
+      <section className="band" id="proof" aria-labelledby="proof-title">
+        <div className="proof-intro">
+          <h2 id="proof-title">Watch the proof happen</h2>
+          <p>
+            The same run, opened up. Your browser hashes the email body itself and gets the value the sender signed. One changed letter breaks it. Then 50 claims hit one record, and
+            Aurora DSQL lets exactly one through.
+          </p>
+        </div>
+        <ProofCanvas live={live} />
+      </section>
       <section className="band" id="how">
         <UpiCase onShop={() => (location.hash = "app")} />
       </section>
@@ -176,7 +187,12 @@ function ProofScreen({ live, onOwn, onShop }: { live: LiveRun; onOwn: () => void
           A buyer can edit a UPI screenshot, or show the same one for two orders. Unforged checks it against your bank's signed credit alert, and lets each credit pay for one order.
         </p>
       </div>
-      <Theater live={live} onOwn={onOwn} />
+      <ProofCanvas live={live} />
+      <p className="muted small">
+        <button type="button" className="text" onClick={onOwn}>
+          Try it with your own email
+        </button>
+      </p>
       <UpiCase onShop={onShop} />
       <div id="own">
         <SignatureCheck sample={sampleEmail} />
