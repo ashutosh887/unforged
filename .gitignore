@@ -7,3 +7,4 @@ cdk.out
 !web/public/samples/sample.eml
 planning/raw
 planning
+.claude/worktrees/
