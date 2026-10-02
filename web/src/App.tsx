@@ -1,6 +1,7 @@
 import { useEffect, useState, type DragEvent, type FormEvent } from "react"
 import { encodeImage, post, type AlertResult, type CheckResult } from "./api"
 import { Demo } from "./Demo"
+import { Guilloche } from "./Guilloche"
 import { Ledger } from "./Ledger"
 import { money, Race, RawEmailField, useAction, VerdictCard } from "./parts"
 import { SignatureCheck } from "./Signature"
@@ -47,6 +48,7 @@ export function App() {
   return (
     <main>
       <header className="hero">
+        <Guilloche />
         <h1>Unforged</h1>
         <p className="claim">A signed email is proof nobody can forge, and each proof can be claimed exactly once.</p>
         <p className="lede">
