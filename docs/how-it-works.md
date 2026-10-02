@@ -222,7 +222,7 @@ them none.
 - A real bank alert has not been tested yet. Every bank-side number in
   `measurements.md` sections 4 and 5 is pending one.
 - A blurry or cropped real screenshot comes back `UNREADABLE` by design.
-- An alert is not yet tied to the shop that receives it. Any shop can store any
+- An alert is not yet tied to the shop that receives it. Any shop stores any
   bank's alert. The claim-once rule still holds per shop.
 - Banks rotate DKIM keys. A credit already stored keeps its result. An old alert
   pasted after the bank removes its key stops verifying.
