@@ -37,7 +37,13 @@ shown for a second order is caught.
    ([`src/core/read.ts`](src/core/read.ts)). The model reports the UTR, amount,
    payee VPA, payee name and app, or says the image is not readable. Code
    validates the output: a UTR must have 12 digits and the amount must parse,
-   or the read counts as unreadable.
+   or the read counts as unreadable. The readers are tried in order (the
+   `modelId` list in `cdk.json`); the last is Amazon Textract, whose text
+   lines are parsed by code in [`src/core/ocr.ts`](src/core/ocr.ts): a UTR
+   next to its label, the one currency amount (or the one large number), the
+   UPI ID under "To". If any field has more than one candidate, it is left
+   empty, which makes the read `UNREADABLE`. The verdict card says which
+   reader was used.
 3. **Claimed once.** Code matches the read against the shop's credits
    ([`src/core/verdict.ts`](src/core/verdict.ts)) and, if everything agrees,
    inserts a claim row in one Aurora DSQL transaction
