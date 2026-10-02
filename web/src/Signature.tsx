@@ -10,7 +10,7 @@ function bodyStart(raw: string): number {
   return at < 0 ? -1 : at + (raw.slice(at).match(/^\r?\n\r?\n/)?.[0].length ?? 2)
 }
 
-function editOneCharacter(raw: string): Edit | null {
+export function editOneCharacter(raw: string): Edit | null {
   const start = bodyStart(raw)
   if (start < 0) return null
   let lineStart = start
@@ -79,7 +79,7 @@ export function SignatureCheck({ sample }: { sample?: { label: string; load: () 
   const original = runs[0]
 
   return (
-    <section className="card">
+    <section className="card" id="own">
       <h2>Check any signed email</h2>
       <p className="muted small">
         Paste the raw source of any email you received (Gmail: ⋮ → Show original → Copy to clipboard). Unforged checks its DKIM signature against the sender's DNS key. Then change one

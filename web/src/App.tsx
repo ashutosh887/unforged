@@ -5,6 +5,7 @@ import { Guilloche } from "./Guilloche"
 import { Ledger } from "./Ledger"
 import { money, Race, RawEmailField, useAction, VerdictCard } from "./parts"
 import { SignatureCheck } from "./Signature"
+import { Theater } from "./Theater"
 
 type View = "try" | "shop"
 type Mode = "screenshot" | "alert"
@@ -52,10 +53,11 @@ export function App() {
         <h1>Unforged</h1>
         <p className="claim">A signed email is proof nobody can forge, and each proof can be claimed exactly once.</p>
         <p className="lede">
-          First case: is that UPI payment screenshot real? Unforged checks it against the seller's own bank credit alert, verified by the bank's DKIM signature. A reader (Amazon
-          Bedrock, or Amazon Textract) pulls the text off the screenshot, code decides, and each bank credit can back one order only.
+          A buyer's UPI screenshot can be edited, or shown twice. The bank's credit alert email cannot: the bank signs it. Unforged checks the signature, then lets each
+          signed record back one order. Below, it runs on the live AWS stack as this page loads.
         </p>
       </header>
+      <Theater />
       <nav className="tabs" aria-label="Views">
         <button type="button" className={view === "try" ? "on" : ""} aria-pressed={view === "try"} onClick={() => setView("try")}>
           Try it
@@ -69,8 +71,14 @@ export function App() {
           <SignatureCheck sample={sampleEmail} />
           <Demo />
         </>
-      ) : token ? <Workspace token={token} /> : <ShopSetup onToken={setToken} />}
-      <Race />
+      ) : token ? (
+        <>
+          <Workspace token={token} />
+          <Race />
+        </>
+      ) : (
+        <ShopSetup onToken={setToken} />
+      )}
     </main>
   )
 }
