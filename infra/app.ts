@@ -89,7 +89,7 @@ class UnforgedStack extends Stack {
     const api = new HttpApi(this, "Api", { createDefaultStage: true })
     const stage = api.defaultStage!.node.defaultChild as CfnStage
     stage.defaultRouteSettings = { throttlingRateLimit: 25, throttlingBurstLimit: 50 }
-    stage.routeSettings = { "POST /api/race": { ThrottlingRateLimit: 5, ThrottlingBurstLimit: 10 } }
+    stage.routeSettings = { "POST /api/race": { ThrottlingRateLimit: 5, ThrottlingBurstLimit: 10 }, "POST /api/demo/shop": { ThrottlingRateLimit: 2, ThrottlingBurstLimit: 5 } }
     const route = (path: string, f: NodejsFunction) => api.addRoutes({ path, methods: [HttpMethod.POST], integration: new HttpLambdaIntegration(`${f.node.id}Route`, f) })
     route("/api/shops", shops)
     route("/api/alerts", alerts)
@@ -102,7 +102,7 @@ class UnforgedStack extends Stack {
       api.addRoutes({ path, methods: [HttpMethod.POST], integration: new HttpLambdaIntegration(name, receipts) })
     }
     route("/api/read", reader)
-    api.addRoutes({ path: "/api/demo/shop", methods: [HttpMethod.POST], integration: new HttpLambdaIntegration("DemoShopRoute", shops) })
+    stage.node.addDependency(...api.addRoutes({ path: "/api/demo/shop", methods: [HttpMethod.POST], integration: new HttpLambdaIntegration("DemoShopRoute", shops) }))
     api.addRoutes({ path: "/api/status", methods: [HttpMethod.GET], integration: new HttpLambdaIntegration("StatusRoute", status) })
 
     const headers = new ResponseHeadersPolicy(this, "SecurityHeaders", {
