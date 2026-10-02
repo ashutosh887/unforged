@@ -4,6 +4,7 @@ import { call, type ReadResult } from "./api"
 import { ShotFrame } from "./Check"
 import { money, utrGroups, verdicts } from "./parts"
 import { hrefOf } from "./router"
+import { DemoChecks } from "./DemoChecks"
 import { PageHead, Section } from "./Site"
 
 type Shot = { file: string; label: string }
@@ -88,6 +89,7 @@ export function UpiCase() {
           <>Same UTR, two amounts.</>
         )}
       </p>
+      <DemoChecks />
       <Section title="Six verdicts" sub="Code returns one, in this order, with its reason. There is no fraud score.">
         <ol className="upi-verdicts">
           {order.map((v) => (
