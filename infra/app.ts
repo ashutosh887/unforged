@@ -20,7 +20,7 @@ class UnforgedStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props)
 
-    const cluster = new CfnCluster(this, "Ledger", { deletionProtectionEnabled: false, tags: [{ key: "app", value: "unforged" }] })
+    const cluster = new CfnCluster(this, "Ledger", { deletionProtectionEnabled: true, tags: [{ key: "app", value: "unforged" }] })
     const endpoint = cluster.attrEndpoint
 
     const uploads = new Bucket(this, "Uploads", {
