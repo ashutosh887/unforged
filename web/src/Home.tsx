@@ -19,7 +19,7 @@ function chipOut(s: Step): string {
   return "Queued"
 }
 
-export function ProofStrip({ live }: { live: LiveRun }) {
+function ProofStrip({ live }: { live: LiveRun }) {
   const { steps, running, run } = live
   const done = steps.filter((s) => s.state === "done").length
   const failed = steps.some((s) => s.state === "failed")

@@ -25,7 +25,7 @@ export const titles = [
 export const orders = ["order A12", "order A13"]
 
 const pause = (ms: number) => new Promise((r) => setTimeout(r, ms))
-export const reducedMotion = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches
+const reducedMotion = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches
 
 export function senderName(from: string): string {
   const name = from.replace(/<[^>]*>/, "").replace(/"/g, "").trim()
@@ -53,7 +53,7 @@ async function timed<T>(task: () => Promise<T>): Promise<{ value: T; ms: number 
   return { value, ms: Math.round(performance.now() - started) }
 }
 
-export const busyNote = "AWS is busy. Retrying"
+const busyNote = "AWS is busy. Retrying"
 const busyFailure = "AWS is busy. Run it again in a moment."
 const attempts = 4
 const timeoutMs = 10_000

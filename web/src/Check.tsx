@@ -169,7 +169,7 @@ export function ShotFrame({ src, boxes, scanning, alt = "The screenshot being ch
   )
 }
 
-export function ReadSheet({ read }: { read: ReadResult }) {
+function ReadSheet({ read }: { read: ReadResult }) {
   return (
     <section className="readsheet" aria-label="What the screenshot says">
       <p className="readsheet-head">

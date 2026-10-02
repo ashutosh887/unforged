@@ -10,7 +10,7 @@ function bodyStart(raw: string): number {
   return at < 0 ? -1 : at + (raw.slice(at).match(/^\r?\n\r?\n/)?.[0].length ?? 2)
 }
 
-export function editOneCharacter(raw: string): Edit | null {
+function editOneCharacter(raw: string): Edit | null {
   const start = bodyStart(raw)
   if (start < 0) return null
   let lineStart = start

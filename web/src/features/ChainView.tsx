@@ -23,7 +23,7 @@ export async function chainHash(prevHash: string, text: string): Promise<string>
   return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("")
 }
 
-export async function auditChain(receipts: Receipt[], checks: ChainResult["checks"] = []): Promise<ChainAudit> {
+async function auditChain(receipts: Receipt[], checks: ChainResult["checks"] = []): Promise<ChainAudit> {
   const signed = new Map(checks.map((c) => [c.id, c.signature]))
   const links: LinkCheck[] = []
   let firstBroken: ChainAudit["firstBroken"] = null

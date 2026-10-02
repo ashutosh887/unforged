@@ -117,7 +117,7 @@ export function DemoCounter({ live, onCheck, proofHref }: { live: LiveRun; onChe
   )
 }
 
-export function CheckBar({ onCheck }: { onCheck: () => void }) {
+function CheckBar({ onCheck }: { onCheck: () => void }) {
   return (
     <div className="checkbar">
       <button type="button" className="primary big" onClick={onCheck}>

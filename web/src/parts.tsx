@@ -76,20 +76,6 @@ export function RawEmailField({ value, onChange, label, hint }: { value: string;
   )
 }
 
-export function BankFacts({ row, empty }: { row: BankRow | null | undefined; empty?: string }) {
-  if (!row) return <p className="muted small">{empty ?? "No signed alert matches this UTR."}</p>
-  return (
-    <dl className="facts">
-      <dt>Bank UTR</dt>
-      <dd className="num">{utrGroups(row.utr)}</dd>
-      <dt>Bank amount</dt>
-      <dd>{money(row.amountPaise)}</dd>
-      <dt>Signed by</dt>
-      <dd>{row.dkimDomain}</dd>
-    </dl>
-  )
-}
-
 export type CardResult = Decision & { read?: ScreenshotRead; reader?: string }
 
 export function readerName(reader: string): string {

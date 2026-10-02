@@ -72,7 +72,7 @@ export async function fetchStatus(signal?: AbortSignal): Promise<StatusLoad> {
   }
 }
 
-export function useStatus(everyMs = 0): [StatusLoad, () => void] {
+function useStatus(everyMs = 0): [StatusLoad, () => void] {
   const [load, setLoad] = useState<StatusLoad>({ state: "loading" })
   const [tick, setTick] = useState(0)
   const refresh = useCallback(() => setTick((t) => t + 1), [])
@@ -118,7 +118,7 @@ function short(text: string, keep = 10): string {
 
 type Row = { name: string; health: Health; detail: string; ms?: number }
 
-export function statusRows(data: LiveStatusData): Row[] {
+function statusRows(data: LiveStatusData): Row[] {
   const rows: Row[] = []
   const d = data.dkim
   if (d) {
