@@ -15,9 +15,12 @@ export type LedgerResult = {
   attempts: { verdict: string; reason: string; alertOnly: boolean; createdAt: string }[]
 }
 export type RecordClaimResult =
-  | { verdict: "VERIFIED"; reason: string; signer: string; claimRef: string; claimedAt: string }
+  | { verdict: "VERIFIED"; reason: string; signer: string; claimRef: string; claimedAt: string; receipt?: ReceiptLink }
   | { verdict: "ALREADY_CLAIMED"; reason: string; signer: string; priorClaim: { claimRef: string; createdAt: string } }
   | { verdict: "REJECTED"; reason: string }
+export type ReceiptLink = { id: string; url: string; seq: number; hash: string; prevHash: string }
+export type Receipt = { id: string; kind: "signed-email" | "bank-credit"; ledger: string; seq: number; signer: string; what: string; claimedAt: string; fingerprint: string; prevHash: string; keyId: string; hash: string; signature: string }
+export type ReceiptResult = { receipt: Receipt; verified: boolean; check: { signature: boolean; hash: boolean } }
 export type RaceResult = {
   n: number
   utr: string

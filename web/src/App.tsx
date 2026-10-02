@@ -5,6 +5,7 @@ import { Guilloche } from "./Guilloche"
 import { Ledger } from "./Ledger"
 import { money, Race, RawEmailField, useAction, VerdictCard } from "./parts"
 import { SignatureCheck } from "./Signature"
+import { ReceiptPage, receiptIdFromHash } from "./Receipt"
 import { Theater } from "./Theater"
 import { UpiCase } from "./UpiCase"
 
@@ -46,6 +47,29 @@ function initialView(token: string): View {
 export function App() {
   const [token, setToken] = useState(initialToken)
   const [view, setView] = useState<View>(() => initialView(token))
+  const [receiptId, setReceiptId] = useState(receiptIdFromHash)
+
+  useEffect(() => {
+    const follow = () => setReceiptId(receiptIdFromHash())
+    addEventListener("hashchange", follow)
+    return () => removeEventListener("hashchange", follow)
+  }, [])
+
+  if (receiptId) {
+    return (
+      <main>
+        <header className="hero">
+          <Guilloche />
+          <h1>Unforged</h1>
+          <p className="lede">A receipt for one signed record, claimed once. AWS KMS signed it, and every receipt in its ledger links to the one before.</p>
+        </header>
+        <ReceiptPage id={receiptId} />
+        <a className="ghost-link" href="#try">
+          See how Unforged checks a payment
+        </a>
+      </main>
+    )
+  }
 
   return (
     <main>

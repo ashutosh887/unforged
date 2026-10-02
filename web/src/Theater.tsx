@@ -1,19 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { post, type RaceResult, type RecordClaimResult, type VerifyResult } from "./api"
+import { post, type RaceResult, type ReceiptResult, type RecordClaimResult, type VerifyResult } from "./api"
 import { editOneCharacter } from "./Signature"
 import { clockTime } from "./parts"
 
 type Tone = "good" | "warn" | "bad" | "neutral"
-type Step = { state: "waiting" } | { state: "running" } | { state: "done"; tone: Tone; stamp: string; detail: string; ms: number } | { state: "failed"; detail: string }
+type Release = { state: "open" } | { state: "pressed"; text: string } | { state: "blocked"; reason: string }
+type Done = { state: "done"; tone: Tone; stamp: string; detail: string; ms: number; link?: { href: string; label: string }; release?: Release }
+type Step = { state: "waiting" } | { state: "running" } | Done | { state: "failed"; detail: string }
 
-type Mail = { from: string; subject: string; date: string; domain: string; selector: string; lines: string[] }
+type Mail = { from: string; subject: string; domain: string; selector: string; lines: string[] }
 
 const titles = [
   "Check the sender's signature",
   "Change one character and check again",
-  "Claim it for refund 1042",
-  "Claim the same email for refund 1043",
   "Fire 50 claims at one record at once",
+  "Claim the email for order A12",
+  "Show the same email for order A13",
+  "Countersign the buyer's receipt",
 ]
 
 const pause = (ms: number) => new Promise((r) => setTimeout(r, ms))
@@ -37,7 +40,6 @@ function parse(raw: string): Mail {
   return {
     from: header(raw, "From").replace(/<[^>]*>/, "").replace(/"/g, "").trim() || header(raw, "From"),
     subject: header(raw, "Subject"),
-    date: header(raw, "Date"),
     domain: sig.match(/\bd=([^;\s]+)/)?.[1] ?? "",
     selector: sig.match(/\bs=([^;\s]+)/)?.[1] ?? "",
     lines,
@@ -68,22 +70,26 @@ async function claim(raw: string, claimRef: string, ledger: string): Promise<Rec
   return data as RecordClaimResult
 }
 
-function claimStep(result: RecordClaimResult, ms: number): Step {
-  if (result.verdict === "VERIFIED") return { state: "done", tone: "good", stamp: "Verified · claimed once", detail: `Claimed for ${result.claimRef} at ${clockTime(result.claimedAt)}. Release goods is open.`, ms }
-  if (result.verdict === "ALREADY_CLAIMED") return { state: "done", tone: "warn", stamp: "Already claimed", detail: `First claimed for ${result.priorClaim.claimRef} at ${clockTime(result.priorClaim.createdAt)}. Release goods stays shut.`, ms }
-  return { state: "done", tone: "bad", stamp: "Rejected", detail: result.reason, ms }
+function claimStep(result: RecordClaimResult, ms: number): Done {
+  if (result.verdict === "VERIFIED") return { state: "done", tone: "good", stamp: "Verified · claimed once", detail: `Claimed for ${result.claimRef} at ${clockTime(result.claimedAt)}.`, ms, release: { state: "open" } }
+  if (result.verdict === "ALREADY_CLAIMED") {
+    const first = `First claimed for ${result.priorClaim.claimRef} at ${clockTime(result.priorClaim.createdAt)}.`
+    return { state: "done", tone: "warn", stamp: "Already claimed", detail: `${first} The email is real. It has been used before.`, ms, release: { state: "blocked", reason: `Already used for ${result.priorClaim.claimRef}.` } }
+  }
+  return { state: "done", tone: "bad", stamp: "Rejected", detail: result.reason, ms, release: { state: "blocked", reason: result.reason } }
 }
 
 export function Theater() {
   const [raw, setRaw] = useState<string | null>(null)
   const [mail, setMail] = useState<Mail | null>(null)
-  const [edit, setEdit] = useState<{ was: string; now: string; line: number; col: number } | null>(null)
+  const [edit, setEdit] = useState<{ line: number; col: number; now: string } | null>(null)
   const [steps, setSteps] = useState<Step[]>(titles.map(() => ({ state: "waiting" })))
   const [race, setRace] = useState<RaceResult | null>(null)
   const [running, setRunning] = useState(false)
   const started = useRef(false)
 
   const set = (i: number, step: Step) => setSteps((all) => all.map((s, j) => (j === i ? step : s)))
+  const patch = (i: number, change: Partial<Done>) => setSteps((all) => all.map((s, j) => (j === i && s.state === "done" ? { ...s, ...change } : s)))
 
   const run = useCallback(async () => {
     setRunning(true)
@@ -109,7 +115,7 @@ export function Theater() {
       if (!changed) throw new Error("No body text to change")
       const editedLines = parse(changed.raw).lines
       const line = editedLines.findIndex((l, i) => l !== parsed.lines[i])
-      setEdit({ was: changed.was, now: changed.now, line, col: line >= 0 ? [...editedLines[line]!].findIndex((c, k) => c !== parsed.lines[line]![k]) : -1 })
+      setEdit({ line, col: line >= 0 ? [...editedLines[line]!].findIndex((c, k) => c !== parsed.lines[line]![k]) : -1, now: changed.now })
       set(1, { state: "running" })
       await pause(beat)
       const second = await timed(() => post<VerifyResult>("verify", { raw: changed.raw }))
@@ -118,26 +124,44 @@ export function Theater() {
         : { state: "done", tone: "bad", stamp: "Rejected", detail: `"${changed.was}" became "${changed.now}". ${second.value.signatures.find((s) => s.detail)?.detail ?? "The signature no longer verifies"}.`, ms: second.ms })
       await pause(beat)
 
-      const ledger = newLedger()
       set(2, { state: "running" })
-      const third = await timed(() => claim(text, "refund 1042", ledger))
-      set(2, claimStep(third.value, third.ms))
+      const third = await timed(() => post<RaceResult>("race", { n: 50 }))
+      setRace(third.value)
+      set(2, {
+        state: "done",
+        tone: third.value.guarded.verified === 1 ? "good" : "bad",
+        stamp: `${third.value.guarded.verified} of 50 accepted`,
+        detail: `Aurora DSQL, a serverless SQL database, keeps one claim row per record, so one claim got through and ${third.value.guarded.alreadyClaimed} bounced. The same 50 against a check-then-insert table were all accepted: ${third.value.naive.accepted - 1} double spends.`,
+        ms: third.ms,
+      })
       await pause(beat)
 
+      const ledger = newLedger()
       set(3, { state: "running" })
-      const fourth = await timed(() => claim(text, "refund 1043", ledger))
+      const fourth = await timed(() => claim(text, "order A12", ledger))
       set(3, claimStep(fourth.value, fourth.ms))
+      if (fourth.value.verdict === "VERIFIED") {
+        await pause(beat + 300)
+        patch(3, { release: { state: "pressed", text: `Released for order A12 at ${clockTime(new Date().toISOString())}` } })
+      }
       await pause(beat)
 
       set(4, { state: "running" })
-      const fifth = await timed(() => post<RaceResult>("race", { n: 50 }))
-      setRace(fifth.value)
-      set(4, {
+      const fifth = await timed(() => claim(text, "order A13", ledger))
+      set(4, claimStep(fifth.value, fifth.ms))
+      await pause(beat)
+
+      set(5, { state: "running" })
+      const made = fourth.value.verdict === "VERIFIED" ? fourth.value.receipt : undefined
+      if (!made) throw new Error("No receipt came back with the claim")
+      const shown = await timed(() => post<ReceiptResult>("receipts", { id: made.id }))
+      set(5, {
         state: "done",
-        tone: fifth.value.guarded.verified === 1 ? "good" : "bad",
-        stamp: `${fifth.value.guarded.verified} of 50 accepted`,
-        detail: `The unique index let one claim through and bounced ${fifth.value.guarded.alreadyClaimed}. The same 50 claims against a check-then-insert table were all accepted: ${fifth.value.naive.accepted - 1} double spends.`,
-        ms: fifth.ms,
+        tone: shown.value.verified ? "good" : "bad",
+        stamp: shown.value.verified ? "Receipt signed by AWS KMS" : "Receipt failed its check",
+        detail: `Receipt ${made.id}, entry ${made.seq} in this ledger, hash ${made.hash.slice(0, 12)} linked to ${made.prevHash.slice(0, 12)}. The server checked the signature and the hash again just now.`,
+        ms: shown.ms,
+        link: { href: `#r=${made.id}`, label: "Open the receipt the buyer sees" },
       })
     } catch (e) {
       setSteps((all) => {
@@ -157,6 +181,9 @@ export function Theater() {
 
   return (
     <section className="theater" aria-label="Live demonstration">
+      <p className="scene">
+        You sell a phone on a classifieds site. The buyer shows a payment screenshot. Ship it? <span>Here a public signed email stands in for the bank's alert. The check is the same.</span>
+      </p>
       <div className="theater-mail" aria-label="The signed email being checked">
         <div className="mail-head">
           <span className="mail-label">Email from</span>
@@ -199,10 +226,16 @@ export function Theater() {
                   <span className="tstep-detail">
                     {s.detail} <span className="tstep-ms">{s.ms} ms</span>
                   </span>
+                  {s.release && <ReleaseButton release={s.release} />}
+                  {s.link && (
+                    <a className="ghost-link" href={s.link.href}>
+                      {s.link.label}
+                    </a>
+                  )}
                 </>
               )}
               {s.state === "failed" && <span className="tstep-detail error">{s.detail}</span>}
-              {i === 4 && race && <RaceGrid race={race} />}
+              {i === 2 && race && <RaceGrid race={race} />}
             </li>
           )
         })}
@@ -217,6 +250,36 @@ export function Theater() {
         </a>
       </div>
     </section>
+  )
+}
+
+function ReleaseButton({ release }: { release: Release }) {
+  if (release.state === "pressed") {
+    return (
+      <span className="tstep-release">
+        <button type="button" className="pressed" disabled aria-pressed="true">
+          Release goods
+        </button>
+        <span className="released">{release.text}</span>
+      </span>
+    )
+  }
+  if (release.state === "blocked") {
+    return (
+      <span className="tstep-release">
+        <button type="button" disabled>
+          Release goods
+        </button>
+        <span className="muted small">Not releasable. {release.reason}</span>
+      </span>
+    )
+  }
+  return (
+    <span className="tstep-release">
+      <button type="button" className="ready">
+        Release goods
+      </button>
+    </span>
   )
 }
 
