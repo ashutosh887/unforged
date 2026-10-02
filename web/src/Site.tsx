@@ -3,7 +3,8 @@ import { AliveDot } from "./features/LiveStatus"
 import { Icon } from "./Icon"
 import { hrefOf, type Page } from "./router"
 
-const repo = "https://github.com/ashutosh887/unforged"
+const author = "https://github.com/ashutosh887"
+const repo = `${author}/unforged`
 const doc = (path: string) => `${repo}/blob/main/${path}`
 
 export function Brand() {
@@ -40,6 +41,9 @@ export function Header({ page }: { page: Page | "receipt" }) {
             </a>
           ))}
         </nav>
+        <a className="site-source" href={repo} target="_blank" rel="noreferrer">
+          Source
+        </a>
         <a className={`primary site-cta${page === "shop" ? " here" : ""}`} href={hrefOf.shop} aria-current={page === "shop" ? "page" : undefined}>
           Your shop
         </a>
@@ -90,6 +94,17 @@ export function Footer() {
           <div className="foot-brand">
             <Brand />
             <p>The screenshot was never the proof.</p>
+            <p>
+              Built by{" "}
+              <a href={author} target="_blank" rel="noreferrer">
+                @ashutosh887
+              </a>
+              . Source on{" "}
+              <a href={repo} target="_blank" rel="noreferrer">
+                GitHub
+              </a>
+              .
+            </p>
           </div>
           {columns.map((c) => (
             <nav key={c.title} aria-label={c.title}>
@@ -107,8 +122,17 @@ export function Footer() {
           ))}
         </div>
         <div className="foot-base">
-          <span>Built on AWS for Zero to Shipped</span>
-          <span>us-east-1</span>
+          <span>
+            Made by{" "}
+            <a href={author} target="_blank" rel="noreferrer">
+              ashutosh887
+            </a>{" "}
+            for AWS Builder Center Zero to Shipped, 2026
+          </span>
+          <span>Live on AWS, us-east-1</span>
+          <a href={repo} target="_blank" rel="noreferrer">
+            github.com/ashutosh887/unforged
+          </a>
           <a href={hrefOf.status} className="foot-status">
             <AliveDot />
           </a>
