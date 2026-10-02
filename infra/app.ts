@@ -42,7 +42,8 @@ class UnforgedStack extends Stack {
 
     const receiptKey = new Key(this, "ReceiptKey", { keySpec: KeySpec.ECC_NIST_P256, keyUsage: KeyUsage.SIGN_VERIFY, description: "Countersigns Unforged claim receipts", removalPolicy: RemovalPolicy.RETAIN })
 
-    const environment = { DSQL_ENDPOINT: endpoint, UPLOAD_BUCKET: uploads.bucketName, MODEL_ID: String(this.node.tryGetContext("modelId")), RECEIPT_KEY_ID: receiptKey.keyId }
+    const demoBanks = this.node.tryGetContext("demoBanks")
+    const environment = { DSQL_ENDPOINT: endpoint, UPLOAD_BUCKET: uploads.bucketName, MODEL_ID: String(this.node.tryGetContext("modelId")), RECEIPT_KEY_ID: receiptKey.keyId, ...(demoBanks ? { DEMO_BANKS: String(demoBanks) } : {}) }
     const fn = (name: string, timeout: number, memorySize = 512) => {
       const f = new NodejsFunction(this, name, {
         entry: root(`src/handlers/${name.toLowerCase()}.ts`),
@@ -54,7 +55,7 @@ class UnforgedStack extends Stack {
         timeout: Duration.seconds(timeout),
         environment,
         logRetention: RetentionDays.ONE_MONTH,
-        bundling: { target: "node22", minify: true, sourceMap: true, externalModules: ["pg-native"], loader: { ".sql": "text" } },
+        bundling: { target: "node22", minify: true, sourceMap: true, externalModules: ["pg-native"], loader: { ".sql": "text", ".eml": "text" } },
       })
       f.addToRolePolicy(new PolicyStatement({ actions: ["dsql:DbConnectAdmin", "dsql:DbConnect"], resources: [cluster.attrResourceArn] }))
       return f
@@ -72,6 +73,7 @@ class UnforgedStack extends Stack {
     for (const f of [records, alerts, check]) f.addToRolePolicy(new PolicyStatement({ actions: ["kms:Sign"], resources: [receiptKey.keyArn] }))
     receipts.addToRolePolicy(new PolicyStatement({ actions: ["kms:GetPublicKey"], resources: [Stack.of(this).formatArn({ service: "kms", resource: "key", resourceName: "*" })] }))
     const reader = fn("Read", 15, 512)
+    const status = fn("Status", 10, 256)
 
     uploads.grantPut(check)
     check.addToRolePolicy(
@@ -100,6 +102,8 @@ class UnforgedStack extends Stack {
       api.addRoutes({ path, methods: [HttpMethod.POST], integration: new HttpLambdaIntegration(name, receipts) })
     }
     route("/api/read", reader)
+    api.addRoutes({ path: "/api/demo/shop", methods: [HttpMethod.POST], integration: new HttpLambdaIntegration("DemoShopRoute", shops) })
+    api.addRoutes({ path: "/api/status", methods: [HttpMethod.GET], integration: new HttpLambdaIntegration("StatusRoute", status) })
 
     const headers = new ResponseHeadersPolicy(this, "SecurityHeaders", {
       customHeadersBehavior: { customHeaders: [{ header: "permissions-policy", value: "camera=(), microphone=(), geolocation=(), payment=()", override: true }] },

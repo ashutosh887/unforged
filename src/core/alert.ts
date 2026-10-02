@@ -2,6 +2,7 @@ import { dkimVerify } from "mailauth/lib/dkim/verify.js"
 import { createHash } from "node:crypto"
 import type { DNSResolver } from "mailauth"
 import { simpleParser } from "mailparser"
+import { demoBank } from "./banks.js"
 import { rupeesToPaise } from "./money.js"
 import { normaliseUtr } from "./verdict.js"
 import type { Credit } from "./types.js"
@@ -81,7 +82,7 @@ function signatureCount(raw: string | Buffer): number {
   return (text.slice(0, end < 0 ? text.length : end).match(/^dkim-signature:/gim) ?? []).length
 }
 
-export async function inspectSignature(raw: string | Buffer, resolver?: DNSResolver): Promise<SignatureReport> {
+export async function inspectSignature(raw: string | Buffer, resolver?: DNSResolver, demoSenders: string[] = []): Promise<SignatureReport> {
   if (signatureCount(raw) > maxSignatures) {
     return { from: null, signatures: [], signer: null, fingerprint: null, claimBlocked: null, alert: { ok: false, reason: `More than ${maxSignatures} DKIM signatures. Paste the original email.` } }
   }
@@ -99,20 +100,21 @@ export async function inspectSignature(raw: string | Buffer, resolver?: DNSResol
   const signer = passing?.signingDomain?.toLowerCase() ?? null
   const claim = passing && signer && from ? claimKey(typeof raw === "string" ? raw : raw.toString("latin1"), from, passing.signingHeaders?.keys ?? "", Boolean(passing.canonBodyLengthLimited)) : { key: null, blocked: null }
   const fullBody = signatures.filter((_, i) => !signed[i]!.canonBodyLengthLimited)
-  return { from, signatures, signer, fingerprint: claim.key, claimBlocked: claim.blocked, alert: await decide(raw, from, fullBody) }
+  return { from, signatures, signer, fingerprint: claim.key, claimBlocked: claim.blocked, alert: await decide(raw, from, fullBody, demoSenders) }
 }
 
-export async function verifyAlert(raw: string | Buffer, resolver?: DNSResolver): Promise<AlertResult> {
-  return (await inspectSignature(raw, resolver)).alert
+export async function verifyAlert(raw: string | Buffer, resolver?: DNSResolver, demoSenders: string[] = []): Promise<AlertResult> {
+  return (await inspectSignature(raw, resolver, demoSenders)).alert
 }
 
-async function decide(raw: string | Buffer, from: string | null, signatures: Signature[]): Promise<AlertResult> {
+async function decide(raw: string | Buffer, from: string | null, signatures: Signature[], demoSenders: string[]): Promise<AlertResult> {
   if (!from) return { ok: false, reason: "The email must have exactly one From address." }
   const fromDomain = from.split("@").pop()!.toLowerCase()
-  const fromBank = bankFor(fromDomain)
+  const fromBank = bankFor(fromDomain) ?? (demoSenders.includes(from.toLowerCase()) ? demoBank : null)
   if (!fromBank) return { ok: false, reason: `${fromDomain} is not on the bank allowlist.` }
 
-  const passing = signatures.find((s) => s.result === "pass" && s.aligned && bankFor(s.domain) === fromBank)
+  const signedByBank = (s: Signature) => (fromBank === demoBank ? s.domain === fromDomain : bankFor(s.domain) === fromBank)
+  const passing = signatures.find((s) => s.result === "pass" && s.aligned && signedByBank(s))
   if (!passing) {
     return { ok: false, reason: `No passing DKIM signature from ${fromDomain}. The email may be edited or forged.` }
   }
