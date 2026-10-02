@@ -8,8 +8,8 @@ type Shot = { file: string; label: string }
 type State = { state: "waiting" } | { state: "reading" } | { state: "done"; result: ReadResult } | { state: "failed"; message: string }
 
 const shots: Shot[] = [
-  { file: "/samples/upi-paid.png", label: "As the buyer's app showed it" },
-  { file: "/samples/upi-edited.png", label: "The same screenshot, amount edited" },
+  { file: "/samples/upi-paid.png", label: "As the app showed it" },
+  { file: "/samples/upi-edited.png", label: "Amount edited" },
 ]
 
 const fieldNames: Record<FieldBox["field"], string> = { utr: "UTR", amount: "Amount", payee: "Paid to" }
