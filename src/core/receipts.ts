@@ -85,3 +85,8 @@ export async function chainOf(sql: Sql, ledger: string, limit: number): Promise<
   const { rows } = await sql.query<ReceiptRow>(`SELECT ${columns} FROM receipts WHERE ledger = $1 ORDER BY seq LIMIT $2`, [ledger, limit])
   return rows.map(fromRow)
 }
+
+export async function signedWith(sql: Sql, keyId: string): Promise<boolean> {
+  const { rows } = await sql.query(`SELECT 1 FROM receipts WHERE key_id = $1 LIMIT 1`, [keyId])
+  return rows.length > 0
+}

@@ -1,4 +1,4 @@
-import { chainOf, checkReceipt, findReceipt } from "../core/receipts.js"
+import { chainOf, checkReceipt, findReceipt, signedWith } from "../core/receipts.js"
 import { body, bounded, env, json, pool, shopFor, text, unauthorised, type Event, type Result } from "./http.js"
 import { publicKeyPem } from "./signing.js"
 
@@ -13,7 +13,7 @@ export async function handler(event: Event): Promise<Result> {
   if (path.endsWith("/key")) {
     const keyId = input?.keyId === undefined ? env("RECEIPT_KEY_ID") : text(input.keyId) ?? ""
     if (!keyPattern.test(keyId)) return json(400, { error: "A key id is a KMS key UUID." })
-    if (keyId !== env("RECEIPT_KEY_ID")) return json(404, { error: "No receipt key with that id." })
+    if (keyId !== env("RECEIPT_KEY_ID") && !(await signedWith(pool(), keyId))) return json(404, { error: "No receipt key with that id." })
     return json(200, { keyId, algorithm: "ECDSA_SHA_256", curve: "P-256", publicKeyPem: await publicKeyPem(keyId) })
   }
 
