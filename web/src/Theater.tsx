@@ -165,17 +165,19 @@ export function Theater() {
     void run()
   }, [run])
 
+  const editable = steps[1]?.state === "done"
+
   const pick = (e: MouseEvent<HTMLElement>) => {
     const target = (e.target as HTMLElement).closest<HTMLElement>("[data-col]")
     const line = target?.parentElement?.dataset.line
-    if (!target || line === undefined || !raw || !mail || running) return
+    if (!target || line === undefined || !raw || !mail || !editable) return
     const col = Number(target.dataset.col)
     if (!/[A-Za-z0-9.]/.test(mail.lines[Number(line)]!.text[col] ?? "")) return
     void applyEdit(raw, mail, Number(line), col).catch(() => undefined)
   }
 
   const another = () => {
-    if (!raw || !mail) return
+    if (!raw || !mail || !editable) return
     const from = edit ? { line: edit.line, col: edit.col + 1 } : firstEditable(mail)
     if (!from) return
     for (let line = from.line; line < mail.lines.length; line++) {
@@ -213,13 +215,14 @@ export function Theater() {
           )
         })}
       </ol>
+      <RailNow steps={steps} />
 
       <div className="canvas">
         <MailObject mail={mail} edit={edit} onPick={pick} />
         <div className="col col-real">
           <h2 className="col-head">Is it real?</h2>
           <KeyLookup mail={mail} step={steps[0]!} verified={verified} />
-          <HashCompare mail={mail} computed={computed} edit={edit} onAnother={another} onRestore={restore} busy={running} />
+          <HashCompare mail={mail} computed={computed} edit={edit} onAnother={another} onRestore={restore} busy={!editable} />
         </div>
         <div className="col col-once">
           <h2 className="col-head">Has it been used?</h2>
@@ -236,6 +239,22 @@ export function Theater() {
         <p className="muted small">Each run gets its own ledger, so the first claim always wins.</p>
       </div>
     </section>
+  )
+}
+
+function RailNow({ steps }: { steps: Step[] }) {
+  const running = steps.findIndex((s) => s.state === "running" || s.state === "failed")
+  const lastDone = steps.map((s) => s.state).lastIndexOf("done")
+  const i = running >= 0 ? running : lastDone
+  if (i < 0) return <p className="rail-now">Loading the signed email</p>
+  const s = steps[i]!
+  return (
+    <p className={`rail-now ${s.state} ${s.state === "done" ? s.tone : ""}`} aria-hidden="true">
+      <b>
+        {i + 1}. {titles[i]}
+      </b>{" "}
+      {s.state === "running" ? "Calling the live API" : s.state === "done" ? `${s.stamp}, ${s.ms} ms` : s.state === "failed" ? s.detail : ""}
+    </p>
   )
 }
 
@@ -383,12 +402,12 @@ const grid = (i: number, x0: number, step: number) => ({ x: x0 + (i % 10) * step
 function dotsFor(race: RaceResult | null, state: GateState, lane: "guarded" | "naive", n: number) {
   return Array.from({ length: n }, (_, i) => {
     const start = grid(i, 8, 9)
-    if (state === "queued" || !race) return { ...start, kind: "queued" }
     if (state === "pressing") {
       const c = i % 5
       const r = Math.floor(i / 5)
       return { x: lane === "guarded" ? 122 + c * 8 : 150 + c * 8, y: 10 + r * 5, kind: "pressing" }
     }
+    if (state === "queued" || !race) return { ...start, kind: "queued" }
     if (lane === "guarded") {
       const { verified, alreadyClaimed } = race.guarded
       if (i < verified) return { ...grid(i, 250, 9), kind: "win" }
