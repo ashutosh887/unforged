@@ -29,12 +29,20 @@ export const hrefOf: Record<Page, string> = {
 
 const receiptPattern = /^[0-9A-Za-z]{22}$/
 
+function decoded(text: string): string {
+  try {
+    return decodeURIComponent(text)
+  } catch {
+    return text
+  }
+}
+
 export function parse(hash: string): Route {
   if (hash.startsWith("#/")) {
     const [head = "", arg] = hash.slice(2).split("/")
     if (head === "receipt" && arg && receiptPattern.test(arg)) return { page: "receipt", arg }
-    const page = paths[head] ?? "home"
-    return arg ? { page, arg: decodeURIComponent(arg) } : { page }
+    const page = Object.hasOwn(paths, head) ? paths[head]! : "home"
+    return arg ? { page, arg: decoded(arg) } : { page }
   }
   const params = new URLSearchParams(hash.slice(1))
   const r = params.get("r")

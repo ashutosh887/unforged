@@ -61,7 +61,18 @@ export function App() {
   }, [route.page])
 
   useEffect(() => {
-    if (new URLSearchParams(location.hash.slice(1)).has("t")) history.replaceState(null, "", "#/shop")
+    const take = () => {
+      const t = new URLSearchParams(location.hash.slice(1)).get("t")
+      if (!t) return
+      try {
+        localStorage.setItem(tokenKey, t)
+      } catch {}
+      setToken(t)
+      history.replaceState(null, "", "#/shop")
+    }
+    take()
+    addEventListener("hashchange", take)
+    return () => removeEventListener("hashchange", take)
   }, [])
 
   const visitLedger = live.shown?.receipt.ledger
