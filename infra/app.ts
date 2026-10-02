@@ -6,6 +6,7 @@ import { AllowedMethods, CachePolicy, Distribution, HeadersFrameOption, HeadersR
 import { HttpOrigin, S3BucketOrigin } from "aws-cdk-lib/aws-cloudfront-origins"
 import { CfnCluster } from "aws-cdk-lib/aws-dsql"
 import { PolicyStatement } from "aws-cdk-lib/aws-iam"
+import { Key, KeySpec, KeyUsage } from "aws-cdk-lib/aws-kms"
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda"
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs"
 import { BlockPublicAccess, Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3"
@@ -38,7 +39,9 @@ class UnforgedStack extends Stack {
       autoDeleteObjects: true,
     })
 
-    const environment = { DSQL_ENDPOINT: endpoint, UPLOAD_BUCKET: uploads.bucketName, MODEL_ID: String(this.node.tryGetContext("modelId")) }
+    const receiptKey = new Key(this, "ReceiptKey", { keySpec: KeySpec.ECC_NIST_P256, keyUsage: KeyUsage.SIGN_VERIFY, description: "Countersigns Unforged claim receipts", removalPolicy: RemovalPolicy.RETAIN })
+
+    const environment = { DSQL_ENDPOINT: endpoint, UPLOAD_BUCKET: uploads.bucketName, MODEL_ID: String(this.node.tryGetContext("modelId")), RECEIPT_KEY_ID: receiptKey.keyId }
     const fn = (name: string, timeout: number, memorySize = 512) => {
       const f = new NodejsFunction(this, name, {
         entry: root(`src/handlers/${name.toLowerCase()}.ts`),
@@ -64,6 +67,9 @@ class UnforgedStack extends Stack {
     const verify = fn("Verify", 15, 512)
     const books = fn("Books", 10)
     const records = fn("Records", 15)
+    const receipts = fn("Receipts", 10)
+    for (const f of [records, alerts, check]) f.addToRolePolicy(new PolicyStatement({ actions: ["kms:Sign"], resources: [receiptKey.keyArn] }))
+    receipts.addToRolePolicy(new PolicyStatement({ actions: ["kms:GetPublicKey"], resources: [Stack.of(this).formatArn({ service: "kms", resource: "key", resourceName: "*" })] }))
     const reader = fn("Read", 15, 512)
 
     uploads.grantPut(check)
@@ -88,6 +94,9 @@ class UnforgedStack extends Stack {
     route("/api/verify", verify)
     route("/api/ledger", books)
     route("/api/records/claim", records)
+    for (const [path, name] of [["/api/receipts", "ReceiptsRoute"], ["/api/receipts/key", "ReceiptKeyRoute"], ["/api/receipts/chain", "ReceiptChainRoute"]] as const) {
+      api.addRoutes({ path, methods: [HttpMethod.POST], integration: new HttpLambdaIntegration(name, receipts) })
+    }
     route("/api/read", reader)
 
     const headers = new ResponseHeadersPolicy(this, "SecurityHeaders", {
