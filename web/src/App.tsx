@@ -50,8 +50,8 @@ export function App() {
         <h1>Unforged</h1>
         <p className="claim">A signed email is proof nobody can forge, and each proof can be claimed exactly once.</p>
         <p className="lede">
-          First case: is that UPI payment screenshot real? Unforged checks it against the seller's own bank credit alert, verified by the bank's DKIM signature. Bedrock reads the
-          screenshot, code decides, and each bank credit can back one order only.
+          First case: is that UPI payment screenshot real? Unforged checks it against the seller's own bank credit alert, verified by the bank's DKIM signature. A reader (Amazon
+          Bedrock, or Amazon Textract) pulls the text off the screenshot, code decides, and each bank credit can back one order only.
         </p>
       </header>
       <nav className="tabs" aria-label="Views">

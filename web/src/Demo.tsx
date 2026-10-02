@@ -168,9 +168,11 @@ export function Demo() {
     )
   }
 
+  if (files === null) return <section className="card muted">Loading fixtures…</section>
+
   const storedAlert: BankRow | null = alertStep.state === "done" ? alertStep.result.credit : null
-  const alertMissing = files !== null && !files[ready.alert.file]
-  const nothingPublished = files !== null && alertMissing && ready.checks.every((c) => !files[c.file])
+  const alertMissing = !files[ready.alert.file]
+  const nothingPublished = alertMissing && ready.checks.every((c) => !files[c.file])
 
   if (nothingPublished) {
     return (
@@ -196,8 +198,8 @@ export function Demo() {
           No bank account needed. One tap creates a demo shop paid on <span className="mono">{ready.shop.vpa}</span>, checks the real screenshot before and after its signed bank alert
           arrives, then runs the edited and reused copies. Every verdict below comes from the live API.
         </p>
-        <button type="button" onClick={() => void run()} disabled={running || files === null}>
-          {running ? "Running…" : files === null ? "Loading fixtures…" : steps.length ? "Run again" : "Run every case"}
+        <button type="button" onClick={() => void run()} disabled={running}>
+          {running ? "Running…" : steps.length ? "Run again" : "Run every case"}
         </button>
         {elapsed !== null && !running && <p className="muted small">Finished in {elapsed} s.</p>}
         {error && <p className="error">{error}</p>}
@@ -230,7 +232,7 @@ export function Demo() {
 
       <ol className="cases">
         {ready.checks.map((fixture, i) => (
-          <Case key={`${fixture.order}-${i}`} fixture={fixture} step={steps[i] ?? (files && !files[fixture.file] ? { state: "pending" } : { state: "idle" })} preview={previews[fixture.file]} storedAlert={storedAlert} />
+          <Case key={`${fixture.order}-${i}`} fixture={fixture} step={steps[i] ?? (!files[fixture.file] ? { state: "pending" } : { state: "idle" })} preview={previews[fixture.file]} storedAlert={storedAlert} />
         ))}
       </ol>
     </>
