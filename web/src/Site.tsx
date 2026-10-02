@@ -101,7 +101,7 @@ export function Footer() {
         <div className="foot-grid">
           <div className="foot-brand">
             <Brand />
-            <p>The screenshot was never the proof.</p>
+            <p>Checks UPI payments against your bank's signed alert.</p>
             <p>
               Built by{" "}
               <a href={author} target="_blank" rel="noreferrer">

@@ -1,11 +1,11 @@
 # Unforged
 
-**A signed email is proof nobody can forge, and each proof can be claimed exactly once.**
+**Is that UPI payment real?** Unforged checks the buyer's screenshot against
+the credit alert your bank emailed you. The bank signs that email with DKIM,
+so it can't be edited, and each credit pays for one order only.
 
-A buyer's UPI payment screenshot can be edited, or shown again for a second
-order. The seller's bank credit alert cannot, because the bank signs it with
-DKIM. Unforged checks the screenshot against that signed alert in code and lets
-each bank credit pay for one order.
+A screenshot can be edited, or shown again for a second order. The same check
+works on any email its sender signs: refunds, payslips, deposits.
 
 Live: https://d1ajauwkb76on3.cloudfront.net
 

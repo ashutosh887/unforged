@@ -131,8 +131,8 @@ export function Home({ live }: { live: LiveRun }) {
     <>
       <section className="hero">
         <div className="hero-copy">
-          <h1>The screenshot was never the proof.</h1>
-          <p className="hero-sub">A signed email is proof nobody can forge. Unforged lets each one be claimed exactly once, starting with UPI payments.</p>
+          <h1>Is that UPI payment real?</h1>
+          <p className="hero-sub">Your bank emails you a signed alert for every credit. Unforged checks the buyer's screenshot against it, and each credit pays for one order only.</p>
           <div className="hero-actions">
             <a className="primary big-cta" href={hrefOf.proof}>
               See the proof
