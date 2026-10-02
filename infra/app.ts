@@ -64,6 +64,7 @@ class UnforgedStack extends Stack {
     const verify = fn("Verify", 15, 512)
     const books = fn("Books", 10)
     const records = fn("Records", 15)
+    const reader = fn("Read", 15, 512)
 
     uploads.grantPut(check)
     check.addToRolePolicy(
@@ -74,6 +75,7 @@ class UnforgedStack extends Stack {
     )
 
     check.addToRolePolicy(new PolicyStatement({ actions: ["textract:DetectDocumentText"], resources: ["*"] }))
+    reader.addToRolePolicy(new PolicyStatement({ actions: ["textract:DetectDocumentText"], resources: ["*"] }))
 
     const api = new HttpApi(this, "Api", { createDefaultStage: true })
     const stage = api.defaultStage!.node.defaultChild as CfnStage
@@ -86,6 +88,7 @@ class UnforgedStack extends Stack {
     route("/api/verify", verify)
     route("/api/ledger", books)
     route("/api/records/claim", records)
+    route("/api/read", reader)
 
     const headers = new ResponseHeadersPolicy(this, "SecurityHeaders", {
       securityHeadersBehavior: {
