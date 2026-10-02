@@ -16,10 +16,14 @@
     "measure:forgery": "tsx scripts/forgery.ts",
     "measure:tamper": "tsx scripts/tamper.ts",
     "measure:signature": "tsx scripts/signature.ts",
-    "measure:record-race": "tsx scripts/record-race.ts"
+    "measure:record-race": "tsx scripts/record-race.ts",
+    "measure:receipt": "tsx scripts/verify-receipt.ts",
+    "measure:chain": "tsx scripts/audit-chain.ts",
+    "measure:receipt-race": "tsx scripts/receipt-race.ts"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.1144.0",
+    "@aws-sdk/client-kms": "^3.1144.0",
     "@aws-sdk/client-s3": "^3.1144.0",
     "@aws-sdk/client-textract": "^3.1144.0",
     "@aws-sdk/dsql-signer": "^3.1144.0",

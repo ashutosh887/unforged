@@ -1,6 +1,7 @@
 import { inspectSignature } from "../core/alert.js"
 import { claimRecord } from "../core/records.js"
 import { body, json, pool, refFrom, type Event, type Result } from "./http.js"
+import { receiptSigner } from "./signing.js"
 
 const maxBytes = 2_000_000
 
@@ -27,6 +28,6 @@ export async function handler(event: Event): Promise<Result> {
     return json(422, { verdict: "REJECTED", reason, signatures: report.signatures })
   }
   let retries = 0
-  const decision = await claimRecord(pool(), { ledger, fingerprint: report.fingerprint, signer: report.signer, claimRef }, () => retries++)
+  const decision = await claimRecord(pool(), { ledger, fingerprint: report.fingerprint, signer: report.signer, claimRef }, () => retries++, receiptSigner())
   return json(200, { ...decision, retries })
 }

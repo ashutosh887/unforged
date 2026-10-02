@@ -5,6 +5,7 @@ import { claim } from "../core/claim.js"
 import { imageFormat, readWithTextract } from "../core/ocr.js"
 import { readScreenshot } from "../core/read.js"
 import { body, env, json, limits, pool, refFrom, sha256, shopFor, unauthorised, type Event, type Result } from "./http.js"
+import { receiptSigner } from "./signing.js"
 
 const bedrock = new BedrockRuntimeClient({ maxAttempts: 2 })
 const s3 = new S3Client({})
@@ -54,7 +55,7 @@ export async function handler(event: Event): Promise<Result> {
   if (!found) return json(503, { error: "The screenshot reader is unavailable right now. Nothing was claimed; try again shortly." })
   const { read, reader } = found
   let retries = 0
-  const decision = await claim(pool(), { shopId: shop.id, shopVpas: shop.vpas, read, orderRef, screenshotSha256 }, () => retries++)
+  const decision = await claim(pool(), { shopId: shop.id, shopVpas: shop.vpas, read, orderRef, screenshotSha256 }, () => retries++, receiptSigner())
   await pool().query("INSERT INTO attempts (shop_id, screenshot_sha256, extracted, verdict, reason) VALUES ($1, $2, $3, $4, $5)", [shop.id, screenshotSha256, JSON.stringify({ ...read, reader }), decision.verdict, decision.reason])
   return json(200, { ...decision, read, reader, retries })
 }
