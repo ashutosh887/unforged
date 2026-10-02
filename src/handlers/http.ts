@@ -4,7 +4,7 @@ import { dsqlPool, type Pool } from "../db/client.js"
 
 export type Event = APIGatewayProxyEventV2
 export type Result = APIGatewayProxyStructuredResultV2
-export type Shop = { id: string; vpas: string[] }
+export type Shop = { id: string; vpas: string[]; demo: boolean }
 
 let shared: Pool | undefined
 
@@ -36,8 +36,14 @@ export function sha256(data: string | Uint8Array): string {
   return createHash("sha256").update(data).digest("hex")
 }
 
-export function newToken(): string {
-  return randomBytes(24).toString("base64url")
+const demoPrefix = "demo."
+
+export function newToken(demo = false): string {
+  return `${demo ? demoPrefix : ""}${randomBytes(24).toString("base64url")}`
+}
+
+export function demoSenders(): string[] {
+  return (process.env.DEMO_BANKS ?? "").split(",").map((s) => s.trim().toLowerCase()).filter((s) => s.includes("@"))
 }
 
 export async function shopFor(event: Event): Promise<Shop | null> {
@@ -45,7 +51,7 @@ export async function shopFor(event: Event): Promise<Shop | null> {
   if (!token) return null
   const { rows } = await pool().query<{ id: string; vpas: string }>("SELECT id, vpas FROM shops WHERE token_hash = $1", [sha256(token)])
   const row = rows[0]
-  return row ? { id: row.id, vpas: row.vpas.split(",").filter(Boolean) } : null
+  return row ? { id: row.id, vpas: row.vpas.split(",").filter(Boolean), demo: token.startsWith(demoPrefix) } : null
 }
 
 export const limits = { shopName: 80, vpas: 5, vpa: 100, ref: 80, imageBytes: 4_000_000, emailBytes: 2_000_000 }

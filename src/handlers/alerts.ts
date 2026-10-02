@@ -1,6 +1,6 @@
 import { verifyAlert } from "../core/alert.js"
 import { claim } from "../core/claim.js"
-import { body, json, limits, pool, refFrom, sha256, shopFor, text, unauthorised, type Event, type Result } from "./http.js"
+import { body, demoSenders, json, limits, pool, refFrom, sha256, shopFor, text, unauthorised, type Event, type Result } from "./http.js"
 import { receiptSigner } from "./signing.js"
 
 export async function handler(event: Event): Promise<Result> {
@@ -11,7 +11,7 @@ export async function handler(event: Event): Promise<Result> {
   if (!raw?.trim()) return json(400, { error: "Paste the raw email, headers included." })
   if (Buffer.byteLength(raw) > limits.emailBytes) return json(413, { error: "That email is over 2 MB. Paste one without large attachments." })
   if (text(input?.orderRef)?.trim() && !refFrom(input?.orderRef)) return json(400, { error: "Keep the order reference under 80 characters." })
-  const result = await verifyAlert(raw)
+  const result = await verifyAlert(raw, undefined, shop.demo ? demoSenders() : [])
   if (!result.ok) return json(422, { error: result.reason })
   const a = result.alert
   const rawSha256 = sha256(raw)
