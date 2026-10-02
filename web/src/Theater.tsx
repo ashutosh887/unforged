@@ -49,7 +49,7 @@ function LogStep({ title, step, race }: { title: string; step: Step; race: RaceR
         <div className="lstep-row">
           <span className="lstep-title">{title}</span>
           {step.state === "done" && <span className="lstep-ms">{step.ms} ms</span>}
-          {step.state === "running" && <span className="lstep-live">Calling AWS</span>}
+          {step.state === "running" && <span className="lstep-live">{step.note ?? "Calling AWS"}</span>}
         </div>
         {step.state === "done" && (
           <>

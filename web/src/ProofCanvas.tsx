@@ -15,7 +15,7 @@ function claimTone(c: Claimed): Tone {
 }
 
 function short(s: Step): string {
-  if (s.state === "running") return "Calling the live API"
+  if (s.state === "running") return s.note ?? "Calling the live API"
   if (s.state === "failed") return s.detail
   if (s.state === "done") return s.stamp
   return ""
@@ -97,7 +97,7 @@ function MailObject({ mail, probe, onPick }: { mail: SignedMail | null; probe: P
             {tags.map((t) => (
               <div key={t.tag} className={`pc-tag pc-tag-${t.tag}`}>
                 <dt>{t.tag}=</dt>
-                <dd>{t.tag === "h" ? t.value.split(":").join(" ") : t.tag === "b" ? `${t.value.replace(/\s/g, "").slice(0, 24)}… ${t.value.replace(/\s/g, "").length} chars` : t.value}</dd>
+                <dd>{t.tag === "h" ? t.value.split(":").join(" ") : t.tag === "b" ? `${t.value.replace(/\s/g, "").slice(0, 24)} and ${t.value.replace(/\s/g, "").length - 24} more characters` : t.value}</dd>
               </div>
             ))}
           </dl>
@@ -183,7 +183,7 @@ function HashCompare({ mail, computed, probe, onAnother, onRestore, busy }: { ma
       </div>
       <p className="pc-panel-out" aria-live="polite">
         {probe?.checking && "Sending the edited email to the live API."}
-        {probe?.result && (probe.result.signer ? "This sender signs only part of the body, so the change slipped past." : `The live API says: ${failure(probe.result)}.`)}
+        {probe?.result && (probe.result.signer ? "This sender signs only part of the body, so the change slipped past." : `The live API rejected the edited copy. ${failure(probe.result)}.`)}
         {!probe && "One changed letter changes the whole hash. Nobody can fix that without the sender's private key."}
       </p>
       {mail && computed && (

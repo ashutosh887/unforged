@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { post, type RaceResult, type ReceiptLink, type ReceiptResult, type RecordClaimResult, type VerifyResult } from "./api"
+import { type RaceResult, type ReceiptLink, type ReceiptResult, type RecordClaimResult, type VerifyResult } from "./api"
 import { clockTime } from "./parts"
 import { bodyHash, editAt, firstEditable, readMail, type SignedMail } from "./proof"
 
 export type Tone = "good" | "warn" | "bad" | "neutral"
 export type Release = { state: "open" } | { state: "pressed"; text: string } | { state: "blocked"; reason: string }
 export type Done = { state: "done"; tone: Tone; stamp: string; detail: string; ms: number; link?: { href: string; label: string }; release?: Release; claim?: RecordClaimResult }
-export type Step = { state: "waiting" } | { state: "running" } | Done | { state: "failed"; detail: string }
+export type Step = { state: "waiting" } | { state: "running"; note?: string } | Done | { state: "failed"; detail: string }
 export type Mail = { from: string; subject: string; domain: string; selector: string; lines: string[] }
 export type Edit = { line: number; col: number; now: string }
 export type Probe = { line: number; col: number; was: string; now: string; raw: string; hash: string | null; result: VerifyResult | null; checking: boolean }
@@ -53,11 +53,44 @@ async function timed<T>(task: () => Promise<T>): Promise<{ value: T; ms: number 
   return { value, ms: Math.round(performance.now() - started) }
 }
 
-async function claim(raw: string, claimRef: string, ledger: string): Promise<RecordClaimResult> {
-  const res = await fetch("/api/records/claim", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ raw, claimRef, ledger }) })
-  const data = (await res.json().catch(() => ({}))) as Partial<RecordClaimResult> & { error?: string }
-  if (!data.verdict) throw new Error(data.error ?? `Request failed (${res.status})`)
-  return data as RecordClaimResult
+export const busyNote = "AWS is busy with other visitors. Retrying"
+const busyFailure = "AWS is busy with other visitors. Run it again in a moment."
+const attempts = 4
+const timeoutMs = 10_000
+
+class Busy extends Error {}
+
+type Retry = (attempt: number) => void
+
+async function send(path: string, body: unknown, onRetry?: Retry): Promise<{ status: number; data: unknown }> {
+  for (let attempt = 1; ; attempt++) {
+    const abort = new AbortController()
+    const timer = setTimeout(() => abort.abort(), timeoutMs)
+    try {
+      const res = await fetch(`/api/${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body), signal: abort.signal })
+      if (res.status !== 503 && res.status !== 429 && res.status !== 502 && res.status !== 504) return { status: res.status, data: await res.json().catch(() => ({})) }
+    } catch {
+    } finally {
+      clearTimeout(timer)
+    }
+    if (attempt >= attempts) throw new Busy(busyFailure)
+    onRetry?.(attempt)
+    await pause(400 + Math.random() * 800)
+  }
+}
+
+async function call<T>(path: string, body: unknown, onRetry?: Retry): Promise<T> {
+  const { status, data } = await send(path, body, onRetry)
+  const out = data as T & { error?: string; message?: string }
+  if (status >= 400) throw new Error(out.error ?? out.message ?? `The server answered with status ${status}.`)
+  return out
+}
+
+async function claim(raw: string, claimRef: string, ledger: string, onRetry?: Retry): Promise<RecordClaimResult> {
+  const { status, data } = await send("records/claim", { raw, claimRef, ledger }, onRetry)
+  const out = data as Partial<RecordClaimResult> & { error?: string }
+  if (!out.verdict) throw new Error(out.error ?? `The server answered with status ${status}.`)
+  return out as RecordClaimResult
 }
 
 function failure(result: VerifyResult): string {
@@ -116,9 +149,10 @@ export function useLiveRun(autoStart: boolean): LiveRun {
   const probeRun = useRef(0)
 
   const set = (i: number, step: Step) => setSteps((all) => all.map((s, j) => (j === i ? step : s)))
+  const busy = (i: number): Retry => () => set(i, { state: "running", note: busyNote })
   const patch = (i: number, change: Partial<Done>) => setSteps((all) => all.map((s, j) => (j === i && s.state === "done" ? { ...s, ...change } : s)))
 
-  const applyEdit = useCallback(async (text: string, m: SignedMail, line: number, col: number): Promise<Probe> => {
+  const applyEdit = useCallback(async (text: string, m: SignedMail, line: number, col: number, onRetry?: Retry): Promise<Probe> => {
     const target = m.lines[line]!
     const changed = editAt(text, target.start + col)
     const base: Probe = { line, col, was: changed.was, now: changed.now, raw: changed.raw, hash: null, result: null, checking: true }
@@ -126,7 +160,7 @@ export function useLiveRun(autoStart: boolean): LiveRun {
     setProbe(base)
     const hash = await bodyHash(changed.raw, m.bodyCanon)
     if (ticket === probeRun.current) setProbe({ ...base, hash })
-    const result = await post<VerifyResult>("verify", { raw: changed.raw })
+    const result = await call<VerifyResult>("verify", { raw: changed.raw }, onRetry)
     const done = { ...base, hash, result, checking: false }
     if (ticket === probeRun.current) setProbe(done)
     return done
@@ -160,7 +194,7 @@ export function useLiveRun(autoStart: boolean): LiveRun {
       await pause(beat)
 
       set(0, { state: "running" })
-      const [one, hash] = await Promise.all([timed(() => post<VerifyResult>("verify", { raw: text })), bodyHash(text, m.bodyCanon)])
+      const [one, hash] = await Promise.all([timed(() => call<VerifyResult>("verify", { raw: text }, busy(0))), bodyHash(text, m.bodyCanon)])
       setVerified(one.value)
       setComputed(hash)
       set(0, one.value.signer
@@ -171,7 +205,7 @@ export function useLiveRun(autoStart: boolean): LiveRun {
       const spot = firstEditable(m)
       if (!spot) throw new Error("No body text to change")
       set(1, { state: "running" })
-      const two = await timed(() => applyEdit(text, m, spot.line, spot.col))
+      const two = await timed(() => applyEdit(text, m, spot.line, spot.col, busy(1)))
       const edited = two.value
       set(1, edited.result?.signer
         ? { state: "done", tone: "warn", stamp: "Still signed", detail: "This sender signs only part of the body.", ms: two.ms }
@@ -180,7 +214,7 @@ export function useLiveRun(autoStart: boolean): LiveRun {
 
       set(2, { state: "running" })
       setGate("pressing")
-      const three = await timed(() => post<RaceResult>("race", { n: 50 }))
+      const three = await timed(() => call<RaceResult>("race", { n: 50 }, busy(2)))
       setRace(three.value)
       setGate("settled")
       set(2, {
@@ -194,7 +228,7 @@ export function useLiveRun(autoStart: boolean): LiveRun {
 
       const ledger = newLedger()
       set(3, { state: "running" })
-      const four = await timed(() => claim(text, orders[0]!, ledger))
+      const four = await timed(() => claim(text, orders[0]!, ledger, busy(3)))
       setFirst({ result: four.value, ms: four.ms })
       set(3, claimStep(four.value, four.ms))
       if (four.value.verdict === "VERIFIED") {
@@ -204,7 +238,7 @@ export function useLiveRun(autoStart: boolean): LiveRun {
       await pause(beat)
 
       set(4, { state: "running" })
-      const five = await timed(() => claim(text, orders[1]!, ledger))
+      const five = await timed(() => claim(text, orders[1]!, ledger, busy(4)))
       setSecond({ result: five.value, ms: five.ms })
       set(4, claimStep(five.value, five.ms))
       await pause(beat)
@@ -212,7 +246,7 @@ export function useLiveRun(autoStart: boolean): LiveRun {
       set(5, { state: "running" })
       const made = four.value.verdict === "VERIFIED" ? four.value.receipt : undefined
       if (!made) throw new Error("No receipt came back with the claim")
-      const six = await timed(() => post<ReceiptResult>("receipts", { id: made.id }))
+      const six = await timed(() => call<ReceiptResult>("receipts", { id: made.id }, busy(5)))
       setReceipt(made)
       setShown(six.value)
       set(5, {

@@ -28,7 +28,7 @@ function OrderPanel({ order, step }: { order: string; step: Step }) {
       <div className="panel pending" aria-busy="true">
         <div className="panel-top">
           <p className="panel-kicker">{label}</p>
-          <p className="panel-wait">Checking the signature and claiming it in Aurora DSQL</p>
+          <p className="panel-wait">{step.note ?? "Checking the signature and claiming it in Aurora DSQL"}</p>
         </div>
       </div>
     )
@@ -96,7 +96,7 @@ export function DemoCounter({ live, onCheck, onProof }: { live: LiveRun; onCheck
                 </span>
                 <span className="feed-main">
                   <span className="feed-name">{feedNames[i]}</span>
-                  <span className="feed-sub">{step.state === "done" ? step.stamp : step.state === "failed" ? step.detail : "Calling AWS"}</span>
+                  <span className="feed-sub">{step.state === "done" ? step.stamp : step.state === "failed" ? step.detail : step.state === "running" ? (step.note ?? "Calling AWS") : "Calling AWS"}</span>
                 </span>
                 {step.state === "done" && <span className="feed-ms">{step.ms} ms</span>}
               </li>

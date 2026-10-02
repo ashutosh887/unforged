@@ -37,7 +37,7 @@ export async function post<T>(path: string, body: unknown, token?: string): Prom
     body: JSON.stringify(body),
   })
   const data = (await res.json().catch(() => ({}))) as T & { error?: string; message?: string }
-  if (!res.ok) throw new Error(data.error ?? data.message ?? `Request failed (${res.status})`)
+  if (!res.ok) throw new Error(data.error ?? data.message ?? `The server answered with status ${res.status}. Try again.`)
   return data
 }
 
