@@ -2214,11 +2214,12 @@ textarea {
 }
 
 .site-source {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-s);
   color: var(--ink-2);
-  font-weight: 550;
-  font-size: var(--t-s);
-  text-decoration: none;
-  padding: 0 var(--s-2);
 }
 
 .site-source:hover {
@@ -2254,7 +2255,11 @@ textarea {
   }
 
   .site-source {
-    display: none;
+    margin-left: auto;
+  }
+
+  .site-source + .site-cta {
+    margin-left: 0;
   }
 
   .site-nav {
@@ -3461,4 +3466,10 @@ textarea {
   background: var(--surface);
   color: var(--ink);
   cursor: pointer;
+}
+
+.foot-gh {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
