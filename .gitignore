@@ -4,5 +4,6 @@ cdk.out
 .env*
 *.eml
 !test/fixtures/*.eml
+!web/public/samples/sample.eml
 planning/raw
 planning

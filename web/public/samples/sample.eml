@@ -1,0 +1,77 @@
+Received: from list by lists1p.gnu.org with archive (Exim 4.90_1)
+	id 1x1Rdi-0001rT-I8
+	for mharc-help-gnu-emacs@gnu.org; Tue, 01 Sep 2026 12:47:14 -0400
+Received: from eggs.gnu.org ([2001:470:142:3::10])
+ by lists1p.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+ (Exim 4.90_1) (envelope-from <eliz@gnu.org>) id 1x1Rdh-0001r9-In
+ for help-gnu-emacs@gnu.org; Tue, 01 Sep 2026 12:47:13 -0400
+Received: from fencepost.gnu.org ([2001:470:142:3::e])
+ by eggs.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+ (Exim 4.90_1) (envelope-from <eliz@gnu.org>)
+ id 1x1Rdg-0005eC-Pu; Tue, 01 Sep 2026 12:47:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gnu.org;
+ s=fencepost-gnu-org; h=References:Subject:In-Reply-To:To:From:Date:
+ mime-version; bh=HMD2CH1liPuHESwWF3f+Of3R45wyySY1sMApDb2L+U0=; b=kVlH3/MlX/tv
+ RgV2KJ9QuVuL/Un5LFetkF1RnknViCzKZ+Xkt4TBpJvS3l9kBhl/PA5zshsdmL+agOVGL27L8+FnY
+ iRrXNK+9vAs16BKPYgtcpvFVJvs8rPSl7XShWLJYc8p7v+pCIKD7jIQdllDADuJiNOGA3y59nlv/U
+ O+h/Oj13frgKYa4s4cuzaKPm0DwrbUKJzKypRuxiHddkZ+JNE+OQt9NQF1PTiWRmZVnxLflN27lly
+ G6JzQrYVYx5NUGeiq+RK69Dj97eQ0dyWZkpDZrBqc7wsawMp2BvVk8J5gJwUO4K7ASADaEwj5b9JN
+ 4S2Pn13WmIY5g6ySeKee6A==;
+Date: Tue, 01 Sep 2026 19:47:10 +0300
+Message-Id: <86ecfc7wc1.fsf@gnu.org>
+From: Eli Zaretskii <eliz@gnu.org>
+To: "R. Diez" <rdiez-2006@rd10.de>
+Cc: tpeplt@gmail.com, help-gnu-emacs@gnu.org
+In-Reply-To: <9de8d4ab-e92c-479c-a007-3e49dcc6dbee@rd10.de>
+ (rdiez-2006@rd10.de)
+Subject: Re: Emacs 31.1 centers scrolls the buffer's vertical position when I
+ start modifying the text near the bottom
+References: <421cb686-de8d-41c0-bbe9-8640adfeddf4@rd10.de>
+ <61e9f144-56cb-4f9b-bd8f-e0e7d61da6c5@rd10.de> <86v78p6tc6.fsf@gnu.org>
+ <9de8d4ab-e92c-479c-a007-3e49dcc6dbee@rd10.de>
+X-BeenThere: help-gnu-emacs@gnu.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: Users list for the GNU Emacs text editor <help-gnu-emacs.gnu.org>
+List-Unsubscribe: <https://lists.gnu.org/mailman/options/help-gnu-emacs>,
+ <mailto:help-gnu-emacs-request@gnu.org?subject=unsubscribe>
+List-Archive: <https://lists.gnu.org/archive/html/help-gnu-emacs>
+List-Post: <mailto:help-gnu-emacs@gnu.org>
+List-Help: <mailto:help-gnu-emacs-request@gnu.org?subject=help>
+List-Subscribe: <https://lists.gnu.org/mailman/listinfo/help-gnu-emacs>,
+ <mailto:help-gnu-emacs-request@gnu.org?subject=subscribe>
+X-List-Received-Date: Tue, 01 Sep 2026 16:47:13 -0000
+
+> Date: Tue, 1 Sep 2026 17:34:56 +0200
+> From: "R. Diez" <rdiez-2006@rd10.de>
+> Cc: tpeplt@gmail.com, help-gnu-emacs@gnu.org
+> 
+> > I repeat my advice: selectively remove portions of your customizations
+> 
+> You are probably right, but removing portions of my customizations is not an easy task. I have accumulated a lot of stuff over the years, I am not well versed in Lisp, and reproducing the problem requires manual interaction. If I cannot find a shortcut, I'd rather switch back to Emacs 30 for a while.
+
+The usual way is to delete half of your .emacs and see if that makes
+the problem go away; if not, remove the other half and try again.  Now
+you know which half contains the culprit.  Now divide that half in 2
+halves and delete one of them.  Etc. etc. -- keep going until you have
+a small enough portion that causes the problem when it's present and
+deleting it makes the problem go away.
+
+It might take time, but any other method will take longer.
+
+> > . how close to the bottom of the window this happens? the last
+> >   visible line? the one before that? line number N from the bottom
+> >   (and what is N?)?
+> 
+> I have been testing more. Say the text buffer is 36 lines high and you haven't scrolled yet, so the first visible line under the tab-line is line number 1.
+> 
+> If you enter a character in lines 1 to 19, the vertical scroll position does not change. Note that 36 / 2 = 18.
+> 
+>  From lines 20 to 36, it is like you run 'recenter-top-bottom' after inserting the first character.
+> 
+> It only happens once when you insert the first character. Afterwards there are no scroll jumps anymore.
+
+That must be some optional feature you turn on.  Maybe someone here
+will have the bells ring for them, given the description.  Failing
+that, I still suggest to use halving to find the culprit.
+
