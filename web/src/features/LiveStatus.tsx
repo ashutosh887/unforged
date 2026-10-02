@@ -62,10 +62,9 @@ export async function fetchStatus(signal?: AbortSignal): Promise<StatusLoad> {
     const type = res.headers.get("content-type") ?? ""
     if (!type.includes("json")) return res.ok ? { state: "missing", at } : { state: "error", message: `Status ${res.status}`, at }
     const body: unknown = await res.json().catch(() => null)
-    if (!res.ok) {
-      const message = str(asObject(body)?.error) ?? str(asObject(body)?.message) ?? `Status ${res.status}`
-      return { state: "error", message, at }
-    }
+    const top = asObject(body)
+    if (!top) return { state: "error", message: `Status ${res.status}`, at }
+    if (!res.ok && !top.dkim && !top.dsql) return { state: "error", message: str(top.error) ?? str(top.message) ?? `Status ${res.status}`, at }
     return { state: "ready", data: parseStatus(body), at, ms: Math.round(performance.now() - started) }
   } catch (e) {
     if (e instanceof DOMException && e.name === "AbortError") throw e
@@ -94,8 +93,7 @@ export type Alive = "checking" | "up" | "down"
 export function useApiAlive(everyMs = 60_000): Alive {
   const [load] = useStatus(everyMs)
   if (load.state === "loading") return "checking"
-  if (load.state === "error") return "down"
-  return "up"
+  return load.state === "ready" ? "up" : "down"
 }
 
 export function AliveDot({ everyMs }: { everyMs?: number }) {
