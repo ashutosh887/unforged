@@ -305,7 +305,15 @@ function RaceGrid({ race }: { race: RaceResult }) {
         </div>
       </div>
       <p className="lane-key">
-        <i className="cell win" /> approved once <i className="cell bounce" /> bounced as already claimed <i className="cell double" /> approved again, a double spend
+        <span>
+          <i className="cell win" /> approved once
+        </span>
+        <span>
+          <i className="cell bounce" /> bounced as already claimed
+        </span>
+        <span>
+          <i className="cell double" /> approved again, a double spend
+        </span>
       </p>
     </div>
   )

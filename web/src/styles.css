@@ -1140,3 +1140,10 @@ label.over textarea {
     grid-column: 1 / -1;
   }
 }
+
+.lane-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+}
