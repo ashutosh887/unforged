@@ -17,13 +17,14 @@ const candidates = mboxMessages(await res.text()).slice(skip - 1)
 
 const results: { round: number; verified: number; alreadyClaimed: number; other: Record<string, number>; reasons: string[]; retries: number; ms: number[] }[] = []
 const stamp = Date.now()
+const ledger = `race-${stamp}`
 let used = 0
 for (const raw of candidates) {
   if (results.length >= rounds) break
   const probe = await post<{ signer: string | null; signatures?: unknown[] }>("/api/verify", { raw })
   if (!probe.body.signer) continue
   used++
-  const replies = await Promise.all(Array.from({ length: n }, (_, i) => post<Claim>("/api/records/claim", { raw, claimRef: `race-${stamp}-${results.length + 1}-${i + 1}` })))
+  const replies = await Promise.all(Array.from({ length: n }, (_, i) => post<Claim>("/api/records/claim", { raw, ledger, claimRef: `race-${stamp}-${results.length + 1}-${i + 1}` })))
   const tally = { verified: 0, alreadyClaimed: 0, other: {} as Record<string, number>, reasons: [] as string[], retries: 0 }
   for (const r of replies) {
     if (r.body.verdict === "VERIFIED") tally.verified++
@@ -43,6 +44,7 @@ for (const raw of candidates) {
 const all = results.flatMap((r) => r.ms)
 const summary = {
   source,
+  ledger,
   rounds: results.length,
   claimsPerRound: n,
   exactlyOneWinner: results.filter((r) => r.verified === 1 && r.alreadyClaimed === n - 1).length,
