@@ -7,6 +7,10 @@ type CreditRow = { id: string; bank: string; utr: string; amount_paise: string; 
 const conflictCodes = new Set(["40001", "OC000", "OC001"])
 const uniqueViolation = "23505"
 
+export function isUniqueViolation(e: unknown): boolean {
+  return errorCode(e) === uniqueViolation
+}
+
 function errorCode(e: unknown): string | undefined {
   return typeof e === "object" && e !== null && "code" in e ? String((e as { code: unknown }).code) : undefined
 }
@@ -32,7 +36,7 @@ function toCredit(row: CreditRow): Credit {
   return { id: row.id, bank: row.bank, utr: row.utr, amountPaise: Number(row.amount_paise), creditedAt: new Date(row.credited_at).toISOString(), dkimDomain: row.dkim_domain, source: row.source }
 }
 
-async function inTx<T>(pool: Pool, body: (c: Conn) => Promise<T>): Promise<T> {
+export async function inTx<T>(pool: Pool, body: (c: Conn) => Promise<T>): Promise<T> {
   const c = await pool.connect()
   try {
     await c.query("BEGIN")
@@ -76,7 +80,7 @@ export async function claim(pool: Pool, input: ClaimInput, onRetry?: () => void)
       onRetry,
     )
   } catch (e) {
-    if (errorCode(e) !== uniqueViolation) throw e
+    if (!isUniqueViolation(e)) throw e
     const prior = await priorClaim(pool, found.id)
     return { verdict: "ALREADY_CLAIMED", reason: `This bank credit was already used for order ${prior?.orderRef ?? "another order"}. The screenshot may be real, but it has been shown before.`, credit: found, ...(prior ? { priorClaim: prior } : {}) }
   }

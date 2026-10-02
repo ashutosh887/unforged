@@ -51,3 +51,10 @@ CREATE UNIQUE INDEX ASYNC IF NOT EXISTS claims_once ON claims (credit_id);
 CREATE INDEX ASYNC IF NOT EXISTS claims_naive_by_credit ON claims_naive (credit_id);
 CREATE UNIQUE INDEX ASYNC IF NOT EXISTS shops_by_token ON shops (token_hash);
 CREATE INDEX ASYNC IF NOT EXISTS attempts_by_shop ON attempts (shop_id, created_at);
+
+CREATE TABLE IF NOT EXISTS claimed_records (
+  fingerprint text PRIMARY KEY,
+  signer text NOT NULL,
+  claim_ref text NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
