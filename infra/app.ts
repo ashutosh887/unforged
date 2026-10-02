@@ -9,6 +9,7 @@ import { PolicyStatement } from "aws-cdk-lib/aws-iam"
 import { Key, KeySpec, KeyUsage } from "aws-cdk-lib/aws-kms"
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda"
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs"
+import { RetentionDays } from "aws-cdk-lib/aws-logs"
 import { BlockPublicAccess, Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3"
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment"
 import type { Construct } from "constructs"
@@ -52,6 +53,7 @@ class UnforgedStack extends Stack {
         memorySize,
         timeout: Duration.seconds(timeout),
         environment,
+        logRetention: RetentionDays.ONE_MONTH,
         bundling: { target: "node22", minify: true, sourceMap: true, externalModules: ["pg-native"], loader: { ".sql": "text" } },
       })
       f.addToRolePolicy(new PolicyStatement({ actions: ["dsql:DbConnectAdmin", "dsql:DbConnect"], resources: [cluster.attrResourceArn] }))
@@ -63,7 +65,6 @@ class UnforgedStack extends Stack {
     const check = fn("Check", 29, 1024)
     const race = fn("Race", 29, 1024)
     const migrate = fn("Migrate", 120)
-    const spike = fn("Spike", 29, 256)
     const verify = fn("Verify", 15, 512)
     const books = fn("Books", 10)
     const records = fn("Records", 15)
@@ -86,11 +87,12 @@ class UnforgedStack extends Stack {
     const api = new HttpApi(this, "Api", { createDefaultStage: true })
     const stage = api.defaultStage!.node.defaultChild as CfnStage
     stage.defaultRouteSettings = { throttlingRateLimit: 25, throttlingBurstLimit: 50 }
+    stage.routeSettings = { "POST /api/race": { throttlingRateLimit: 5, throttlingBurstLimit: 10 } }
     const route = (path: string, f: NodejsFunction) => api.addRoutes({ path, methods: [HttpMethod.POST], integration: new HttpLambdaIntegration(`${f.node.id}Route`, f) })
     route("/api/shops", shops)
     route("/api/alerts", alerts)
     route("/api/check", check)
-    route("/api/race", race)
+    stage.node.addDependency(...route("/api/race", race))
     route("/api/verify", verify)
     route("/api/ledger", books)
     route("/api/records/claim", records)
@@ -100,6 +102,7 @@ class UnforgedStack extends Stack {
     route("/api/read", reader)
 
     const headers = new ResponseHeadersPolicy(this, "SecurityHeaders", {
+      customHeadersBehavior: { customHeaders: [{ header: "permissions-policy", value: "camera=(), microphone=(), geolocation=(), payment=()", override: true }] },
       securityHeadersBehavior: {
         strictTransportSecurity: { accessControlMaxAge: Duration.days(365), includeSubdomains: true, override: true },
         contentTypeOptions: { override: true },
