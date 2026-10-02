@@ -102,6 +102,7 @@ class UnforgedStack extends Stack {
     route("/api/read", reader)
 
     const headers = new ResponseHeadersPolicy(this, "SecurityHeaders", {
+      customHeadersBehavior: { customHeaders: [{ header: "permissions-policy", value: "camera=(), microphone=(), geolocation=(), payment=()", override: true }] },
       securityHeadersBehavior: {
         strictTransportSecurity: { accessControlMaxAge: Duration.days(365), includeSubdomains: true, override: true },
         contentTypeOptions: { override: true },
