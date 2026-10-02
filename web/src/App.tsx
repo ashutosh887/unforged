@@ -11,10 +11,10 @@ type Mode = "screenshot" | "alert"
 
 const tokenKey = "unforged.token"
 
-const demoAlert = {
-  label: "Use the demo bank alert",
+const sampleEmail = {
+  label: "Use a sample signed email",
   load: async () => {
-    const res = await fetch("/fixtures/alert.eml", { cache: "no-cache" }).catch(() => null)
+    const res = await fetch("/samples/sample.eml", { cache: "no-cache" }).catch(() => null)
     if (!res?.ok || (res.headers.get("content-type") ?? "").includes("text/html")) return null
     return res.text()
   },
@@ -66,7 +66,7 @@ export function App() {
       </nav>
       {view === "try" ? (
         <>
-          <SignatureCheck sample={demoAlert} />
+          <SignatureCheck sample={sampleEmail} />
           <Demo />
         </>
       ) : token ? <Workspace token={token} /> : <ShopSetup onToken={setToken} />}
@@ -100,7 +100,7 @@ function ShopSetup({ onToken }: { onToken: (t: string) => void }) {
       <form onSubmit={submit} className="stack">
         <label>
           Shop name
-          <input value={name} onChange={(e) => setName(e.target.value)} required autoComplete="organization" />
+          <input value={name} onChange={(e) => setName(e.target.value)} required maxLength={80} autoComplete="organization" />
         </label>
         <label>
           UPI ID you are paid on
@@ -205,7 +205,7 @@ function ClaimAlertBox({ token, onDone }: { token: string; onDone: () => void })
         <RawEmailField value={raw} onChange={setRaw} label="Raw credit alert email (Gmail: ⋮ → Show original → Copy to clipboard)" />
         <label>
           Order reference
-          <input value={orderRef} onChange={(e) => setOrderRef(e.target.value)} placeholder="Order 1042" required />
+          <input value={orderRef} onChange={(e) => setOrderRef(e.target.value)} placeholder="Order 1042" maxLength={80} required />
         </label>
         <button disabled={action.busy || !raw.trim() || !orderRef.trim()}>{action.busy ? "Checking signature…" : "Claim alert"}</button>
       </form>
@@ -267,7 +267,7 @@ function ScreenshotBox({ token, onDone }: { token: string; onDone: () => void })
         </label>
         <label>
           Order reference
-          <input value={orderRef} onChange={(e) => setOrderRef(e.target.value)} placeholder="Order 1042" required />
+          <input value={orderRef} onChange={(e) => setOrderRef(e.target.value)} placeholder="Order 1042" maxLength={80} required />
         </label>
         <button disabled={action.busy || !file}>{action.busy ? "Reading…" : "Check payment"}</button>
       </form>

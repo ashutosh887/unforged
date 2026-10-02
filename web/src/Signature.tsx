@@ -98,6 +98,7 @@ export function SignatureCheck({ sample }: { sample?: { label: string; load: () 
             </button>
           )}
         </div>
+        {!original?.result.signer && <p className="muted small">Check a signed email first; then you can change one character and claim it once.</p>}
       </form>
       {error && <p className="error">{error}</p>}
       {runs.length > 0 && (
@@ -201,10 +202,11 @@ function ClaimOnce({ raw, edited }: { raw: string; edited: string | null }) {
       <form onSubmit={submit} className="stack">
         <label>
           What is it being claimed for?
-          <input value={claimRef} onChange={(e) => setClaimRef(e.target.value)} placeholder="Refund for order 1042" maxLength={120} required />
+          <input value={claimRef} onChange={(e) => setClaimRef(e.target.value)} placeholder="Refund for order 1042" maxLength={80} required />
         </label>
         <div className="row">
           <button disabled={busy || !claimRef.trim()}>{busy ? "Claiming…" : "Claim this email"}</button>
+          {!claimRef.trim() && <p className="muted small">Say what it is being claimed for to enable the button.</p>}
           {edited && (
             <button type="button" className="ghost" disabled={busy || !claimRef.trim()} onClick={() => void claim("The edited copy", edited)}>
               Claim the edited copy

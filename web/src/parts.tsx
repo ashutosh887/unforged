@@ -179,13 +179,15 @@ export function Race() {
             <strong>{action.result.guarded.verified}</strong>
             <span>accepted with the unique index</span>
             <small>
-              {action.result.guarded.alreadyClaimed} already claimed · {action.result.guarded.retries} retries · {action.result.guarded.ms} ms
+              {action.result.guarded.verified === 1 ? "no double spends" : `${action.result.guarded.verified - 1} double spends`} · {action.result.guarded.alreadyClaimed} already claimed · {action.result.guarded.retries} retries · {action.result.guarded.ms} ms
             </small>
           </div>
           <div className={`tally ${action.result.naive.accepted === 1 ? "good" : "bad"}`}>
             <strong>{action.result.naive.accepted}</strong>
             <span>accepted by check-then-insert</span>
-            <small>{action.result.naive.errors} errors</small>
+            <small>
+              {action.result.naive.accepted > 1 ? `${action.result.naive.accepted - 1} of these would be double spends` : "no double spends"} · {action.result.naive.errors} errors
+            </small>
           </div>
         </div>
       )}

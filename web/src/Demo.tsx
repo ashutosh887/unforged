@@ -4,7 +4,7 @@ import { encodeImage, post, type AlertResult, type CheckResult } from "./api"
 import { money, verdicts, VerdictCard, type BankRow } from "./parts"
 
 type FixtureCheck = { label: string; file: string; expect: Verdict; order: string; beforeAlert?: boolean }
-type Manifest = { shop: { name: string; vpa: string }; alert: { label: string; file: string }; checks: FixtureCheck[] }
+type Manifest = { published?: boolean; shop: { name: string; vpa: string }; alert: { label: string; file: string }; checks: FixtureCheck[] }
 
 type Loaded<T> = { state: "loading" } | { state: "pending" } | { state: "ready"; data: T }
 
@@ -92,7 +92,7 @@ function usePreviews(files: Record<string, Blob | null> | null): Record<string, 
 
 export function Demo() {
   const manifest = useManifest()
-  const ready = manifest.state === "ready" ? manifest.data : null
+  const ready = manifest.state === "ready" && manifest.data.published ? manifest.data : null
   const files = useFiles(ready)
   const previews = usePreviews(files)
   const [alertStep, setAlertStep] = useState<AlertStep>({ state: "idle" })
@@ -158,42 +158,21 @@ export function Demo() {
     }
   }
 
-  if (manifest.state === "loading") return <section className="card muted">Loading fixtures…</section>
-  if (!ready) {
-    return (
-      <section className="card">
-        <h2>Try it</h2>
-        <p className="muted">Fixture pending. The signed alert and screenshots have not been published yet.</p>
-      </section>
-    )
-  }
+  if (manifest.state === "loading") return null
+  if (!ready) return null
 
-  if (files === null) return <section className="card muted">Loading fixtures…</section>
+  if (files === null) return null
 
   const storedAlert: BankRow | null = alertStep.state === "done" ? alertStep.result.credit : null
   const alertMissing = !files[ready.alert.file]
   const nothingPublished = alertMissing && ready.checks.every((c) => !files[c.file])
 
-  if (nothingPublished) {
-    return (
-      <section className="card">
-        <h2>Try it</h2>
-        <p className="muted">The signed bank alert and its screenshots are being published. The race below runs live now. Once they land, one tap runs each case:</p>
-        <ul className="small">
-          {ready.checks.map((c, i) => (
-            <li key={`${c.order}-${i}`}>
-              {c.label} <span className="muted">· order {c.order} · expects {verdicts[c.expect]?.label ?? c.expect}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )
-  }
+  if (nothingPublished) return null
 
   return (
     <>
       <section className="card">
-        <h2>Try it</h2>
+        <h2>Six cases</h2>
         <p className="muted">
           No bank account needed. One tap creates a demo shop paid on <span className="mono">{ready.shop.vpa}</span>, checks the real screenshot before and after its signed bank alert
           arrives, then runs the edited and reused copies. Every verdict below comes from the live API.
