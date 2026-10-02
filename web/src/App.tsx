@@ -6,6 +6,7 @@ import { Ledger } from "./Ledger"
 import { money, Race, RawEmailField, useAction, VerdictCard } from "./parts"
 import { SignatureCheck } from "./Signature"
 import { Theater } from "./Theater"
+import { UpiCase } from "./UpiCase"
 
 type View = "try" | "shop"
 type Mode = "screenshot" | "alert"
@@ -60,6 +61,7 @@ export function App() {
         </p>
       </header>
       <Theater />
+      <UpiCase onShop={() => setView("shop")} />
       <nav className="tabs" aria-label="Views">
         <button type="button" className={view === "try" ? "on" : ""} aria-pressed={view === "try"} onClick={() => setView("try")}>
           Try it
