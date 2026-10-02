@@ -125,7 +125,22 @@ for a new account, `lambda:GetAccountSettings`), so most of each burst was
 throttled by Lambda before the handler ran. A quota increase to 1,000 was
 requested through Service Quotas on 2 Oct (`L-B99A9384`). It was granted the
 same day: `lambda:GetAccountSettings` now reports `ConcurrentExecutions`
-1,000. The runs in this section were not repeated at the new limit.
+1,000. The clean run at the new limit is below.
+
+### 7b. The same race at the 1,000 limit
+
+Run 2 Oct 2026, 11:09 UTC. `SKIP=60 pnpm measure:record-race`, same setup,
+ten fresh emails. Raw: `measurements/record-race-2026-10-02T11-09-45-582Z.json`.
+
+| Metric | Result |
+| --- | --- |
+| Rounds with exactly one VERIFIED and 49 ALREADY_CLAIMED | 10/10 |
+| Total VERIFIED (1 is correct per round) | 10 |
+| Other responses (errors, throttles) | 0 of 500 |
+| OCC retries reported | 87 |
+| Request time p50 / p95 (laptop in India → CloudFront) | 651 ms / 2458 ms |
+
+Every one of the 500 requests reached the code and got an answer.
 The in-Lambda race in §1 is not affected, since it runs all 50 claims inside
 one invocation.
 
