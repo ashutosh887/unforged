@@ -48,4 +48,11 @@ export async function shopFor(event: Event): Promise<Shop | null> {
   return row ? { id: row.id, vpas: row.vpas.split(",").filter(Boolean) } : null
 }
 
+export const limits = { shopName: 80, vpas: 5, vpa: 100, ref: 80, imageBytes: 4_000_000 }
+
+export function refFrom(value: string | undefined): string | null {
+  const ref = value?.trim()
+  return ref && ref.length <= limits.ref ? ref : null
+}
+
 export const unauthorised = json(401, { error: "Missing or unknown shop token." })

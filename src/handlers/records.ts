@@ -1,14 +1,14 @@
 import { inspectSignature } from "../core/alert.js"
 import { claimRecord } from "../core/records.js"
-import { body, json, pool, type Event, type Result } from "./http.js"
+import { body, json, pool, refFrom, type Event, type Result } from "./http.js"
 
 const maxBytes = 2_000_000
 
 export async function handler(event: Event): Promise<Result> {
   const input = body<{ raw?: string; claimRef?: string }>(event)
   const raw = input?.raw
-  const claimRef = input?.claimRef?.trim().slice(0, 120) ?? ""
-  if (!raw?.trim() || !claimRef) return json(400, { error: "Send the raw email and what it is being claimed for." })
+  const claimRef = refFrom(input?.claimRef)
+  if (!raw?.trim() || !claimRef) return json(400, { error: "Send the raw email and what it is being claimed for, under 80 characters." })
   if (Buffer.byteLength(raw) > maxBytes) return json(413, { error: "That email is over 2 MB. Paste one without large attachments." })
   const report = await inspectSignature(raw)
   if (report.signer && report.claimBlocked) return json(422, { verdict: "REJECTED", reason: `Signed by ${report.signer}, but it cannot be claimed once: ${report.claimBlocked}`, signatures: report.signatures })

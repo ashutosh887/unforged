@@ -32,7 +32,7 @@ async function replay(): Promise<Result> {
 export async function handler(event: Event): Promise<Result> {
   const input = body<{ n?: number; mode?: string }>(event)
   if (input?.mode === "replay") return replay()
-  const n = Math.min(Math.max(Math.trunc(input?.n ?? 50), 2), 100)
+  const n = Math.min(Math.max(Math.trunc(input?.n ?? 50), 2), 50)
   const read = await seedCredit()
   const utr = read.utr
   let retries = 0

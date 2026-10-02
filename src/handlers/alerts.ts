@@ -1,6 +1,6 @@
 import { verifyAlert } from "../core/alert.js"
 import { claim } from "../core/claim.js"
-import { body, json, pool, sha256, shopFor, unauthorised, type Event, type Result } from "./http.js"
+import { body, json, pool, refFrom, sha256, shopFor, unauthorised, type Event, type Result } from "./http.js"
 
 export async function handler(event: Event): Promise<Result> {
   const shop = await shopFor(event)
@@ -8,6 +8,7 @@ export async function handler(event: Event): Promise<Result> {
   const input = body<{ raw?: string; orderRef?: string }>(event)
   const raw = input?.raw
   if (!raw) return json(400, { error: "Paste the raw email, headers included." })
+  if (input.orderRef?.trim() && !refFrom(input.orderRef)) return json(400, { error: "Keep the order reference under 80 characters." })
   const result = await verifyAlert(raw)
   if (!result.ok) return json(422, { error: result.reason })
   const a = result.alert
@@ -17,7 +18,7 @@ export async function handler(event: Event): Promise<Result> {
     [shop.id, a.bank, a.utr, a.amountPaise, a.creditedAt, a.source, a.dkimDomain, rawSha256],
   )
   const stored = { credit: { ...a, id: inserted.rows[0]?.id ?? null }, duplicate: !inserted.rows[0] }
-  const orderRef = input.orderRef?.trim()
+  const orderRef = refFrom(input.orderRef)
   if (!orderRef) return json(inserted.rows[0] ? 201 : 200, stored)
 
   const read = { readable: true, utr: a.utr, amountPaise: a.amountPaise, payeeVpa: null, payeeName: null, app: null }
