@@ -6,7 +6,7 @@ import { rupeesToPaise } from "./money.js"
 import { normaliseUtr } from "./verdict.js"
 import type { Credit } from "./types.js"
 
-export const bankDomains: Record<string, string[]> = {
+const bankDomains: Record<string, string[]> = {
   hdfc: ["hdfcbank.net", "hdfcbank.com"],
   icici: ["icicibank.com"],
   sbi: ["sbi.co.in"],

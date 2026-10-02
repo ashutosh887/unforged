@@ -23,12 +23,12 @@ export function receiptId(): string {
   return Array.from(bytes, (b) => alphabet[b % 62]).join("")
 }
 
-export function canonical(body: ReceiptBody): string {
+function canonical(body: ReceiptBody): string {
   const ordered = Object.fromEntries(Object.entries(body).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)))
   return JSON.stringify(ordered)
 }
 
-export function chainHash(prevHash: string, text: string): string {
+function chainHash(prevHash: string, text: string): string {
   return createHash("sha256").update(prevHash).update(text).digest("hex")
 }
 

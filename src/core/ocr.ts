@@ -27,7 +27,7 @@ function digitsIn(text: string): string[] {
   return [...text.matchAll(twelveDigits)].map((m) => m[1]!.replace(/\s/g, ""))
 }
 
-export function findUtr(lines: Line[]): string | null {
+function findUtr(lines: Line[]): string | null {
   const labelled = lines.flatMap((line, i) => (utrLabel.test(line.text) ? [...digitsIn(line.text), ...digitsIn(lines[i + 1]?.text ?? "")] : []))
   const fromLabels = distinct(labelled)
   if (fromLabels.length === 1) return fromLabels[0]!
@@ -36,7 +36,7 @@ export function findUtr(lines: Line[]): string | null {
   return anywhere.length === 1 ? anywhere[0]! : null
 }
 
-export function findAmount(lines: Line[]): string | null {
+function findAmount(lines: Line[]): string | null {
   const withCurrency = distinct(lines.flatMap((l) => l.text.replace(/\s+/g, " ").trim().match(currencyAmount)?.[1] ?? []))
   if (withCurrency.length === 1) return withCurrency[0]!
   if (withCurrency.length > 1) return null
@@ -47,7 +47,7 @@ export function findAmount(lines: Line[]): string | null {
   return values.length === 1 ? values[0]! : null
 }
 
-export function findPayee(lines: Line[]): string | null {
+function findPayee(lines: Line[]): string | null {
   const to = lines.findIndex((l) => /^to\b/i.test(l.text.trim()))
   if (to >= 0) {
     const from = lines.findIndex((l, i) => i > to && /^from\b/i.test(l.text.trim()))

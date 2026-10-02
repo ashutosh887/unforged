@@ -17,7 +17,7 @@ function errorCode(e: unknown): string | undefined {
   return typeof e === "object" && e !== null && "code" in e ? String((e as { code: unknown }).code) : undefined
 }
 
-export function isConflict(e: unknown): boolean {
+function isConflict(e: unknown): boolean {
   const code = errorCode(e)
   return code !== undefined && conflictCodes.has(code)
 }

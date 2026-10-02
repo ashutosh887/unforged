@@ -1,7 +1,7 @@
 import { formatPaise } from "./money.js"
 import type { Credit, Decision, ScreenshotRead } from "./types.js"
 
-export function normaliseVpa(vpa: string): string {
+function normaliseVpa(vpa: string): string {
   return vpa.trim().toLowerCase()
 }
 
