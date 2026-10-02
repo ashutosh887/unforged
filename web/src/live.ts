@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { type RaceResult, type ReceiptLink, type ReceiptResult, type RecordClaimResult, type VerifyResult } from "./api"
+import { call, type RaceResult, type ReceiptLink, type ReceiptResult, type RecordClaimResult, type VerifyResult } from "./api"
 import { clockTime } from "./parts"
 import { bodyHash, editAt, firstEditable, readMail, type SignedMail } from "./proof"
 
@@ -14,12 +14,12 @@ export type Claimed = { result: RecordClaimResult; ms: number }
 export type GateState = "queued" | "pressing" | "settled"
 
 export const titles = [
-  "Check the sender's signature",
-  "Change one character and check again",
-  "Fire 50 claims at one record at once",
-  "Claim the email for order A12",
-  "Show the same email for order A13",
-  "Countersign the buyer's receipt",
+  "Check the signature",
+  "Change one letter",
+  "Fire 50 claims at once",
+  "Claim for order A12",
+  "Reuse for order A13",
+  "Sign the receipt",
 ]
 
 export const orders = ["order A12", "order A13"]
@@ -53,8 +53,8 @@ async function timed<T>(task: () => Promise<T>): Promise<{ value: T; ms: number 
   return { value, ms: Math.round(performance.now() - started) }
 }
 
-export const busyNote = "AWS is busy with other visitors. Retrying"
-const busyFailure = "AWS is busy with other visitors. Run it again in a moment."
+export const busyNote = "AWS is busy. Retrying"
+const busyFailure = "AWS is busy. Run it again in a moment."
 const attempts = 4
 const timeoutMs = 10_000
 
@@ -67,7 +67,7 @@ async function send(path: string, body: unknown, onRetry?: Retry): Promise<{ sta
     const abort = new AbortController()
     const timer = setTimeout(() => abort.abort(), timeoutMs)
     try {
-      const res = await fetch(`/api/${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body), signal: abort.signal })
+      const res = await call(path, body, { signal: abort.signal })
       if (res.status !== 503 && res.status !== 429 && res.status !== 502 && res.status !== 504) return { status: res.status, data: await res.json().catch(() => ({})) }
     } catch {
     } finally {
@@ -79,7 +79,7 @@ async function send(path: string, body: unknown, onRetry?: Retry): Promise<{ sta
   }
 }
 
-async function call<T>(path: string, body: unknown, onRetry?: Retry): Promise<T> {
+async function ask<T>(path: string, body: unknown, onRetry?: Retry): Promise<T> {
   const { status, data } = await send(path, body, onRetry)
   const out = data as T & { error?: string; message?: string }
   if (status >= 400) throw new Error(out.error ?? out.message ?? `The server answered with status ${status}.`)
@@ -99,10 +99,9 @@ function failure(result: VerifyResult): string {
 }
 
 function claimStep(result: RecordClaimResult, ms: number): Done {
-  if (result.verdict === "VERIFIED") return { state: "done", tone: "good", stamp: "Verified, claimed once", detail: `Claimed for ${result.claimRef} at ${clockTime(result.claimedAt)}.`, ms, release: { state: "open" }, claim: result }
+  if (result.verdict === "VERIFIED") return { state: "done", tone: "good", stamp: "Verified", detail: `Claimed for ${result.claimRef} at ${clockTime(result.claimedAt)}.`, ms, release: { state: "open" }, claim: result }
   if (result.verdict === "ALREADY_CLAIMED") {
-    const first = `First claimed for ${result.priorClaim.claimRef} at ${clockTime(result.priorClaim.createdAt)}.`
-    return { state: "done", tone: "warn", stamp: "Already claimed", detail: `${first} The email is real. It was used before.`, ms, release: { state: "blocked", reason: `Already used for ${result.priorClaim.claimRef}.` }, claim: result }
+    return { state: "done", tone: "warn", stamp: "Already claimed", detail: `First used for ${result.priorClaim.claimRef} at ${clockTime(result.priorClaim.createdAt)}.`, ms, release: { state: "blocked", reason: `Already used for ${result.priorClaim.claimRef}.` }, claim: result }
   }
   return { state: "done", tone: "bad", stamp: "Rejected", detail: result.reason, ms, release: { state: "blocked", reason: result.reason }, claim: result }
 }
@@ -161,7 +160,7 @@ export function useLiveRun(autoStart: boolean): LiveRun {
     setProbe(base)
     const hash = await bodyHash(changed.raw, m.bodyCanon)
     if (ticket === probeRun.current) setProbe({ ...base, hash })
-    const result = await call<VerifyResult>("verify", { raw: changed.raw }, onRetry)
+    const result = await ask<VerifyResult>("verify", { raw: changed.raw }, onRetry)
     const done = { ...base, hash, result, checking: false }
     if (ticket === probeRun.current) setProbe(done)
     return done
@@ -195,11 +194,11 @@ export function useLiveRun(autoStart: boolean): LiveRun {
       await pause(beat)
 
       set(0, { state: "running" })
-      const [one, hash] = await Promise.all([timed(() => call<VerifyResult>("verify", { raw: text }, busy(0))), bodyHash(text, m.bodyCanon)])
+      const [one, hash] = await Promise.all([timed(() => ask<VerifyResult>("verify", { raw: text }, busy(0))), bodyHash(text, m.bodyCanon)])
       setVerified(one.value)
       setComputed(hash)
       set(0, one.value.signer
-        ? { state: "done", tone: "good", stamp: `Signed by ${one.value.signer}`, detail: `Fetched the public key at ${m.selector}._domainkey.${m.domain} from DNS and checked the signature over the headers and body.`, ms: one.ms }
+        ? { state: "done", tone: "good", stamp: `Signed by ${one.value.signer}`, detail: `Key from ${m.selector}._domainkey.${m.domain}.`, ms: one.ms }
         : { state: "done", tone: "bad", stamp: "Not verified", detail: failure(one.value), ms: one.ms })
       await pause(beat * 2)
 
@@ -209,20 +208,20 @@ export function useLiveRun(autoStart: boolean): LiveRun {
       const two = await timed(() => applyEdit(text, m, spot.line, spot.col, busy(1)))
       const edited = two.value
       set(1, edited.result?.signer
-        ? { state: "done", tone: "warn", stamp: "Still signed", detail: "This sender signs only part of the body.", ms: two.ms }
+        ? { state: "done", tone: "warn", stamp: "Still signed", detail: "This sender signs part of the body only.", ms: two.ms }
         : { state: "done", tone: "bad", stamp: "Rejected", detail: `"${edited.was}" became "${edited.now}". ${edited.result ? failure(edited.result) : "The signature no longer verifies"}.`, ms: two.ms })
       await pause(beat * 2)
 
       set(2, { state: "running" })
       setGate("pressing")
-      const three = await timed(() => call<RaceResult>("race", { n: 50 }, busy(2)))
+      const three = await timed(() => ask<RaceResult>("race", { n: 50 }, busy(2)))
       setRace(three.value)
       setGate("settled")
       set(2, {
         state: "done",
         tone: three.value.guarded.verified === 1 ? "good" : "bad",
         stamp: `${three.value.guarded.verified} of ${three.value.n} accepted`,
-        detail: `Aurora DSQL keeps one claim row per record, so one claim got through and ${three.value.guarded.alreadyClaimed} bounced. The same ${three.value.n} against a check-then-insert table were all accepted, ${Math.max(0, three.value.naive.accepted - 1)} of them double spends.`,
+        detail: `${three.value.guarded.alreadyClaimed} refused. Check-then-insert let ${three.value.naive.accepted} through.`,
         ms: three.ms,
       })
       await pause(beat * 2)
@@ -247,16 +246,16 @@ export function useLiveRun(autoStart: boolean): LiveRun {
       set(5, { state: "running" })
       const made = four.value.verdict === "VERIFIED" ? four.value.receipt : undefined
       if (!made) throw new Error("No receipt came back with the claim")
-      const six = await timed(() => call<ReceiptResult>("receipts", { id: made.id }, busy(5)))
+      const six = await timed(() => ask<ReceiptResult>("receipts", { id: made.id }, busy(5)))
       setReceipt(made)
       setShown(six.value)
       set(5, {
         state: "done",
         tone: six.value.verified ? "good" : "bad",
-        stamp: six.value.verified ? "Receipt signed by AWS KMS" : "Receipt failed its check",
-        detail: `Entry ${made.seq} in this ledger, hash ${made.hash.slice(0, 12)} linked to ${made.prevHash.slice(0, 12)}. The server checked the signature and the hash again just now.`,
+        stamp: six.value.verified ? "Signed by AWS KMS" : "Receipt failed its check",
+        detail: `Entry ${made.seq}, hash ${made.hash.slice(0, 12)}.`,
         ms: six.ms,
-        link: { href: `#r=${made.id}`, label: "Open the buyer's receipt" },
+        link: { href: `#r=${made.id}`, label: "Open the receipt" },
       })
     } catch (e) {
       setSteps((all) => {

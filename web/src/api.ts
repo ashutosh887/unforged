@@ -30,14 +30,36 @@ export type RaceResult = {
   naive: { accepted: number; errors: number }
 }
 
-export async function post<T>(path: string, body: unknown, token?: string): Promise<T> {
+export type ChainResult = { ledger: string; receipts: Receipt[]; checks: { id: string; signature: boolean; hash: boolean }[] }
+
+type Listener = (up: boolean) => void
+const listeners = new Set<Listener>()
+let reached = false
+
+export function onHealth(listener: Listener): () => void {
+  listeners.add(listener)
+  listener(reached)
+  return () => listeners.delete(listener)
+}
+
+export async function call(path: string, body: unknown, init: { token?: string; signal?: AbortSignal } = {}): Promise<Response> {
   const res = await fetch(`/api/${path}`, {
     method: "POST",
-    headers: { "content-type": "application/json", ...(token ? { "x-shop-token": token } : {}) },
+    headers: { "content-type": "application/json", ...(init.token ? { "x-shop-token": init.token } : {}) },
     body: JSON.stringify(body),
+    ...(init.signal ? { signal: init.signal } : {}),
   })
+  if (res.status < 500 && !reached && (res.headers.get("content-type") ?? "").includes("json")) {
+    reached = true
+    listeners.forEach((l) => l(true))
+  }
+  return res
+}
+
+export async function post<T>(path: string, body: unknown, token?: string): Promise<T> {
+  const res = await call(path, body, token ? { token } : {})
   const data = (await res.json().catch(() => ({}))) as T & { error?: string; message?: string }
-  if (!res.ok) throw new Error(data.error ?? data.message ?? `The server answered with status ${res.status}. Try again.`)
+  if (!res.ok) throw new Error(data.error ?? data.message ?? `The server answered ${res.status}. Try again.`)
   return data
 }
 

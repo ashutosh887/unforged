@@ -6,7 +6,7 @@ import { Icon } from "./Icon"
 import { orders, type Done, type LiveRun, type Step } from "./live"
 import { clockTime, money, Panel, ReleaseAction, toneIcon, utrGroups, verdicts } from "./parts"
 
-const feedNames = ["Signature checked", "One character changed", "50 claims at once", "", "", "Buyer's receipt countersigned"]
+const feedNames = ["Signature", "One letter changed", "50 claims at once", "", "", "KMS receipt"]
 
 function claimTitle(step: Done): string {
   if (!step.claim) return step.stamp
@@ -16,8 +16,8 @@ function claimTitle(step: Done): string {
 function claimLine(step: Done): string {
   const c = step.claim
   if (!c) return step.detail
-  if (c.verdict === "VERIFIED") return `Signed by ${c.signer}. Claimed once, at ${clockTime(c.claimedAt)}. Release the goods.`
-  if (c.verdict === "ALREADY_CLAIMED") return `This email already paid for ${c.priorClaim.claimRef} at ${clockTime(c.priorClaim.createdAt)}. Don't release.`
+  if (c.verdict === "VERIFIED") return `Signed by ${c.signer} at ${clockTime(c.claimedAt)}. Release the goods.`
+  if (c.verdict === "ALREADY_CLAIMED") return `Paid for ${c.priorClaim.claimRef.replace(/^order /, "order ")} at ${clockTime(c.priorClaim.createdAt)}. Don't release.`
   return c.reason
 }
 
@@ -28,7 +28,7 @@ function OrderPanel({ order, step }: { order: string; step: Step }) {
       <div className="panel pending" aria-busy="true">
         <div className="panel-top">
           <p className="panel-kicker">{label}</p>
-          <p className="panel-wait">{step.note ?? "Checking the signature and claiming it in Aurora DSQL"}</p>
+          <p className="panel-wait">{step.note ?? "Checking the signature, then claiming it"}</p>
         </div>
       </div>
     )
@@ -57,7 +57,7 @@ function OrderPanel({ order, step }: { order: string; step: Step }) {
   )
 }
 
-export function DemoCounter({ live, onCheck, onProof }: { live: LiveRun; onCheck: () => void; onProof: () => void }) {
+export function DemoCounter({ live, onCheck, proofHref }: { live: LiveRun; onCheck: () => void; proofHref: string }) {
   const { steps, receipt } = live
   const claims = [4, 3].map((i) => ({ order: orders[i - 3]!, step: steps[i]! }))
   const anyClaim = claims.some((c) => c.step.state !== "waiting")
@@ -67,9 +67,6 @@ export function DemoCounter({ live, onCheck, onProof }: { live: LiveRun; onCheck
   )
   return (
     <div className="counter">
-      <p className="counter-note">
-        A public signed email stands in for your bank's alert. Every check here calls the live AWS stack.
-      </p>
       <Aloud items={spoken} />
       <div className="orders" aria-live="polite">
         {anyClaim ? (
@@ -77,17 +74,17 @@ export function DemoCounter({ live, onCheck, onProof }: { live: LiveRun; onCheck
         ) : (
           <div className="incoming">
             <p className="incoming-label">
-              <Icon name="lock" size={15} /> Incoming signed record
+              <Icon name="lock" size={15} /> Incoming signed email
             </p>
             <p className="incoming-from">{live.mail?.from || "Loading a signed email"}</p>
-            {live.mail && <p className="incoming-sig">DKIM d={live.mail.domain}, checking now</p>}
-            <p className="incoming-next">Next it pays for order A12. Then someone tries it again for order A13.</p>
+            {live.mail && <p className="incoming-sig">Signed by {live.mail.domain}, checking</p>}
+            <p className="incoming-next">It pays for order A12. Then it comes back for A13.</p>
           </div>
         )}
       </div>
       {checks.length > 0 && (
         <section className="feed" aria-label="Checks on this visit">
-          <h3 className="feed-title">Checks on this visit</h3>
+          <h3 className="feed-title">This visit</h3>
           <ul>
             {checks.map(({ i, step }) => (
               <li key={i} className={`feed-row ${step.state === "done" ? step.tone : step.state}`}>
@@ -105,12 +102,12 @@ export function DemoCounter({ live, onCheck, onProof }: { live: LiveRun; onCheck
           {receipt && (
             <a className="row-link" href={`#r=${receipt.id}`}>
               <Icon name="receipt" size={18} />
-              <span>Open the receipt the buyer gets for order A12</span>
+              <span>Buyer's receipt for order A12</span>
             </a>
           )}
-          <button type="button" className="text" onClick={onProof}>
-            See every step with its timing
-          </button>
+          <a className="text" href={proofHref}>
+            See every step
+          </a>
         </section>
       )}
       <CheckBar onCheck={onCheck} />
@@ -163,7 +160,7 @@ export function ShopCounter({ token, version, onCheck }: { token: string; versio
         {ledger.credits.length === 0 ? (
           <div className="empty">
             <Icon name="lock" size={22} />
-            <p>No signed bank alerts yet. Add your bank's credit alert in Shop, then check the buyer's screenshot.</p>
+            <p>No bank alerts yet. Add one in Shop.</p>
           </div>
         ) : (
           <ul>

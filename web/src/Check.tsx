@@ -1,5 +1,5 @@
 import { useEffect, useState, type DragEvent, type FormEvent } from "react"
-import { encodeImage, post, type AlertResult, type CheckResult, type FieldBox, type ReadResult } from "./api"
+import { call, encodeImage, post, type AlertResult, type CheckResult, type FieldBox, type ReadResult } from "./api"
 import { Icon } from "./Icon"
 import { money, RawEmailField, readerName, useAction, utrGroups, VerdictCard } from "./parts"
 
@@ -15,7 +15,7 @@ const fieldNames: Record<FieldBox["field"], string> = { utr: "UTR", amount: "Amo
 
 async function readScreenshot(file: File): Promise<ReadResult> {
   const { image } = await encodeImage(file, ["png", "jpeg"])
-  const res = await fetch("/api/read", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ image }) })
+  const res = await call("read", { image })
   const data = (await res.json().catch(() => ({}))) as Partial<ReadResult> & { error?: string }
   if (!res.ok || !data.read) throw new Error(data.error ?? `The server answered with status ${res.status}. Try again.`)
   return data as ReadResult
@@ -116,12 +116,12 @@ function ScreenshotCheck({ token, onDone, onShop }: { token: string; onDone: () 
             <span className="shot-empty">
               <Icon name="image" size={28} />
               <strong>Choose the buyer's screenshot</strong>
-              <span>Or drop it here. PNG or JPEG, under 4 MB.</span>
+              <span>Or drop it here. PNG or JPEG.</span>
             </span>
           )}
         </label>
         <div className="samples">
-          <span className="muted small">No screenshot handy?</span>
+          <span className="muted small">Try a sample</span>
           {samples.map((s) => (
             <button key={s.file} type="button" className="chip-btn" disabled={busy} onClick={() => void useSample(s.file)}>
               {s.label}
@@ -145,8 +145,7 @@ function ScreenshotCheck({ token, onDone, onShop }: { token: string; onDone: () 
       {phase.state === "read" && !token && (
         <div className="notice">
           <p>
-            <strong>No verdict on the demo counter.</strong> A verdict compares this UTR with your shop's signed bank alerts, and the demo has none. Set up a shop and add your bank's alert to
-            get one.
+            <strong>No verdict without a shop.</strong> A verdict needs your bank's signed alerts to compare against.
           </p>
           <button type="button" className="secondary" onClick={onShop}>
             Set up your shop
@@ -200,8 +199,8 @@ function ClaimAlertBox({ token, onDone }: { token: string; onDone: () => void })
   return (
     <>
       <form onSubmit={submit} className="check-form">
-        <p className="muted small">No screenshot. Paste the bank's signed credit alert and the order it pays for. Each alert can back one order.</p>
-        <RawEmailField value={raw} onChange={setRaw} label="Raw credit alert email. In Gmail, open the menu, choose Show original, then Copy to clipboard." />
+        <p className="muted small">No screenshot needed. Each alert backs one order.</p>
+        <RawEmailField value={raw} onChange={setRaw} label="Raw alert email" hint="In Gmail, open the menu, choose Show original, then Copy to clipboard." />
         <label className="field">
           <span className="field-label">Order it pays for</span>
           <input value={orderRef} onChange={(e) => setOrderRef(e.target.value)} placeholder="A1042" maxLength={80} required />

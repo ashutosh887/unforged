@@ -1,4 +1,4 @@
-export type IconName = "counter" | "scan" | "proof" | "shop" | "check" | "cross" | "clock" | "copy" | "image" | "lock" | "link" | "bolt" | "receipt" | "replay"
+export type IconName = "counter" | "scan" | "proof" | "shop" | "check" | "cross" | "clock" | "copy" | "image" | "lock" | "link" | "bolt" | "receipt" | "replay" | "menu" | "close" | "key" | "mail"
 
 const paths: Record<IconName, string> = {
   counter: "M4 5h16v4H4zM4 11h16v8H4zM8 15h3",
@@ -15,6 +15,10 @@ const paths: Record<IconName, string> = {
   bolt: "M13 3L5 13h6l-1 8 8-10h-6z",
   receipt: "M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6",
   replay: "M4 12a8 8 0 108-8H8M8 4l-3 3 3 3",
+  menu: "M4 7h16M4 12h16M4 17h16",
+  close: "M6 6l12 12M18 6L6 18",
+  key: "M14.5 9.5a4 4 0 10-3.3 3.9L13 15h2v2h2v2h3v-3l-5.6-5.6c.07-.3.1-.6.1-.9zM9 9h.01",
+  mail: "M4 6h16v12H4zM4 7l8 6 8-6",
 }
 
 export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {

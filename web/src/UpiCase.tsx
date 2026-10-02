@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react"
 import type { Verdict } from "../../src/core/types.js"
-import type { ReadResult } from "./api"
+import { call, type ReadResult } from "./api"
 import { ShotFrame } from "./Check"
 import { money, utrGroups, verdicts } from "./parts"
+import { hrefOf } from "./router"
+import { PageHead, Section } from "./Site"
 
 type Shot = { file: string; label: string }
 type State = { state: "waiting" } | { state: "reading" } | { state: "done"; result: ReadResult } | { state: "failed"; message: string }
@@ -25,13 +27,13 @@ async function base64Of(file: string): Promise<string> {
 }
 
 async function readShot(file: string): Promise<ReadResult> {
-  const res = await fetch("/api/read", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ image: await base64Of(file) }) })
+  const res = await call("read", { image: await base64Of(file) })
   const data = (await res.json().catch(() => ({}))) as Partial<ReadResult> & { error?: string }
   if (!res.ok || !data.read) throw new Error(data.error ?? `The server answered with status ${res.status}. Try again.`)
   return data as ReadResult
 }
 
-export function UpiCase({ onShop }: { onShop: () => void }) {
+export function UpiCase() {
   const [states, setStates] = useState<State[]>(shots.map(() => ({ state: "waiting" })))
   const ref = useRef<HTMLElement>(null)
   const started = useRef(false)
@@ -70,46 +72,37 @@ export function UpiCase({ onShop }: { onShop: () => void }) {
   const edited = states[1]?.state === "done" ? states[1].result.read : null
 
   return (
-    <section className="upi-case" ref={ref} aria-labelledby="upi-title">
-      <div className="band-head">
-        <h2 id="upi-title">Two screenshots, one UTR</h2>
-        <p className="muted">
-          Both were made for this demo. Amazon Textract reads each one live when you reach this part of the page, and code picks out the UTR, the amount and the UPI ID. The boxes show where
-          Textract found them.
-        </p>
-      </div>
+    <section className="upi-case" ref={ref}>
+      <PageHead title="Two screenshots, one UTR" sub="Amazon Textract reads both live. The boxes show where it found each field. Only the bank's signed alert knows which amount arrived." />
       <div className="upi-shots">
         {shots.map((shot, i) => (
           <ShotCard key={shot.file} shot={shot} state={states[i]!} />
         ))}
       </div>
-      <div className="upi-next">
-        <p className="upi-punch">
-          {paid && edited && paid.utr === edited.utr && paid.amountPaise !== edited.amountPaise ? (
-            <>
-              Same UTR <span className="num">{utrGroups(paid.utr)}</span>. One says {money(paid.amountPaise)}, the other {money(edited.amountPaise)}. Only the bank's signed alert says which
-              amount arrived.
-            </>
-          ) : (
-            <>Both screenshots carry the same UTR with different amounts. Only the bank's signed alert says which amount arrived.</>
-          )}
-        </p>
-        <p className="muted">
-          With your bank's alert stored, the edited copy comes back amount mismatch. The real one comes back verified once, and already claimed every time after that. This page has no
-          seller's bank alert, so that part runs in your own shop.
-        </p>
-        <dl className="upi-verdicts">
+      <p className="upi-punch" aria-live="polite">
+        {paid && edited && paid.utr === edited.utr && paid.amountPaise !== edited.amountPaise ? (
+          <>
+            Same UTR <span className="num">{utrGroups(paid.utr)}</span>. {money(paid.amountPaise)} on one, {money(edited.amountPaise)} on the other.
+          </>
+        ) : (
+          <>Same UTR, two amounts.</>
+        )}
+      </p>
+      <Section title="Six verdicts" sub="Code returns one, in this order, with its reason. There is no fraud score.">
+        <ol className="upi-verdicts">
           {order.map((v) => (
-            <div key={v} className={`upi-verdict ${verdicts[v].tone}`}>
-              <dt>{verdicts[v].label}</dt>
-              <dd>{verdicts[v].next}</dd>
-            </div>
+            <li key={v} className={`upi-verdict ${verdicts[v].tone}`}>
+              <span className={`chip ${verdicts[v].tone}`}>{verdicts[v].label}</span>
+              <span>{verdicts[v].next}</span>
+            </li>
           ))}
-        </dl>
-        <button type="button" className="secondary" onClick={onShop}>
-          Set up your shop
-        </button>
-      </div>
+        </ol>
+        <p>
+          <a className="secondary" href={`${hrefOf.shop}/setup`}>
+            Set up your shop
+          </a>
+        </p>
+      </Section>
     </section>
   )
 }
@@ -120,8 +113,8 @@ function ShotCard({ shot, state }: { shot: Shot; state: State }) {
     <figure className="upi-shot">
       <figcaption>{shot.label}</figcaption>
       <ShotFrame src={shot.file} boxes={result?.boxes ?? []} scanning={state.state === "reading"} alt={`${shot.label}, a sample screenshot made for this demo`} />
-      {state.state === "waiting" && <p className="muted small">Reads when this part scrolls into view.</p>}
-      {state.state === "reading" && <p className="lstep-live">Amazon Textract is reading it</p>}
+      {state.state === "waiting" && <p className="muted small">Queued</p>}
+      {state.state === "reading" && <p className="live-note">Textract is reading it</p>}
       {state.state === "failed" && <p className="error">{state.message}</p>}
       {result && (
         <dl className="facts">

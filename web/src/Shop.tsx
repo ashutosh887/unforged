@@ -15,7 +15,7 @@ export function ShopSetup({ onToken }: { onToken: (t: string) => void }) {
     try {
       localStorage.setItem(tokenKey, action.result.token)
     } catch {}
-    history.replaceState(null, "", `#t=${action.result.token}`)
+    history.replaceState(null, "", "#/shop")
     onToken(action.result.token)
   }, [action.result, onToken])
 
@@ -27,7 +27,7 @@ export function ShopSetup({ onToken }: { onToken: (t: string) => void }) {
   return (
     <section className="sheet">
       <h2>Set up your shop</h2>
-      <p className="muted">No account. You get a private link that opens your counter. Keep it like a key.</p>
+      <p className="muted">No account. You get a private link to your counter. Keep it like a key.</p>
       <form onSubmit={submit} className="check-form">
         <label className="field">
           <span className="field-label">Shop name</span>
@@ -58,7 +58,7 @@ export function ShopLink({ token }: { token: string }) {
       <Icon name="link" size={20} />
       <div>
         <h2>Your private shop link</h2>
-        <p className="muted small">Anyone with this link can check payments for your shop.</p>
+        <p className="muted small">Anyone with it can check payments for your shop.</p>
       </div>
       <button type="button" className="secondary" onClick={() => void copy()}>
         <Icon name="copy" size={16} /> {copied ? "Copied" : "Copy link"}
@@ -77,9 +77,9 @@ export function AlertBox({ token, onDone }: { token: string; onDone: () => void 
   return (
     <section className="sheet">
       <h2>Add a bank alert</h2>
-      <p className="muted small">Paste the credit alert your bank emailed you. Unforged keeps it only if the bank's DKIM signature checks out and the sender is a known bank.</p>
+      <p className="muted small">Kept only if the bank's DKIM signature checks out and the sender is a known bank.</p>
       <form onSubmit={submit} className="check-form">
-        <RawEmailField value={raw} onChange={setRaw} label="Raw credit alert email. In Gmail, open the menu, choose Show original, then Copy to clipboard." />
+        <RawEmailField value={raw} onChange={setRaw} label="Raw alert email" hint="In Gmail, open the menu, choose Show original, then Copy to clipboard." />
         <button className="primary" disabled={action.busy || !raw.trim()}>
           {action.busy ? "Checking the signature" : "Add alert"}
         </button>

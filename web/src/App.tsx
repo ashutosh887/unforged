@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react"
-import { CheckScreen } from "./Check"
-import { DemoCounter, ShopCounter } from "./Counter"
-import { Demo } from "./Demo"
-import { useLiveRun, type LiveRun } from "./live"
-import { Race } from "./parts"
-import { ReceiptPage, receiptIdFromHash } from "./Receipt"
-import { Brand, Shell, useMedia, type Tab } from "./Shell"
-import { AlertBox, ShopLink, ShopSetup, tokenKey } from "./Shop"
-import { SignatureCheck } from "./Signature"
+import { Architecture } from "./Architecture"
+import { Home } from "./Home"
+import { Ledger } from "./Ledger"
+import { useLiveRun } from "./live"
 import { ProofCanvas } from "./ProofCanvas"
-import { Theater } from "./Theater"
+import { ReceiptPage } from "./Receipt"
+import { useRoute } from "./router"
+import { ShopApp } from "./Shell"
+import { tokenKey } from "./Shop"
+import { SignatureCheck } from "./Signature"
+import { Footer, Header, PageHead } from "./Site"
 import { UpiCase } from "./UpiCase"
+import { UseCases } from "./UseCases"
 
 const sampleEmail = {
   label: "Use a sample signed email",
@@ -36,168 +37,68 @@ function initialToken(): string {
   }
 }
 
-function initialAppMode(token: string): boolean {
-  const hash = new URLSearchParams(location.hash.slice(1))
-  if (hash.has("try")) return false
-  return Boolean(token) || hash.has("app")
+const titles: Record<string, string> = {
+  home: "Unforged",
+  proof: "Proof",
+  screenshots: "Screenshots",
+  check: "Check an email",
+  architecture: "Architecture",
+  ledger: "Ledger",
+  uses: "Use cases",
+  shop: "Your shop",
+  receipt: "Receipt",
 }
-
-const titles: Record<Tab, string> = { counter: "Counter", check: "Check a payment", proof: "How it works", shop: "Your shop" }
 
 export function App() {
+  const route = useRoute()
   const [token, setToken] = useState(initialToken)
-  const [receiptId, setReceiptId] = useState(receiptIdFromHash)
-  const [appMode, setAppMode] = useState(() => initialAppMode(token))
-  const [tab, setTab] = useState<Tab>("counter")
-  const [version, setVersion] = useState(0)
-  const wide = useMedia("(min-width: 1080px)")
-  const live = useLiveRun(!receiptId && (!token || tab === "proof"))
+  const live = useLiveRun(route.page === "home" || route.page === "proof" || (route.page === "shop" && !token))
 
   useEffect(() => {
-    const follow = () => {
-      setReceiptId(receiptIdFromHash())
-      const hash = new URLSearchParams(location.hash.slice(1))
-      if (hash.has("try")) setAppMode(false)
-      if (hash.has("app")) setAppMode(true)
-    }
-    addEventListener("hashchange", follow)
-    return () => removeEventListener("hashchange", follow)
+    document.title = route.page === "home" ? "Unforged" : `${titles[route.page]} | Unforged`
+  }, [route.page])
+
+  useEffect(() => {
+    if (new URLSearchParams(location.hash.slice(1)).has("t")) history.replaceState(null, "", "#/shop")
   }, [])
 
-  const goOwn = () => {
-    setTab("proof")
-    requestAnimationFrame(() => document.getElementById("own")?.scrollIntoView({ behavior: "smooth", block: "start" }))
-  }
+  const visitLedger = live.shown?.receipt.ledger
 
-  if (receiptId) {
-    return (
-      <div className="receipt-page">
-        <header className="topbar">
-          <a href="#try" className="brand-link">
-            <Brand />
-          </a>
-        </header>
-        <main>
-          <ReceiptPage id={receiptId} />
-          <a className="text" href="#try">
-            See how Unforged checks a payment
-          </a>
-        </main>
-      </div>
-    )
-  }
-
-  const changed = () => setVersion((v) => v + 1)
-  const screen = (frame: "device" | "page") => (
-    <Shell
-      frame={frame}
-      tab={tab}
-      onTab={setTab}
-      title={tab === "counter" && !token ? "Demo counter" : titles[tab]}
-      subtitle={tab === "counter" ? (token ? "Signed bank credits for your shop" : "This visit's ledger") : undefined}
-      extra={
-        <a className="text small" href="#try">
-          About Unforged
-        </a>
-      }
-    >
-      {tab === "counter" &&
-        (token ? <ShopCounter token={token} version={version} onCheck={() => setTab("check")} /> : <DemoCounter live={live} onCheck={() => setTab("check")} onProof={() => setTab("proof")} />)}
-      {tab === "check" && <CheckScreen token={token} onDone={changed} onShop={() => setTab("shop")} />}
-      {tab === "proof" && (frame === "device" ? <Theater live={live} /> : <ProofScreen live={live} onOwn={goOwn} onShop={() => setTab("shop")} />)}
-      {tab === "shop" &&
-        (token ? (
+  return (
+    <div className={`site page-${route.page}`}>
+      <a
+        className="skip"
+        href="#main"
+        onClick={(e) => {
+          e.preventDefault()
+          document.getElementById("main")?.focus()
+        }}
+      >
+        Skip to content
+      </a>
+      <Header page={route.page} />
+      <main id="main" className="wrap" tabIndex={-1}>
+        {route.page === "home" && <Home live={live} />}
+        {route.page === "proof" && (
           <>
-            <ShopLink token={token} />
-            <AlertBox token={token} onDone={changed} />
-            <Race />
+            <PageHead title="The proof, live" sub="A real signed email through the live stack. Click any letter in the body to break it." />
+            <ProofCanvas live={live} />
           </>
-        ) : (
-          <ShopSetup
-            onToken={(t) => {
-              setToken(t)
-              setAppMode(true)
-              setTab("counter")
-            }}
-          />
-        ))}
-    </Shell>
-  )
-
-  if (appMode || !wide) return <div className="app-page">{screen("page")}</div>
-
-  return (
-    <div className="landing">
-      <header className="topbar">
-        <Brand />
-        <nav aria-label="Page">
-          <a className="text" href="#how">
-            How screenshots are read
-          </a>
-          <a className="text" href="#own">
-            Try your own email
-          </a>
-          <a className="primary" href="#app">
-            Open the app
-          </a>
-        </nav>
-      </header>
-      <section className="stage">
-        <div className="stage-copy">
-          <h1>Check the payment, not the screenshot.</h1>
-          <p className="lede">
-            A buyer can edit a UPI screenshot, or show the same one for two orders. Unforged checks it against your bank's signed credit alert, and lets each credit pay for one order.
-          </p>
-          <Theater live={live} />
-        </div>
-        <div className="stage-device">
-          <div className="device">{screen("device")}</div>
-        </div>
-      </section>
-      <section className="band" id="proof" aria-labelledby="proof-title">
-        <div className="proof-intro">
-          <h2 id="proof-title">Watch the proof happen</h2>
-          <p>
-            The same run, opened up. Your browser hashes the email body itself and gets the value the sender signed. One changed letter breaks it. Then 50 claims hit one record, and
-            Aurora DSQL lets exactly one through.
-          </p>
-        </div>
-        <ProofCanvas live={live} />
-      </section>
-      <section className="band" id="how">
-        <UpiCase onShop={() => (location.hash = "app")} />
-      </section>
-      <section className="band" id="own">
-        <SignatureCheck sample={sampleEmail} />
-        <Demo />
-      </section>
-      <footer className="foot">
-        <p>Runs on CloudFront, API Gateway, Lambda, Aurora DSQL, Amazon Textract, Amazon Bedrock and AWS KMS in us-east-1.</p>
-      </footer>
-    </div>
-  )
-}
-
-function ProofScreen({ live, onOwn, onShop }: { live: LiveRun; onOwn: () => void; onShop: () => void }) {
-  return (
-    <div className="proof">
-      <div className="proof-intro">
-        <h2>Check the payment, not the screenshot.</h2>
-        <p>
-          A buyer can edit a UPI screenshot, or show the same one for two orders. Unforged checks it against your bank's signed credit alert, and lets each credit pay for one order.
-        </p>
-      </div>
-      <ProofCanvas live={live} />
-      <p className="muted small">
-        <button type="button" className="text" onClick={onOwn}>
-          Try it with your own email
-        </button>
-      </p>
-      <UpiCase onShop={onShop} />
-      <div id="own">
-        <SignatureCheck sample={sampleEmail} />
-      </div>
-      <Demo />
+        )}
+        {route.page === "screenshots" && <UpiCase />}
+        {route.page === "check" && (
+          <>
+            <PageHead title="Check an email" sub="Paste any email's raw source. See who signed it, break it, claim it once. Nothing you paste is stored." />
+            <SignatureCheck sample={sampleEmail} />
+          </>
+        )}
+        {route.page === "architecture" && <Architecture />}
+        {route.page === "ledger" && <Ledger ledger={route.arg} visitLedger={visitLedger} />}
+        {route.page === "uses" && <UseCases />}
+        {route.page === "shop" && <ShopApp token={token} onToken={setToken} live={live} start={route.arg === "setup" ? "shop" : "counter"} />}
+        {route.page === "receipt" && <ReceiptPage id={route.arg} />}
+      </main>
+      <Footer />
     </div>
   )
 }

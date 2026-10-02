@@ -1,24 +1,14 @@
 import { useEffect, useState } from "react"
 import { post, type ReceiptResult } from "./api"
 import { Icon } from "./Icon"
-import { receiptDesignFixture } from "./receiptDesignFixture"
 
 export type BuyerReceipt = { id: string; signer: string; what: string; claimedAt: string; hash: string; prevHash: string; signature: string; verified: boolean; seq?: number; kind?: "signed-email" | "bank-credit" }
 
 type Load = { state: "loading" } | { state: "error"; message: string } | { state: "ready"; receipt: BuyerReceipt }
 
-export const receiptPreviewKey = "receipt-preview"
-
 function ist(iso: string): string {
   const at = new Date(iso)
   return Number.isNaN(at.getTime()) ? iso : `${at.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })} IST`
-}
-
-export function receiptIdFromHash(): string | null {
-  const params = new URLSearchParams(location.hash.slice(1))
-  if (params.has(receiptPreviewKey)) return receiptPreviewKey
-  const id = params.get("r")
-  return id && /^[0-9A-Za-z]{22}$/.test(id) ? id : null
 }
 
 function fromResult({ receipt, verified }: ReceiptResult): BuyerReceipt {
@@ -30,8 +20,7 @@ function short(hex: string): string {
 }
 
 export function ReceiptPage({ id }: { id: string }) {
-  const preview = id === receiptPreviewKey
-  const [load, setLoad] = useState<Load>(preview ? { state: "ready", receipt: receiptDesignFixture } : { state: "loading" })
+  const [load, setLoad] = useState<Load>({ state: "loading" })
   const [copied, setCopied] = useState(false)
   const [full, setFull] = useState(false)
   const [key, setKey] = useState<string | null>(null)
@@ -41,7 +30,6 @@ export function ReceiptPage({ id }: { id: string }) {
   }
 
   useEffect(() => {
-    if (preview) return
     let live = true
     post<ReceiptResult>("receipts", { id })
       .then((data) => live && setLoad({ state: "ready", receipt: fromResult(data) }))
@@ -49,7 +37,7 @@ export function ReceiptPage({ id }: { id: string }) {
     return () => {
       live = false
     }
-  }, [id, preview])
+  }, [id])
 
   const copy = async () => {
     await navigator.clipboard.writeText(location.href).catch(() => undefined)
@@ -68,7 +56,6 @@ export function ReceiptPage({ id }: { id: string }) {
   const r = load.receipt
   return (
     <article className={`slip ${r.verified ? "good" : "bad"}`}>
-      {preview && <p className="preview-flag">Design preview with made-up values. This is not a real receipt.</p>}
       <header className="slip-top">
         <span className="slip-mark">
           <Icon name={r.verified ? "check" : "cross"} size={26} />

@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react"
-import { post, type RecordClaimResult, type VerifyResult } from "./api"
+import { call, post, type RecordClaimResult, type VerifyResult } from "./api"
 import { clockTime, money, Panel, RawEmailField } from "./parts"
 
 type Edit = { raw: string; at: number; was: string; now: string }
@@ -65,7 +65,7 @@ export function SignatureCheck({ sample }: { sample?: { label: string; load: () 
   const tamper = () => {
     const edit = editOneCharacter(raw)
     if (!edit) return setError("No body text to change.")
-    void verify("One character changed", edit.raw, edit)
+    void verify("One letter changed", edit.raw, edit)
   }
 
   const useSample = async () => {
@@ -80,17 +80,12 @@ export function SignatureCheck({ sample }: { sample?: { label: string; load: () 
 
   return (
     <section className="sheet">
-      <h2>Check any signed email</h2>
-      <p className="muted small">
-        Paste the raw source of any email you received. In Gmail, open the message menu, choose Show original, then Copy to clipboard. Unforged checks its DKIM signature against the
-        sender's key in DNS. Then change one character and watch the signature break. Nothing you paste is stored.
-      </p>
       <form onSubmit={submit} className="check-form">
-        <RawEmailField value={raw} onChange={setRaw} label="Raw email, headers included" />
+        <RawEmailField value={raw} onChange={setRaw} label="Raw email, headers included" hint="In Gmail, open the menu, choose Show original, then Copy to clipboard." />
         <div className="row">
           <button className="primary" disabled={busy || !raw.trim()}>{busy ? "Checking" : "Check signature"}</button>
           <button type="button" className="secondary" disabled={busy || !original?.result.signer} onClick={tamper}>
-            Change one character, check again
+            Change one letter
           </button>
           {sample && hasSample && (
             <button type="button" className="secondary" disabled={busy} onClick={() => void useSample()}>
@@ -98,8 +93,7 @@ export function SignatureCheck({ sample }: { sample?: { label: string; load: () 
             </button>
           )}
         </div>
-        {!original?.result.signer && <p className="muted small">Check a signed email first. Then you can change one character, and claim it once.</p>}
-      </form>
+              </form>
       {error && <p className="error">{error}</p>}
       {runs.length > 0 && (
         <div className="panels">
@@ -123,7 +117,7 @@ function Report({ run }: { run: Run }) {
       tone={tone}
       kicker={run.label}
       title={signed ? `Signed by ${result.signer}` : result.signatures.length ? "Signature broken" : "Not signed"}
-      line={edit ? `Body character ${edit.at + 1} changed from "${edit.was}" to "${edit.now}".` : undefined}
+      line={edit ? `Letter ${edit.at + 1} of the body, "${edit.was}" to "${edit.now}".` : undefined}
     >
       <dl className="facts">
         <dt>From</dt>
@@ -174,7 +168,7 @@ function ClaimOnce({ raw, edited }: { raw: string; edited: string | null }) {
     setBusy(true)
     setError("")
     try {
-      const res = await fetch("/api/records/claim", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ raw: text, claimRef }) })
+      const res = await call("records/claim", { raw: text, claimRef })
       const result = (await res.json().catch(() => ({}))) as RecordClaimResult & { error?: string }
       if (!res.ok && result.verdict !== "REJECTED") throw new Error(result.error ?? `The server answered with status ${res.status}. Try again.`)
       setClaims((all) => [{ label, result, claimRef }, ...all].slice(0, 3))
@@ -192,19 +186,15 @@ function ClaimOnce({ raw, edited }: { raw: string; edited: string | null }) {
 
   return (
     <div className="claim-once">
-      <h3>Claim this email once</h3>
-      <p className="muted small">
-        A signed email can back one claim, such as one refund or one payment. Claim it, then claim it again. A unique index in Aurora DSQL refuses the second claim. Unforged stores only
-        the signer's domain, a fingerprint of the signature and your reference.
-      </p>
+      <h3>Claim it once</h3>
+      <p className="muted small">Claim it twice. Aurora DSQL refuses the second. Stored: the signer, a fingerprint and your reference.</p>
       <form onSubmit={submit} className="check-form">
         <label className="field">
-          <span className="field-label">What is it being claimed for?</span>
+          <span className="field-label">Claimed for</span>
           <input value={claimRef} onChange={(e) => setClaimRef(e.target.value)} placeholder="Refund for order 1042" maxLength={80} required />
         </label>
         <div className="row">
           <button className="primary" disabled={busy || !claimRef.trim()}>{busy ? "Claiming" : "Claim this email"}</button>
-          {!claimRef.trim() && <p className="muted small">Say what it is being claimed for to enable the button.</p>}
           {edited && (
             <button type="button" className="secondary" disabled={busy || !claimRef.trim()} onClick={() => void claim("The edited copy", edited)}>
               Claim the edited copy

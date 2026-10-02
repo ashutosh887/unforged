@@ -9,12 +9,12 @@ export type Tone = "good" | "warn" | "bad" | "neutral"
 export type BankRow = Pick<Credit, "bank" | "utr" | "amountPaise" | "dkimDomain" | "creditedAt">
 
 export const verdicts: Record<Verdict, { label: string; tone: Tone; next: string }> = {
-  VERIFIED: { label: "Verified", tone: "good", next: "The bank's signed alert matches. Release the goods." },
-  ALREADY_CLAIMED: { label: "Already claimed", tone: "warn", next: "Don't release. This payment already paid for another order." },
+  VERIFIED: { label: "Verified", tone: "good", next: "The signed alert matches. Release the goods." },
+  ALREADY_CLAIMED: { label: "Already claimed", tone: "warn", next: "Don't release. It already paid for another order." },
   AMOUNT_MISMATCH: { label: "Amount mismatch", tone: "bad", next: "Don't release. Your bank received a different amount." },
   PAYEE_MISMATCH: { label: "Payee mismatch", tone: "bad", next: "Don't release. This payment went to a different UPI ID." },
-  NOT_FOUND_YET: { label: "Not found yet", tone: "neutral", next: "No signed bank alert has this UTR yet. Wait for your bank's email, then check again." },
-  UNREADABLE: { label: "Unreadable", tone: "neutral", next: "Ask the buyer for a clearer screenshot that shows the UTR and the amount." },
+  NOT_FOUND_YET: { label: "Not found yet", tone: "neutral", next: "No signed alert has this UTR yet. Wait for the bank's email." },
+  UNREADABLE: { label: "Unreadable", tone: "neutral", next: "Ask for a clearer screenshot with the UTR and amount." },
 }
 
 export const toneIcon: Record<Tone, IconName> = { good: "check", warn: "replay", bad: "cross", neutral: "clock" }
@@ -47,7 +47,7 @@ export function useAction<T>() {
   return { busy, error, result, run }
 }
 
-export function RawEmailField({ value, onChange, label }: { value: string; onChange: (raw: string) => void; label: string }) {
+export function RawEmailField({ value, onChange, label, hint }: { value: string; onChange: (raw: string) => void; label: string; hint?: string }) {
   const [over, setOver] = useState(false)
   const load = async (file: File | undefined) => {
     if (file) onChange(await file.text())
@@ -67,6 +67,7 @@ export function RawEmailField({ value, onChange, label }: { value: string; onCha
       }}
     >
       <span className="field-label">{label}</span>
+      {hint && <span className="field-hint">{hint}</span>}
       <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={6} spellCheck={false} placeholder="Paste here, or drop an .eml file" />
       <span className="file">
         Or open an .eml file <input type="file" accept=".eml,message/rfc822,text/plain" onChange={(e) => void load(e.target.files?.[0])} />
@@ -221,7 +222,7 @@ export function Race() {
   return (
     <section className="sheet">
       <h2>Race 50 claims</h2>
-      <p className="muted">Fifty claims for one bank credit at the same instant, with the unique index and without it.</p>
+      <p className="muted">50 claims for one credit at once, with the unique key and without.</p>
       <button type="button" className="secondary" disabled={action.busy} onClick={() => void action.run(() => post("race", { n }))}>
         {action.busy ? "Racing" : `Race ${n} claims`}
       </button>

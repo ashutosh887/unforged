@@ -3,6 +3,7 @@ import type { RaceResult, ReceiptLink, ReceiptResult, VerifyResult } from "./api
 import { senderName, titles, type Claimed, type GateState, type LiveRun, type Probe, type Step } from "./live"
 import { clockTime } from "./parts"
 import type { SignedMail } from "./proof"
+import { Why } from "./Site"
 
 type Tone = "good" | "warn" | "bad"
 
@@ -70,7 +71,7 @@ export function ProofCanvas({ live }: { live: LiveRun }) {
         <button type="button" className="primary" onClick={() => void live.run()} disabled={running}>
           {running ? "Running on the live stack" : "Run it again"}
         </button>
-        <p className="muted small">Each run gets its own ledger, so the first claim always wins.</p>
+        <p className="muted small">Fresh ledger each run, so the first claim wins.</p>
       </div>
     </section>
   )
@@ -82,11 +83,11 @@ function MailObject({ mail, probe, onPick }: { mail: SignedMail | null; probe: P
   return (
     <div className="pc-col pc-col-mail">
       <h3 className="pc-col-head">The signed email</h3>
-      <p className="pc-col-note">A real post from a public mailing list, signed by gnu.org's mail server. It stands in for the bank's credit alert. The check is the same.</p>
+      <Why>A real post from a public mailing list, signed by gnu.org. It stands in for a bank's credit alert. The check is the same.</Why>
       <div className="pc-mail" aria-label="The signed email, as structured fields">
         <dl className="pc-mail-heads">
           <dt>From</dt>
-          <dd>{mail ? `${senderName(mail.from)}, ${mail.domain}` : "Loading the email"}</dd>
+          <dd>{mail ? `${senderName(mail.from)}, ${mail.domain}` : "Loading"}</dd>
           <dt>Subject</dt>
           <dd>{mail?.subject}</dd>
           <dt>Date</dt>
@@ -104,7 +105,7 @@ function MailObject({ mail, probe, onPick }: { mail: SignedMail | null; probe: P
           </dl>
         </div>
         <div className="pc-mail-body" onClick={onPick}>
-          <p className="pc-mail-body-label">Body. Click any letter to change it.</p>
+          <p className="pc-mail-body-label">Body. Click a letter to change it.</p>
           <p className="pc-mail-text">
             {(mail?.lines ?? []).map((l, i) => (
               <span key={l.start} data-line={i} className="pc-mail-line">
@@ -128,7 +129,7 @@ function KeyLookup({ mail, step, verified }: { mail: SignedMail | null; step: St
   const state = step.state === "running" ? "asking" : verified ? (verified.signer ? "pass" : "fail") : "idle"
   return (
     <div className={`pc-panel pc-lookup ${state}`}>
-      <h4>Fetch the sender's public key</h4>
+      <h4>Public key from DNS</h4>
       <div className="pc-wire" aria-hidden="true">
         <span className="pc-end">Lambda</span>
         <span className="pc-line">
@@ -140,11 +141,12 @@ function KeyLookup({ mail, step, verified }: { mail: SignedMail | null; step: St
         TXT <b>{host}</b>
       </p>
       <p className="pc-panel-out" aria-live="polite">
-        {state === "idle" && "Waiting to ask DNS."}
-        {state === "asking" && "Asking DNS for the key, then checking the signature."}
-        {state === "pass" && `Key returned. The signature over ${mail?.signedHeaders.length ?? 0} headers and the body checks out${sig?.aligned ? `, and ${mail?.domain} matches the From address` : ""}.`}
+        {state === "idle" && "Waiting"}
+        {state === "asking" && "Asking DNS"}
+        {state === "pass" && `Signature checks out over ${mail?.signedHeaders.length ?? 0} headers and the body${sig?.aligned ? `. ${mail?.domain} matches From` : ""}.`}
         {state === "fail" && verified && failure(verified)}
       </p>
+      <Why>The sender publishes its public key in DNS. Only its mail server holds the private key, so only it can sign.</Why>
     </div>
   )
 }
@@ -167,30 +169,29 @@ function HashCompare({ mail, computed, probe, onAnother, onRestore, busy }: { ma
   const differing = probe?.hash ? [...probe.hash].filter((c, i) => c !== signed[i]).length : 0
   return (
     <div className="pc-panel pc-hashes">
-      <h4>Hash the body and compare</h4>
+      <h4>Body hash</h4>
       <div className="pc-hash-row">
-        <span className="pc-hash-label">In the signature, bh=</span>
+        <span className="pc-hash-label">Signed, bh=</span>
         {signed ? <HashText value={signed} /> : <code className="pc-hash pc-pending">waiting</code>}
       </div>
       <div className={`pc-hash-row ${computed ? (same ? "match" : "mismatch") : ""}`}>
-        <span className="pc-hash-label">SHA-256 of the body, computed in your browser</span>
+        <span className="pc-hash-label">Your browser's SHA-256</span>
         {computed ? <HashText value={computed} against={signed} /> : <code className="pc-hash pc-pending">waiting</code>}
         {computed && <span className="pc-hash-verdict">{same ? "Identical" : "Different"}</span>}
       </div>
       <div className={`pc-hash-row ${probe?.hash ? "mismatch" : "pc-ghost-row"}`}>
-        <span className="pc-hash-label">{probe ? `After changing "${probe.was}" to "${probe.now}"` : "After changing one character"}</span>
+        <span className="pc-hash-label">{probe ? `After "${probe.was}" to "${probe.now}"` : "After one letter changes"}</span>
         {probe?.hash ? <HashText value={probe.hash} against={signed} /> : <code className="pc-hash pc-pending">waiting</code>}
-        {probe?.hash && <span className="pc-hash-verdict">{differing} of {signed.length} characters differ</span>}
+        {probe?.hash && <span className="pc-hash-verdict">{differing} of {signed.length} differ</span>}
       </div>
       <p className="pc-panel-out" aria-live="polite">
-        {probe?.checking && "Sending the edited email to the live API."}
-        {probe?.result && (probe.result.signer ? "This sender signs only part of the body, so the change slipped past." : `The live API rejected the edited copy. ${failure(probe.result)}.`)}
-        {!probe && "One changed letter changes the whole hash. Nobody can fix that without the sender's private key."}
+        {probe?.checking && "Sending the edit to the live API"}
+        {probe?.result && (probe.result.signer ? "This sender signs part of the body only." : `Live API rejected it. ${failure(probe.result)}.`)}
       </p>
       {mail && computed && (
         <div className="pc-row">
           <button type="button" className="secondary" onClick={onAnother} disabled={busy}>
-            Change the next character
+            Change the next letter
           </button>
           {probe && (
             <button type="button" className="secondary" onClick={onRestore} disabled={busy}>
@@ -199,6 +200,7 @@ function HashCompare({ mail, computed, probe, onAnother, onRestore, busy }: { ma
           )}
         </div>
       )}
+      <Why>The signature covers this hash. One changed letter changes the hash, and nobody can sign again without the private key.</Why>
     </div>
   )
 }
@@ -241,17 +243,17 @@ function Lane({ race, state, lane }: { race: RaceResult | null; state: GateState
 function Gate({ race, state }: { race: RaceResult | null; state: GateState }) {
   return (
     <div className="pc-panel pc-gate">
-      <h4>Fifty claims for one record, at the same instant</h4>
+      <h4>50 claims, one record, same instant</h4>
       <div className="pc-lane-block">
-        <p className="pc-lane-name">Aurora DSQL, one row per record</p>
+        <p className="pc-lane-name">Unique key, Aurora DSQL</p>
         <Lane race={race} state={state} lane="guarded" />
         <p className="pc-lane-tally">
           {race ? (
             <>
-              <b className="good">{race.guarded.verified} through</b>, {race.guarded.alreadyClaimed} refused as already claimed, {race.guarded.retries} retries, {race.guarded.ms} ms
+              <b>{race.guarded.verified} through</b>, {race.guarded.alreadyClaimed} refused, {race.guarded.ms} ms
             </>
           ) : state === "pressing" ? (
-            "50 claims in flight"
+            "50 in flight"
           ) : (
             "Waiting"
           )}
@@ -263,13 +265,14 @@ function Gate({ race, state }: { race: RaceResult | null; state: GateState }) {
         <p className="pc-lane-tally">
           {race ? (
             <>
-              <b className="bad">{race.naive.accepted} through</b>, so {Math.max(0, race.naive.accepted - 1)} double spends
+              <b>{race.naive.accepted} through</b>, {Math.max(0, race.naive.accepted - 1)} double spends
             </>
           ) : (
-            "Same 50 claims, no unique index"
+            "Same 50, no unique key"
           )}
         </p>
       </div>
+      <Why>With check-then-insert, every simultaneous claim sees "not claimed yet". A unique key admits one row, so one claim wins.</Why>
     </div>
   )
 }
@@ -279,7 +282,7 @@ function Claims({ first, second, released, onRelease }: { first: Claimed | null;
   const prior = second?.result.verdict === "ALREADY_CLAIMED" ? second.result.priorClaim : null
   return (
     <div className="pc-panel pc-claims">
-      <h4>The seller's screen</h4>
+      <h4>Seller's screen</h4>
       <div className={`pc-order ${first ? claimTone(first) : "waiting"}`}>
         <span className="pc-order-ref">Order A12</span>
         <span className="pc-order-state">{first ? (first.result.verdict === "VERIFIED" ? `Claimed at ${clockTime(first.result.claimedAt)}` : first.result.reason) : "Waiting"}</span>
@@ -293,11 +296,12 @@ function Claims({ first, second, released, onRelease }: { first: Claimed | null;
       </div>
       <div className={`pc-order ${second ? claimTone(second) : "waiting"}`}>
         <span className="pc-order-ref">Order A13</span>
-        <span className="pc-order-state">{second ? (prior ? `Same email, already used for ${prior.claimRef} at ${clockTime(prior.createdAt)}` : second.result.reason) : "Waiting"}</span>
+        <span className="pc-order-state">{second ? (prior ? `Already used for ${prior.claimRef.replace(/^order /, "")} at ${clockTime(prior.createdAt)}` : second.result.reason) : "Waiting"}</span>
         <button type="button" className="primary pc-release-btn" disabled>
           Release goods
         </button>
       </div>
+      <Why>The claim key is the signer, From, Date and body hash. A new order number does not make it a new email.</Why>
     </div>
   )
 }
@@ -306,7 +310,7 @@ function ReceiptChain({ link, shown }: { link: ReceiptLink | null; shown: Receip
   const r = shown?.receipt
   return (
     <div className={`pc-panel pc-chain ${shown ? (shown.verified ? "good" : "bad") : ""}`}>
-      <h4>The buyer's receipt</h4>
+      <h4>Buyer's receipt</h4>
       {link && shown && r ? (
         <>
           <div className="pc-links" aria-label="Receipt hash chain">
@@ -321,12 +325,13 @@ function ReceiptChain({ link, shown }: { link: ReceiptLink | null; shown: Receip
             </span>
           </div>
           <p className="pc-panel-out">
-            {shown.verified ? "AWS KMS signed it. The server just checked the signature and the hash again." : "The receipt failed its check."} <a href={`#r=${link.id}`}>Open the receipt the buyer sees</a>
+            {shown.verified ? "Signed by AWS KMS. Hash and signature check out." : "The receipt failed its check."} <a href={`#r=${link.id}`}>Open the receipt</a>
           </p>
         </>
       ) : (
-        <p className="pc-panel-out">Signed by AWS KMS after the first claim, and linked to the entry before it.</p>
+        <p className="pc-panel-out">Waiting for the first claim</p>
       )}
+      <Why>AWS KMS signs each receipt and links it to the one before, so anyone can check it offline.</Why>
     </div>
   )
 }
