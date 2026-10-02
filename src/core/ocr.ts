@@ -1,8 +1,11 @@
 import { DetectDocumentTextCommand, type TextractClient } from "@aws-sdk/client-textract"
+import type { ImageFormat } from "@aws-sdk/client-bedrock-runtime"
 import { toRead } from "./read.js"
 import type { ScreenshotRead } from "./types.js"
 
-export type Line = { text: string; height: number }
+export type Box = { left: number; top: number; width: number; height: number }
+export type Line = { text: string; height: number; box?: Box }
+export type FieldBox = Box & { field: "utr" | "amount" | "payee"; text: string }
 
 const utrLabel = /\b(UPI\s*(transaction|txn|ref(erence)?)\s*(id|no\.?|number)?|UTR|RRN)\b/i
 const twelveDigits = /(?<!\d)(\d{4}\s?\d{4}\s?\d{4})(?!\d)/g
@@ -71,10 +74,39 @@ export function readLines(lines: Line[]): ScreenshotRead {
   })
 }
 
-export async function readWithTextract(client: TextractClient, image: Uint8Array): Promise<ScreenshotRead> {
+export function imageFormat(image: Uint8Array): ImageFormat | null {
+  const b = Buffer.from(image)
+  if (b.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return "png"
+  if (b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff) return "jpeg"
+  if (b.subarray(0, 4).toString("latin1") === "GIF8") return "gif"
+  if (b.subarray(0, 4).toString("latin1") === "RIFF" && b.subarray(8, 12).toString("latin1") === "WEBP") return "webp"
+  return null
+}
+
+export function fieldBoxes(lines: Line[], read: ScreenshotRead): FieldBox[] {
+  const digits = (t: string) => t.replace(/\D/g, "")
+  const amountText = read.amountPaise === null ? null : String(read.amountPaise / 100)
+  const pick = (field: FieldBox["field"], match: (l: Line) => boolean): FieldBox[] => {
+    const line = lines.find((l) => l.box && match(l))
+    return line?.box ? [{ field, text: line.text, ...line.box }] : []
+  }
+  return [
+    ...(read.utr ? pick("utr", (l) => digits(l.text).includes(read.utr!)) : []),
+    ...(amountText ? pick("amount", (l) => digits(l.text.split(".")[0]!) === amountText.split(".")[0] && /^(?:₹|Rs\.?|INR)?\s*[\d,]+(?:\.\d{1,2})?$/i.test(l.text.trim())) : []),
+    ...(read.payeeVpa ? pick("payee", (l) => l.text.toLowerCase().includes(read.payeeVpa!.toLowerCase())) : []),
+  ]
+}
+
+export async function textractLines(client: TextractClient, image: Uint8Array): Promise<Line[]> {
   const out = await client.send(new DetectDocumentTextCommand({ Document: { Bytes: image } }))
-  const lines = (out.Blocks ?? [])
+  return (out.Blocks ?? [])
     .filter((b) => b.BlockType === "LINE" && b.Text)
-    .map((b) => ({ text: b.Text!, height: b.Geometry?.BoundingBox?.Height ?? 0 }))
-  return readLines(lines)
+    .map((b) => {
+      const g = b.Geometry?.BoundingBox
+      return { text: b.Text!, height: g?.Height ?? 0, ...(g ? { box: { left: g.Left ?? 0, top: g.Top ?? 0, width: g.Width ?? 0, height: g.Height ?? 0 } } : {}) }
+    })
+}
+
+export async function readWithTextract(client: TextractClient, image: Uint8Array): Promise<ScreenshotRead> {
+  return readLines(await textractLines(client, image))
 }

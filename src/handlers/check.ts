@@ -2,20 +2,13 @@ import { BedrockRuntimeClient, type ImageFormat } from "@aws-sdk/client-bedrock-
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { TextractClient } from "@aws-sdk/client-textract"
 import { claim } from "../core/claim.js"
-import { readWithTextract } from "../core/ocr.js"
+import { imageFormat, readWithTextract } from "../core/ocr.js"
 import { readScreenshot } from "../core/read.js"
 import { body, env, json, limits, pool, refFrom, sha256, shopFor, unauthorised, type Event, type Result } from "./http.js"
 
 const bedrock = new BedrockRuntimeClient({ maxAttempts: 2 })
 const s3 = new S3Client({})
 const textract = new TextractClient({})
-function sniff(image: Buffer): ImageFormat | null {
-  if (image.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return "png"
-  if (image[0] === 0xff && image[1] === 0xd8 && image[2] === 0xff) return "jpeg"
-  if (image.subarray(0, 4).toString("latin1") === "GIF8") return "gif"
-  if (image.subarray(0, 4).toString("latin1") === "RIFF" && image.subarray(8, 12).toString("latin1") === "WEBP") return "webp"
-  return null
-}
 
 function readWith(model: string, image: Uint8Array, format: ImageFormat) {
   return model === "textract" ? readWithTextract(textract, image) : readScreenshot(bedrock, model, image, format)
@@ -51,7 +44,7 @@ export async function handler(event: Event): Promise<Result> {
   if (!input?.image || !orderRef) return json(400, { error: "Send a screenshot and an order reference under 80 characters." })
   if (input.image.length > Math.ceil((limits.imageBytes * 4) / 3) + 4) return json(413, { error: "That screenshot is over 4 MB. Send a smaller one." })
   const image = Buffer.from(input.image, "base64")
-  const format = sniff(image)
+  const format = imageFormat(image)
   if (!format) return json(400, { error: "That file is not a PNG, JPEG, GIF or WebP image." })
   const screenshotSha256 = sha256(image)
   await s3.send(new PutObjectCommand({ Bucket: env("UPLOAD_BUCKET"), Key: `${shop.id}/${screenshotSha256}.${format}`, Body: image, ContentType: `image/${format}` }))
