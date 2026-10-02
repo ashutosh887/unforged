@@ -3,6 +3,7 @@ import { post, type ChainResult, type Receipt } from "./api"
 import { checkInBrowser, type BrowserCheck } from "./chain"
 import { ChainView } from "./features/ChainView"
 import { hrefOf } from "./router"
+import { tokenKey } from "./Shop"
 import { PageHead } from "./Site"
 
 const auditedLedger = "chain-1790930647118"
@@ -16,7 +17,11 @@ export function Ledger({ ledger, visitLedger }: { ledger?: string | undefined; v
   useEffect(() => {
     let live = true
     setLoad({ state: "loading" })
-    post<ChainResult>("receipts/chain", { ledger: shown, limit: 50 })
+    let token: string | undefined
+    try {
+      token = shown.startsWith("shop-") ? (localStorage.getItem(tokenKey) ?? undefined) : undefined
+    } catch {}
+    post<ChainResult>("receipts/chain", { ledger: shown, limit: 50 }, token)
       .then(async ({ receipts }) => {
         const checks = await Promise.all(receipts.map((r) => checkInBrowser(r).catch(() => ({ id: r.id, hash: false, signature: false }))))
         if (live) setLoad({ state: "ready", receipts, checks })

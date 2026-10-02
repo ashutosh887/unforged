@@ -55,19 +55,20 @@ function ist(iso: string): string {
 
 type Load = { state: "loading" } | { state: "error"; message: string } | { state: "ready"; receipts: Receipt[]; audit: ChainAudit }
 
-export type ChainViewProps = { ledger: string; limit?: number; refreshKey?: unknown } | { receipts: Receipt[]; checks?: ChainResult["checks"]; refreshKey?: unknown }
+export type ChainViewProps = { ledger: string; limit?: number; token?: string; refreshKey?: unknown } | { receipts: Receipt[]; checks?: ChainResult["checks"]; refreshKey?: unknown }
 
 export function ChainView(props: ChainViewProps) {
   const [load, setLoad] = useState<Load>({ state: "loading" })
   const ledger = "ledger" in props ? props.ledger : null
   const limit = "ledger" in props ? props.limit : undefined
+  const token = "ledger" in props ? props.token : undefined
   const given = "receipts" in props ? props.receipts : null
   const givenChecks = "receipts" in props ? props.checks : undefined
 
   useEffect(() => {
     let live = true
     setLoad({ state: "loading" })
-    const source: Promise<Pick<ChainResult, "receipts" | "checks">> = given ? Promise.resolve({ receipts: given, checks: givenChecks ?? [] }) : post<ChainResult>("receipts/chain", { ledger, ...(limit ? { limit } : {}) })
+    const source: Promise<Pick<ChainResult, "receipts" | "checks">> = given ? Promise.resolve({ receipts: given, checks: givenChecks ?? [] }) : post<ChainResult>("receipts/chain", { ledger, ...(limit ? { limit } : {}) }, token)
     source
       .then(async ({ receipts, checks }) => {
         const ordered = [...receipts].sort((a, b) => a.seq - b.seq)
@@ -78,7 +79,7 @@ export function ChainView(props: ChainViewProps) {
     return () => {
       live = false
     }
-  }, [ledger, limit, given, givenChecks, props.refreshKey])
+  }, [ledger, limit, token, given, givenChecks, props.refreshKey])
 
   return (
     <section className="feature-card" aria-labelledby="chain-view-title" aria-busy={load.state === "loading"}>
