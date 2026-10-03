@@ -7,9 +7,21 @@ so it can't be edited, and each credit pays for one order only.
 A screenshot can be edited, or shown again for a second order. The same check
 works on any email its sender signs: refunds, payslips, deposits.
 
-Live: https://d1ajauwkb76on3.cloudfront.net
+## Links
 
-Submission: [project on Builder Center](https://builder.aws.com/project/3K4xydlPqRKwDRLpYdZkq00UWR4/unforged-is-that-upi-payment-real-checked-against-the-banks-own-signed-alert) · [build article](https://builder.aws.com/content/3JztvFTHp1kaXp1h1nDiCkKltr4/a-payment-screenshot-is-a-picture-here-is-how-i-made-the-banks-signed-email-the-judge)
+| | |
+|---|---|
+| Live app | [d1ajauwkb76on3.cloudfront.net](https://d1ajauwkb76on3.cloudfront.net) |
+| Live status | [Status page](https://d1ajauwkb76on3.cloudfront.net/#/status) |
+| Hackathon project | [Unforged on AWS Builder Center](https://builder.aws.com/project/3K4xydlPqRKwDRLpYdZkq00UWR4/unforged-is-that-upi-payment-real-checked-against-the-banks-own-signed-alert) |
+| Build article | [A payment screenshot is a picture](https://builder.aws.com/content/3JztvFTHp1kaXp1h1nDiCkKltr4/a-payment-screenshot-is-a-picture-here-is-how-i-made-the-banks-signed-email-the-judge) |
+| How it works | [docs/how-it-works.md](docs/how-it-works.md) |
+| Measurements | [docs/measurements.md](docs/measurements.md) |
+| Threat model | [docs/threat-model.md](docs/threat-model.md) |
+| Verify it yourself | [docs/verify-yourself.md](docs/verify-yourself.md) |
+| FAQ | [docs/faq.md](docs/faq.md) |
+| Agent proof | [docs/agent-proof](docs/agent-proof/README.md) |
+| Author | [@ashutosh887](https://github.com/ashutosh887) |
 
 Built by [@ashutosh887](https://github.com/ashutosh887) for the AWS Builder
 Center "Zero to Shipped" hackathon, `#daily-life-enhancement` and `#startups`.
