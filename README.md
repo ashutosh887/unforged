@@ -7,26 +7,27 @@ so it can't be edited, and each credit pays for one order only.
 A screenshot can be edited, or shown again for a second order. The same check
 works on any email its sender signs: refunds, payslips, deposits.
 
+Built by [Ashutosh Jha (@ashutosh887)](https://github.com/ashutosh887) for
+the AWS Builder Center Zero to Shipped hackathon, in the Daily life
+enhancement category and the Startups lane.
+
 ## Links
 
 | | |
 |---|---|
 | Live app | [d1ajauwkb76on3.cloudfront.net](https://d1ajauwkb76on3.cloudfront.net) |
-| Live status | [Status page](https://d1ajauwkb76on3.cloudfront.net/#/status) |
 | Hackathon project | [Unforged on AWS Builder Center](https://builder.aws.com/project/3K4xydlPqRKwDRLpYdZkq00UWR4/unforged-is-that-upi-payment-real-checked-against-the-banks-own-signed-alert) |
 | Build article | [A payment screenshot is a picture](https://builder.aws.com/content/3JztvFTHp1kaXp1h1nDiCkKltr4/a-payment-screenshot-is-a-picture-here-is-how-i-made-the-banks-signed-email-the-judge) |
 | How it works | [docs/how-it-works.md](docs/how-it-works.md) |
-| Measurements | [docs/measurements.md](docs/measurements.md) |
+| Measurements | [docs/measurements.md](docs/measurements.md), raw JSON in [measurements/](measurements/) |
 | Threat model | [docs/threat-model.md](docs/threat-model.md) |
 | Verify it yourself | [docs/verify-yourself.md](docs/verify-yourself.md) |
 | FAQ | [docs/faq.md](docs/faq.md) |
-| Agent proof | [docs/agent-proof](docs/agent-proof/README.md) |
-| Author | [@ashutosh887](https://github.com/ashutosh887) |
+| How the coding agent used AWS | [docs/agent-proof](docs/agent-proof/README.md) |
 
-Built by [@ashutosh887](https://github.com/ashutosh887) for the AWS Builder
-Center "Zero to Shipped" hackathon, `#daily-life-enhancement` and `#startups`.
+## Pages on the live site
 
-| Page | What a judge sees |
+| Page | What you see |
 |---|---|
 | [Home](https://d1ajauwkb76on3.cloudfront.net/#/) | The six-step proof running live, and every verdict with where to see it |
 | [Proof](https://d1ajauwkb76on3.cloudfront.net/#/proof) | The body hash computed in your browser, one letter changed, 50 claims racing for one row |
@@ -36,19 +37,6 @@ Center "Zero to Shipped" hackathon, `#daily-life-enhancement` and `#startups`.
 | [Ledger](https://d1ajauwkb76on3.cloudfront.net/#/ledger) | The receipt hash chain, rechecked in your browser with WebCrypto |
 | [Status](https://d1ajauwkb76on3.cloudfront.net/#/status) | Live check of the DKIM key, Aurora DSQL and the KMS receipt key |
 | [Your shop](https://d1ajauwkb76on3.cloudfront.net/#/shop) | The seller app: counter, check, ledger, Hindi or English announcements |
-
-- **See it work:** open the live link. The proof runs as the page loads, see
-  [Try it in 30 seconds](#try-it-in-30-seconds).
-- **Architecture:** one CDK stack in `us-east-1`. CloudFront, S3, API Gateway,
-  Lambda, Aurora DSQL, Amazon Textract, Amazon Bedrock and AWS KMS. See
-  [Architecture](#architecture).
-- **How AWS and the coding agent were used:** Claude Code deployed and
-  measured the stack through the AWS MCP Server as the IAM user
-  `unforged-agent`. The MCP config, the IAM identity, the CloudTrail export
-  and the session log are indexed in
-  [`docs/agent-proof/README.md`](docs/agent-proof/README.md).
-- **Every number:** [`docs/measurements.md`](docs/measurements.md), with raw
-  JSON in [`measurements/`](measurements/).
 
 ## What it looks like
 
@@ -121,14 +109,6 @@ email. The buyer's receipt carries a QR code and verifies in the browser.
 | 5. Screenshot | Textract reads the screenshot. Code picks the UTR, amount and payee, and leaves any field with two candidates empty | [step 7](docs/how-it-works.md#step-7-reading-the-screenshot) |
 | 6. Verdict | Code returns one of six verdicts, each with its reason. There is no fraud score | [step 8](docs/how-it-works.md#step-8-the-verdict) |
 
-More reading:
-
-- [`docs/how-it-works.md`](docs/how-it-works.md) follows the sample email through every step with its real values.
-- [`docs/threat-model.md`](docs/threat-model.md) lists every attack, what stops it, and whether that was tested live.
-- [`docs/verify-yourself.md`](docs/verify-yourself.md) has a command for every claim in this README.
-- [`docs/faq.md`](docs/faq.md) answers the questions a judge asks.
-- [`docs/measurements.md`](docs/measurements.md) has every number, with raw JSON in `measurements/`.
-
 ## Measured on the live stack
 
 Every number here comes from a real run, recorded in
@@ -141,7 +121,7 @@ reproduces it.
 | One credit claimed twice in a row | 10 rounds | 0/10 second claims approved | The naive table also refuses 10/10; it fails only on simultaneous claims | `pnpm measure:replay`, §2 |
 | One body character changed on a real signed email | 37 emails that pass as archived, of 80 from a public list | 37/37 rejected | An untouched copy passes | `pnpm measure:signature`, §6 |
 | From rewritten to `alerts@hdfcbank.net` | The same 37 | 37/37 rejected, 0/80 stored as a bank credit | An untouched copy is refused only for being off the bank allowlist | `pnpm measure:signature`, §6 |
-| Simultaneous claims of one signed email | 10 rounds of 10 | 10/10 rounds with exactly one Verified | Run under the account's old Lambda limit of 10, see §7 | `pnpm measure:record-race`, §7 |
+| 50 simultaneous claims of one signed email, through CloudFront | 10 rounds, 500 requests | 10/10 rounds with exactly one Verified and 49 Already claimed, 0 of 500 errors | p50 651 ms, p95 2,458 ms | `pnpm measure:record-race`, §7b |
 | A signature stripped to make a second claim | 2 emails with two signatures | Every stripped copy came back Already claimed | The first key design approved the stripped copy | §7, no raw file |
 | KMS receipts written 8 at a time | 32 claims into one ledger | Receipts 1 to 32 with no gaps, 0 breaks on offline audit | | `pnpm measure:receipt-race`, `pnpm measure:chain`, §9 |
 | Textract reads of the demo screenshots | 2 synthetic images, 10 reads each | 10/10 on UTR, amount and payee, Textract p50 719 ms | Says nothing about real phone screenshots | `scripts/read-samples.ts`, §8 |
@@ -252,9 +232,6 @@ CloudTrail export are in [`docs/agent-proof/`](docs/agent-proof/README.md).
   original or upload the `.eml`.
 - A bank that does not sign its alerts cannot be checked.
 - An alert is not tied to the shop that receives it.
-- The 50-way runs of signed-email claims in §7 ran under the account's old
-  Lambda concurrency limit of 10, so most requests got HTTP 503. The limit is
-  now 1,000. Those runs have not been repeated.
 
 The full list, with what stops each attack, is in
 [`docs/threat-model.md`](docs/threat-model.md).
