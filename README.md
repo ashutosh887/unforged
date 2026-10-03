@@ -57,36 +57,36 @@ All five are screenshots of the live site.
 **Home.** The proof runs on load. Order A12 is verified and released; the same email for A13 comes back Already claimed and Release goods stays off.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/first-screen-dark.png">
-  <img alt="Home page after its live run" src="docs/images/first-screen.png">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/ashutosh887/unforged/main/docs/images/first-screen-dark.png">
+  <img alt="Home page after its live run" src="https://raw.githubusercontent.com/ashutosh887/unforged/main/docs/images/first-screen.png">
 </picture>
 
 **Proof.** Your browser hashes the email body and gets the signed `bh=` value. One changed letter breaks it. Fifty claims race for one row and one gets through.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/proof-dark.png">
-  <img alt="Proof page" src="docs/images/proof.png">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/ashutosh887/unforged/main/docs/images/proof-dark.png">
+  <img alt="Proof page" src="https://raw.githubusercontent.com/ashutosh887/unforged/main/docs/images/proof.png">
 </picture>
 
 **Screenshots.** Run the real check on a throwaway demo shop. The cropped sample comes back Unreadable, the others Not found yet.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/screenshots-check-dark.png">
-  <img alt="Screenshots page after Run the real check" src="docs/images/screenshots-check.png">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/ashutosh887/unforged/main/docs/images/screenshots-check-dark.png">
+  <img alt="Screenshots page after Run the real check" src="https://raw.githubusercontent.com/ashutosh887/unforged/main/docs/images/screenshots-check.png">
 </picture>
 
 **Ledger.** Every receipt is signed by AWS KMS and hashes the one before it. Your browser rechecks the chain.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/ledger-dark.png">
-  <img alt="Ledger page" src="docs/images/ledger.png">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/ashutosh887/unforged/main/docs/images/ledger-dark.png">
+  <img alt="Ledger page" src="https://raw.githubusercontent.com/ashutosh887/unforged/main/docs/images/ledger.png">
 </picture>
 
 **Architecture.** The stack, the verdict source code and the measured numbers.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/architecture-page-dark.png">
-  <img alt="Architecture page" src="docs/images/architecture-page.png">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/ashutosh887/unforged/main/docs/images/architecture-page-dark.png">
+  <img alt="Architecture page" src="https://raw.githubusercontent.com/ashutosh887/unforged/main/docs/images/architecture-page.png">
 </picture>
 
 ## Try it in 30 seconds
