@@ -60,7 +60,7 @@ that defence was checked. Status means:
   bank's alert. The claim-once rule still holds within each shop.
 - The API Gateway address is reachable directly, around CloudFront. It has
   the same throttle and the same code, but no CloudFront security headers.
-- The 50-way runs in §7 ran under the account's old Lambda concurrency limit
-  of 10, so most requests got HTTP 503 before the code ran. The limit is now
-  1,000 and the runs have not been repeated. No email was claimed twice in any
-  run.
+- The first 50-way runs in §7 ran under the account's old Lambda concurrency
+  limit of 10, so most requests got HTTP 503 before the code ran. At the new
+  limit of 1,000 the run was repeated (§7b): 10 of 10 rounds had one Verified,
+  and 0 of 500 requests failed. No email was claimed twice in any run.
