@@ -9,11 +9,11 @@ enforced by an Aurora DSQL unique index inside one transaction, so an old
 real screenshot shown for a second order is caught. Positioning, rubric and
 requirements: `planning/PLAN.md` (gitignored, local only).
 
-Built for the AWS Builder Center "Zero to Shipped" hackathon. Category
-`#daily-life-enhancement`, lane `#startups`. Deadline 2 Oct 2026 11:59 PM
-PDT (3 Oct 12:29 IST). The ship gate is pass-or-fail: the app must be live
-on AWS at a public URL, and the coding agent's connection to AWS must be
-documented in `docs/agent-proof/`.
+Built for the AWS Builder Center "Zero to Shipped" hackathon (18 Sep to
+2 Oct 2026), category `#daily-life-enhancement`, lane `#startups`. It was
+one of the five winners, out of 3,812 participants. `v1.0.0` tags the
+state that won. The app stays live on AWS, and the agent's AWS connection
+is documented in `docs/agent-proof/`.
 
 ## Verdicts (code, never a prompt)
 

@@ -8,9 +8,11 @@ signed email: refunds, payslips, deposits.
 
 **[Live app](https://d1ajauwkb76on3.cloudfront.net)** · **[Hackathon project](https://builder.aws.com/project/3K4xydlPqRKwDRLpYdZkq00UWR4/unforged-is-that-upi-payment-real-checked-against-the-banks-own-signed-alert)** · **[Build article](https://builder.aws.com/content/3JztvFTHp1kaXp1h1nDiCkKltr4/a-payment-screenshot-is-a-picture-here-is-how-i-made-the-banks-signed-email-the-judge)** · **[Live status](https://d1ajauwkb76on3.cloudfront.net/#/status)**
 
-Built by [Ashutosh Jha (@ashutosh887)](https://github.com/ashutosh887) for the
-AWS Builder Center Zero to Shipped hackathon, in the Daily life enhancement
-category and the Startups lane. Everything runs on AWS in `us-east-1`.
+**Winner, [AWS Builder Center Zero to Shipped](https://builder.aws.com/build/hackathons/e83e84e5-4f4c-383b-bbe9-4a15ac195d55/zero-to-shipped?tab=winners)**, one of five winning
+projects from 3,812 participants (Daily life enhancement category, Startups
+lane). Built by [Ashutosh Jha (@ashutosh887)](https://github.com/ashutosh887).
+Everything runs on AWS in `us-east-1`. Release [`v1.0.0`](https://github.com/ashutosh887/unforged/releases/tag/v1.0.0)
+is the code as judged.
 
 ## In one minute
 
