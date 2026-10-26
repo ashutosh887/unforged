@@ -10,7 +10,7 @@ signed email: refunds, payslips, deposits.
 
 **Winner, [AWS Builder Center Zero to Shipped](https://builder.aws.com/build/hackathons/e83e84e5-4f4c-383b-bbe9-4a15ac195d55/zero-to-shipped?tab=winners)**, one of five winning
 projects from 3,812 participants (Daily life enhancement category, Startups
-lane). Built by [Ashutosh Jha (@ashutosh887)](https://github.com/ashutosh887).
+lane). Built by [@ashutosh887](https://github.com/ashutosh887).
 Everything runs on AWS in `us-east-1`. Release [`v1.0.0`](https://github.com/ashutosh887/unforged/releases/tag/v1.0.0)
 is the code as judged.
 
